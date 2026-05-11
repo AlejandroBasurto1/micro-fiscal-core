@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skyblue Fiscal Core</title>
+
+<style>
+body{
+background:#0f172a;
+color:white;
+font-family:Arial;
+padding:20px;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+}
+
+input,button,select{
+padding:10px;
+border:none;
+border-radius:8px;
+margin:5px;
+}
+
+button{
+background:#3b82f6;
+color:white;
+cursor:pointer;
+}
+
+table{
+width:100%;
+margin-top:10px;
+border-collapse:collapse;
+}
+
+td,th{
+padding:10px;
+border-bottom:1px solid #334155;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🚀 Skyblue Fiscal Core</h1>
+
+<div class="card">
+<h2>Dashboard</h2>
+
+<p>Ingresos: $<span id="ingresos">0</span></p>
+<p>Gastos: $<span id="gastos">0</span></p>
+<p>ISR estimado: $<span id="isr">0</span></p>
+</div>
+
+<div class="card">
+<h2>Nuevo Movimiento</h2>
+
+<input id="concepto" placeholder="Concepto">
+<input id="monto" type="number" placeholder="Monto">
+
+<select id="tipo">
+<option>Ingreso</option>
+<option>Gasto</option>
+</select>
+
+<button onclick="agregar()">Guardar</button>
+</div>
+
+<div class="card">
+<h2>Movimientos</h2>
+
+<table>
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Monto</th>
+<th>Tipo</th>
+</tr>
+</thead>
+
+<tbody id="tabla"></tbody>
+</table>
+</div>
+
+<script>
+let movimientos=[];
+
+function agregar(){
+
+let concepto=document.getElementById('concepto').value;
+let monto=parseFloat(document.getElementById('monto').value);
+let tipo=document.getElementById('tipo').value;
+
+if(!concepto || !monto)return;
+
+movimientos.push({
+concepto,
+monto,
+tipo
+});
+
+render();
+}
+
+function render(){
+
+let ingresos=0;
+let gastos=0;
+
+let tabla=document.getElementById('tabla');
+tabla.innerHTML='';
+
+movimientos.forEach(m=>{
+
+if(m.tipo==='Ingreso'){
+ingresos+=m.monto;
+}else{
+gastos+=m.monto;
+}
+
+tabla.innerHTML+=`
+<tr>
+<td>${m.concepto}</td>
+<td>$${m.monto}</td>
+<td>${m.tipo}</td>
+</tr>
+`;
+
+});
+
+document.getElementById('ingresos').innerText=ingresos;
+document.getElementById('gastos').innerText=gastos;
+document.getElementById('isr').innerText=((ingresos-gastos)*0.16).toFixed(2);
+
+}
+</script>
+
+</body>
+</html>
