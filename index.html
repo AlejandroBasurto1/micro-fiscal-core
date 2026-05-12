@@ -312,31 +312,7 @@ GPS
 
 </div>
 
-<div class="section" id="contenido">
-
-<h2>💰 Ingresos</h2>
-
-<input type="text" placeholder="Concepto ingreso">
-
-<input type="number" placeholder="Monto">
-
-<select id="regimenSelect">
-
-<option value="Actividad Empresarial">
-🏢 Actividad Empresarial
-</option>
-
-<option value="Asalariado">
-👨‍💼 Asalariado
-</option>
-
-</select>
-
-<button class="ready" onclick="guardarRegimen()">
-💾 Guardar Ingreso
-</button>
-
-</div>
+<div class="section" id="contenido"></div>
 
 <div class="actions">
 
@@ -364,9 +340,26 @@ let regimenFiscal =
 localStorage.getItem("regimenFiscal")
 || "Asalariado";
 
+window.addEventListener('load', ()=>{
+
+regimenFiscal =
+localStorage.getItem("regimenFiscal")
+|| "Asalariado";
+
+activar(document.querySelector('.card.active'));
+
+});
+
+
+
 function activar(elemento){
 
-const cards = document.querySelectorAll('.card');
+regimenFiscal =
+localStorage.getItem("regimenFiscal")
+|| "Asalariado";
+
+const cards =
+document.querySelectorAll('.card');
 
 cards.forEach(card=>{
 card.classList.remove('active');
@@ -374,7 +367,8 @@ card.classList.remove('active');
 
 elemento.classList.add('active');
 
-const titulo = elemento.innerText.trim();
+const titulo =
+elemento.innerText.trim();
 
 const contenido =
 document.getElementById('contenido');
@@ -416,7 +410,7 @@ ${regimenFiscal === "Asalariado"
 <button class="ready"
 onclick="guardarRegimen()">
 
-💾 Guardar Ingreso
+💾 Guardar Régimen
 
 </button>
 
@@ -876,7 +870,8 @@ function guardarRegimen(){
 const select =
 document.getElementById('regimenSelect');
 
-regimenFiscal = select.value;
+regimenFiscal =
+select.value;
 
 localStorage.setItem(
 "regimenFiscal",
@@ -888,6 +883,12 @@ alert(
 + regimenFiscal
 );
 
+activar(
+document.querySelector(
+'.card.active'
+)
+);
+
 }
 
 
@@ -897,7 +898,8 @@ function guardarRegimenRegistro(){
 const select =
 document.getElementById('regimenRegistro');
 
-regimenFiscal = select.value;
+regimenFiscal =
+select.value;
 
 localStorage.setItem(
 "regimenFiscal",
@@ -907,6 +909,12 @@ regimenFiscal
 alert(
 "Régimen actualizado: "
 + regimenFiscal
+);
+
+activar(
+document.querySelector(
+'.card.active'
+)
 );
 
 }
@@ -929,11 +937,13 @@ document.getElementById('gasolinaCampos');
 
 if(tipo.value === "Gasolina"){
 
-campos.style.display = "block";
+campos.style.display =
+"block";
 
 }else{
 
-campos.style.display = "none";
+campos.style.display =
+"none";
 
 }
 
@@ -959,11 +969,13 @@ document.getElementById(
 
 if(tipo.value === "Gasolina"){
 
-campos.style.display = "block";
+campos.style.display =
+"block";
 
 }else{
 
-campos.style.display = "none";
+campos.style.display =
+"none";
 
 }
 
