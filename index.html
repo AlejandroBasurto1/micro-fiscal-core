@@ -360,7 +360,17 @@ card.classList.remove('active');
 elemento.classList.add('active');
 
 }
+function activarTool(elemento){
 
+const tools = document.querySelectorAll('.tool');
+
+tools.forEach(tool=>{
+tool.classList.remove('active');
+});
+
+elemento.classList.add('active');
+
+}
 </script>
 </body>
 </html>
