@@ -4,143 +4,273 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Micro Fiscal Core</title>
-</title>
 
 <style>
-body{
-background:#0f172a;
-color:white;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
 font-family:Arial;
+}
+
+body{
+background:#07111f;
+color:white;
 padding:20px;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+}
+
+.logo{
+font-size:32px;
+font-weight:bold;
+}
+
+.mode{
+background:#132238;
+padding:10px 15px;
+border-radius:15px;
+font-size:14px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+margin-bottom:25px;
 }
 
 .card{
-background:#1e293b;
+background:#132238;
 padding:20px;
-border-radius:12px;
+border-radius:22px;
+min-height:120px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+box-shadow:0 0 10px rgba(0,0,0,.2);
+transition:.2s;
+}
+
+.card:hover{
+transform:scale(1.03);
+}
+
+.card span{
+font-size:40px;
+margin-bottom:10px;
+}
+
+.card h3{
+font-size:18px;
+}
+
+.section{
+background:#132238;
+padding:20px;
+border-radius:22px;
+margin-bottom:25px;
+}
+
+.section h2{
 margin-bottom:20px;
 }
 
-input,button,select{
-padding:10px;
+input,select{
+width:100%;
+padding:15px;
 border:none;
-border-radius:8px;
-margin:5px;
+border-radius:15px;
+margin-bottom:15px;
+background:#1b2f4a;
+color:white;
+font-size:16px;
 }
 
 button{
-background:#3b82f6;
+width:100%;
+padding:18px;
+border:none;
+border-radius:18px;
+background:#10b981;
 color:white;
+font-size:18px;
+font-weight:bold;
 cursor:pointer;
 }
 
-table{
-width:100%;
-margin-top:10px;
-border-collapse:collapse;
+.tools{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+margin-bottom:25px;
 }
 
-td,th{
-padding:10px;
-border-bottom:1px solid #334155;
+.tool{
+background:#132238;
+padding:20px;
+border-radius:20px;
+text-align:center;
+}
+
+.tool span{
+font-size:45px;
+display:block;
+margin-bottom:10px;
+}
+
+.actions{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+}
+
+.action{
+padding:20px;
+border-radius:20px;
+text-align:center;
+font-weight:bold;
+font-size:18px;
+}
+
+.save{background:#10b981;}
+.edit{background:#3b82f6;}
+.delete{background:#ef4444;}
+.excel{background:#15803d;}
+
+@media(min-width:768px){
+.grid{
+grid-template-columns:repeat(4,1fr);
+}
+
+.tools{
+grid-template-columns:repeat(3,1fr);
+}
+
+.actions{
+grid-template-columns:repeat(4,1fr);
+}
 }
 </style>
 </head>
 
 <body>
 
-<h1>🚀 Micro Fiscal Core</h1>
+<div class="header">
+<div class="logo">🚀 Micro Fiscal Core</div>
+<div class="mode">Modo Repartidor</div>
+</div>
+
+<div class="grid">
 
 <div class="card">
-<h2>Dashboard</h2>
-
-<p>Ingresos: $<span id="ingresos">0</span></p>
-<p>Gastos: $<span id="gastos">0</span></p>
-<p>ISR estimado: $<span id="isr">0</span></p>
+<span>💰</span>
+<h3>Ingresos</h3>
 </div>
 
 <div class="card">
-<h2>Nuevo Movimiento</h2>
+<span>💸</span>
+<h3>Gastos</h3>
+</div>
 
-<input id="concepto" placeholder="Concepto">
-<input id="monto" type="number" placeholder="Monto">
+<div class="card">
+<span>📊</span>
+<h3>Estimado</h3>
+</div>
 
-<select id="tipo">
+<div class="card">
+<span>🧾</span>
+<h3>IVA</h3>
+</div>
+
+<div class="card">
+<span>📝</span>
+<h3>Registro</h3>
+</div>
+
+<div class="card">
+<span>🚚</span>
+<h3>Viáticos</h3>
+</div>
+
+<div class="card">
+<span>👥</span>
+<h3>Clientes</h3>
+</div>
+
+<div class="card">
+<span>🗺️</span>
+<h3>Rutas</h3>
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>⛽ Nuevo Movimiento</h2>
+
+<input type="text" placeholder="Concepto">
+
+<input type="number" placeholder="Monto">
+
+<input type="number" placeholder="Litros gasolina">
+
+<input type="number" placeholder="Odómetro">
+
+<select>
 <option>Ingreso</option>
 <option>Gasto</option>
 </select>
 
-<button onclick="agregar()">Guardar</button>
+<button>➕ Guardar Movimiento</button>
+
 </div>
 
-<div class="card">
-<h2>Movimientos</h2>
+<div class="tools">
 
-<table>
-<thead>
-<tr>
-<th>Concepto</th>
-<th>Monto</th>
-<th>Tipo</th>
-</tr>
-</thead>
-
-<tbody id="tabla"></tbody>
-</table>
+<div class="tool">
+<span>📷</span>
+OCR
 </div>
 
-<script>
-let movimientos=[];
+<div class="tool">
+<span>🔳</span>
+QR
+</div>
 
-function agregar(){
+<div class="tool">
+<span>📦</span>
+Código
+</div>
 
-let concepto=document.getElementById('concepto').value;
-let monto=parseFloat(document.getElementById('monto').value);
-let tipo=document.getElementById('tipo').value;
+</div>
 
-if(!concepto || !monto)return;
+<div class="actions">
 
-movimientos.push({
-concepto,
-monto,
-tipo
-});
+<div class="action save">
+💾 Guardar
+</div>
 
-render();
-}
+<div class="action edit">
+✏️ Editar
+</div>
 
-function render(){
+<div class="action delete">
+🗑️ Borrar
+</div>
 
-let ingresos=0;
-let gastos=0;
+<div class="action excel">
+📤 Excel
+</div>
 
-let tabla=document.getElementById('tabla');
-tabla.innerHTML='';
-
-movimientos.forEach(m=>{
-
-if(m.tipo==='Ingreso'){
-ingresos+=m.monto;
-}else{
-gastos+=m.monto;
-}
-
-tabla.innerHTML+=`
-<tr>
-<td>${m.concepto}</td>
-<td>$${m.monto}</td>
-<td>${m.tipo}</td>
-</tr>
-`;
-
-});
-
-document.getElementById('ingresos').innerText=ingresos;
-document.getElementById('gastos').innerText=gastos;
-document.getElementById('isr').innerText=((ingresos-gastos)*0.16).toFixed(2);
-
-}
-</script>
+</div>
 
 </body>
 </html>
