@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -316,6 +317,7 @@ GPS
 <input type="number" placeholder="Monto">
 
 <select id="regimenSelect">
+
 <option value="Actividad Empresarial">
 🏢 Actividad Empresarial
 </option>
@@ -323,6 +325,7 @@ GPS
 <option value="Asalariado">
 👨‍💼 Asalariado
 </option>
+
 </select>
 
 <button class="ready" onclick="guardarRegimen()">
@@ -355,6 +358,8 @@ GPS
 
 let regimenFiscal = "Actividad Empresarial";
 
+
+
 function activar(elemento){
 
 const cards = document.querySelectorAll('.card');
@@ -371,15 +376,21 @@ const contenido = document.getElementById('contenido');
 
 
 
+/* ========================= */
+/* INGRESOS */
+/* ========================= */
+
 if(titulo.includes('Ingresos')){
 
 contenido.innerHTML = `
 
 <h2>💰 Ingresos</h2>
 
-<input type="text" placeholder="Concepto ingreso">
+<input type="text"
+placeholder="Concepto ingreso">
 
-<input type="number" placeholder="Monto">
+<input type="number"
+placeholder="Monto">
 
 <select id="regimenSelect">
 
@@ -393,8 +404,11 @@ contenido.innerHTML = `
 
 </select>
 
-<button class="ready" onclick="guardarRegimen()">
+<button class="ready"
+onclick="guardarRegimen()">
+
 💾 Guardar Ingreso
+
 </button>
 
 `;
@@ -411,18 +425,84 @@ else if(titulo.includes('Gastos')){
 
 if(regimenFiscal === "Asalariado"){
 
-activarModuloViaticos();
-return;
+contenido.innerHTML = `
+
+<h2>🚚 Viáticos</h2>
+
+<input type="text"
+placeholder="Concepto">
+
+<input type="number"
+placeholder="Monto recibido">
+
+<select id="tipoViatico"
+onchange="mostrarCamposViaticos()">
+
+<option value="Gasolina">
+⛽ Gasolina
+</option>
+
+<option value="Hotel">
+🏨 Hotel
+</option>
+
+<option value="Comida">
+🍔 Comida
+</option>
+
+<option value="Transporte">
+🚕 Transporte
+</option>
+
+<option value="Casetas">
+🛣️ Casetas
+</option>
+
+<option value="Otros">
+📦 Otros
+</option>
+
+</select>
+
+<div id="camposViaticoGasolina">
+
+<input type="number"
+placeholder="Litros gasolina">
+
+<input type="number"
+placeholder="Total cargado">
+
+<input type="number"
+placeholder="$/Litro">
+
+<input type="number"
+placeholder="Odómetro actual">
+
+</div>
+
+<button class="ready">
+💾 Guardar Viático
+</button>
+
+`;
+
+mostrarCamposViaticos();
 
 }
+
+
+
+else{
 
 contenido.innerHTML = `
 
 <h2>💸 Gastos Operativos</h2>
 
-<input type="text" placeholder="Concepto gasto">
+<input type="text"
+placeholder="Concepto gasto">
 
-<input type="number" placeholder="Monto">
+<input type="number"
+placeholder="Monto">
 
 <select id="tipoGasto"
 onchange="mostrarCamposGasolina()">
@@ -469,6 +549,8 @@ placeholder="Odómetro actual">
 `;
 
 mostrarCamposGasolina();
+
+}
 
 }
 
@@ -556,55 +638,6 @@ onclick="guardarRegimenRegistro()">
 
 else if(titulo.includes('Viáticos')){
 
-activarModuloViaticos();
-
-}
-
-
-
-/* ========================= */
-/* RUTAS */
-/* ========================= */
-
-else if(titulo.includes('Rutas')){
-
-contenido.innerHTML = `
-
-<h2>🗺️ Rutas</h2>
-
-<input type="text"
-placeholder="Origen">
-
-<input type="text"
-placeholder="Cliente 1">
-
-<input type="text"
-placeholder="Cliente 2">
-
-<input type="text"
-placeholder="Cliente 3">
-
-<button class="ready">
-🚀 Calcular Ruta
-</button>
-
-`;
-
-}
-
-}
-
-
-
-/* ========================= */
-/* MODULO VIATICOS */
-/* ========================= */
-
-function activarModuloViaticos(){
-
-const contenido =
-document.getElementById('contenido');
-
 contenido.innerHTML = `
 
 <h2>🚚 Viáticos</h2>
@@ -672,6 +705,44 @@ mostrarCamposViaticos();
 
 
 
+/* ========================= */
+/* RUTAS */
+/* ========================= */
+
+else if(titulo.includes('Rutas')){
+
+contenido.innerHTML = `
+
+<h2>🗺️ Rutas</h2>
+
+<input type="text"
+placeholder="Origen">
+
+<input type="text"
+placeholder="Cliente 1">
+
+<input type="text"
+placeholder="Cliente 2">
+
+<input type="text"
+placeholder="Cliente 3">
+
+<button class="ready">
+🚀 Calcular Ruta
+</button>
+
+`;
+
+}
+
+}
+
+
+
+/* ========================= */
+/* GUARDAR REGIMEN */
+/* ========================= */
+
 function guardarRegimen(){
 
 const select =
@@ -698,6 +769,10 @@ alert("Régimen actualizado: " + regimenFiscal);
 
 
 
+/* ========================= */
+/* CAMPOS GASOLINA GASTOS */
+/* ========================= */
+
 function mostrarCamposGasolina(){
 
 const tipo =
@@ -721,6 +796,10 @@ campos.style.display = "none";
 }
 
 
+
+/* ========================= */
+/* CAMPOS GASOLINA VIATICOS */
+/* ========================= */
 
 function mostrarCamposViaticos(){
 
@@ -746,6 +825,10 @@ campos.style.display = "none";
 
 
 
+/* ========================= */
+/* TOOLS */
+/* ========================= */
+
 function activarTool(elemento){
 
 const tools =
@@ -763,3 +846,4 @@ elemento.classList.add('active');
 
 </body>
 </html>
+```
