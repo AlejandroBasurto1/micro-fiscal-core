@@ -158,11 +158,18 @@ background:#1b2f4a;
 color:white;
 font-size:14px;
 outline:none;
+
+appearance:none;
+-webkit-appearance:none;
+-moz-appearance:none;
+
+cursor:pointer;
 }
 
 select option{
 background:#102544;
 color:white;
+padding:10px;
 }
 
 button{
@@ -278,8 +285,8 @@ background:#15803d;
 </div>
 
 <div class="card" onclick="activar(this)">
-<span>🗺️</span>
-<h3>Rutas</h3>
+<span>🛠️</span>
+<h3>Mantenimiento</h3>
 </div>
 
 </div>
@@ -358,8 +365,6 @@ GPS
 
 let regimenFiscal = "Actividad Empresarial";
 
-
-
 function activar(elemento){
 
 const cards = document.querySelectorAll('.card');
@@ -376,21 +381,15 @@ const contenido = document.getElementById('contenido');
 
 
 
-/* ========================= */
-/* INGRESOS */
-/* ========================= */
-
 if(titulo.includes('Ingresos')){
 
 contenido.innerHTML = `
 
 <h2>💰 Ingresos</h2>
 
-<input type="text"
-placeholder="Concepto ingreso">
+<input type="text" placeholder="Concepto ingreso">
 
-<input type="number"
-placeholder="Monto">
+<input type="number" placeholder="Monto">
 
 <select id="regimenSelect">
 
@@ -404,11 +403,8 @@ placeholder="Monto">
 
 </select>
 
-<button class="ready"
-onclick="guardarRegimen()">
-
+<button class="ready" onclick="guardarRegimen()">
 💾 Guardar Ingreso
-
 </button>
 
 `;
@@ -429,11 +425,9 @@ contenido.innerHTML = `
 
 <h2>🚚 Viáticos</h2>
 
-<input type="text"
-placeholder="Concepto">
+<input type="text" placeholder="Concepto">
 
-<input type="number"
-placeholder="Monto recibido">
+<input type="number" placeholder="Monto recibido">
 
 <select id="tipoViatico"
 onchange="mostrarCamposViaticos()">
@@ -464,7 +458,8 @@ onchange="mostrarCamposViaticos()">
 
 </select>
 
-<div id="camposViaticoGasolina">
+<div id="camposViaticoGasolina"
+style="display:none;">
 
 <input type="number"
 placeholder="Litros gasolina">
@@ -519,8 +514,12 @@ onchange="mostrarCamposGasolina()">
 🔧 Herramientas
 </option>
 
-<option value="Logística">
+<option value="Logistica">
 🚚 Logística
+</option>
+
+<option value="Mantenimiento">
+🛠️ Mantenimiento
 </option>
 
 <option value="Otros">
@@ -529,7 +528,8 @@ onchange="mostrarCamposGasolina()">
 
 </select>
 
-<div id="gasolinaCampos">
+<div id="gasolinaCampos"
+style="display:none;">
 
 <input type="number"
 placeholder="Total cargado">
@@ -589,41 +589,68 @@ placeholder="Referencia">
 
 
 /* ========================= */
-/* REGISTRO */
+/* MANTENIMIENTO */
 /* ========================= */
 
-else if(titulo.includes('Registro')){
+else if(titulo.includes('Mantenimiento')){
 
 contenido.innerHTML = `
 
-<h2>📝 Registro Fiscal</h2>
+<h2>🛠️ Mantenimiento</h2>
 
-<input type="text"
-placeholder="Razón social">
+<select>
 
-<input type="text"
-placeholder="RFC">
-
-<input type="text"
-placeholder="Correo">
-
-<select id="regimenRegistro">
-
-<option value="Actividad Empresarial">
-🏢 Actividad Empresarial
+<option>
+🛞 Balatas
 </option>
 
-<option value="Asalariado">
-👨‍💼 Asalariado
+<option>
+🛢️ Aceite
+</option>
+
+<option>
+🛞 Llantas
+</option>
+
+<option>
+🔩 Suspensión
+</option>
+
+<option>
+🔋 Batería
+</option>
+
+<option>
+⚙️ Afinación
+</option>
+
+<option>
+🚗 Frenos
+</option>
+
+<option>
+🔧 Otro
 </option>
 
 </select>
 
-<button class="ready"
-onclick="guardarRegimenRegistro()">
+<input type="number"
+placeholder="Kilometraje actual">
 
-💾 Guardar Registro
+<input type="number"
+placeholder="Próximo mantenimiento">
 
+<input type="number"
+placeholder="Costo pieza">
+
+<input type="number"
+placeholder="Mano de obra">
+
+<input type="text"
+placeholder="Taller / Referencia">
+
+<button class="ready">
+💾 Guardar Mantenimiento
 </button>
 
 `;
@@ -677,7 +704,8 @@ onchange="mostrarCamposViaticos()">
 
 </select>
 
-<div id="camposViaticoGasolina">
+<div id="camposViaticoGasolina"
+style="display:none;">
 
 <input type="number"
 placeholder="Litros gasolina">
@@ -703,38 +731,6 @@ mostrarCamposViaticos();
 
 }
 
-
-
-/* ========================= */
-/* RUTAS */
-/* ========================= */
-
-else if(titulo.includes('Rutas')){
-
-contenido.innerHTML = `
-
-<h2>🗺️ Rutas</h2>
-
-<input type="text"
-placeholder="Origen">
-
-<input type="text"
-placeholder="Cliente 1">
-
-<input type="text"
-placeholder="Cliente 2">
-
-<input type="text"
-placeholder="Cliente 3">
-
-<button class="ready">
-🚀 Calcular Ruta
-</button>
-
-`;
-
-}
-
 }
 
 
@@ -756,21 +752,8 @@ alert("Régimen guardado: " + regimenFiscal);
 
 
 
-function guardarRegimenRegistro(){
-
-const select =
-document.getElementById('regimenRegistro');
-
-regimenFiscal = select.value;
-
-alert("Régimen actualizado: " + regimenFiscal);
-
-}
-
-
-
 /* ========================= */
-/* CAMPOS GASOLINA GASTOS */
+/* CAMPOS GASOLINA */
 /* ========================= */
 
 function mostrarCamposGasolina(){
@@ -798,7 +781,7 @@ campos.style.display = "none";
 
 
 /* ========================= */
-/* CAMPOS GASOLINA VIATICOS */
+/* CAMPOS VIATICOS */
 /* ========================= */
 
 function mostrarCamposViaticos(){
@@ -847,3 +830,4 @@ elemento.classList.add('active');
 </body>
 </html>
 ```
+
