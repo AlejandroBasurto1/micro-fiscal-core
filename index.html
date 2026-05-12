@@ -348,7 +348,59 @@ Gps
 
 </div>
 <script>
+function activar(elemento){
 
+const cards = document.querySelectorAll('.card');
+
+cards.forEach(card=>{
+card.classList.remove('active');
+});
+
+elemento.classList.add('active');
+
+const titulo = elemento.innerText.trim();
+
+const contenido = document.getElementById('contenido');
+
+if(titulo.includes('Ingresos')){
+
+contenido.innerHTML = `
+<h2>💰 Ingresos</h2>
+
+<input type="text" placeholder="Concepto ingreso">
+
+<input type="number" placeholder="Monto">
+
+<select>
+<option>Actividad Empresarial</option>
+<option>Asalariado</option>
+</select>
+
+<button class="ready">
+💾 Guardar Ingreso
+</button>
+`;
+
+}
+
+if(titulo.includes('Gastos')){
+
+contenido.innerHTML = `
+<h2>💸 Gastos</h2>
+
+<input type="text" placeholder="Concepto gasto">
+
+<input type="number" placeholder="Monto">
+
+<select>
+<option>Gasolina</option>
+<option>Internet</option>
+<option>Dentista</option>
+<option>Colegiatura</option>
+</select>
+
+<button class="ready">
+💾 Guard
 function activar(elemento){
 
 const cards = document.querySelectorAll('.card');
