@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Micro Fiscal Core</title>
 
 <style>
@@ -123,6 +121,7 @@ font-size:12px;
 opacity:.4;
 filter:grayscale(100%);
 transition:.2s;
+cursor:pointer;
 }
 
 .tool.active{
@@ -295,40 +294,32 @@ Código
 </div>
 
 <div class="tool" onclick="activarTool(this)">
-<span>☁️</span>
-Gps
+<span>📍</span>
+GPS
 </div>
 
 </div>
-
-<div class="section">
 
 <div class="section" id="contenido">
 
-<h2>🚚 Viáticos</h2>
+<h2>💰 Ingresos</h2>
 
-<input type="text" placeholder="Concepto">
+<input type="text" placeholder="Concepto ingreso">
 
 <input type="number" placeholder="Monto">
 
-<input type="number" placeholder="Litros gasolina">
-
-<input type="number" placeholder="Odómetro">
-
 <select>
-<option>Gasolina</option>
-<option>Casetas</option>
-<option>Hotel</option>
-<option>Comida</option>
-<option>Otros</option>
+<option>Actividad Empresarial</option>
+<option>Asalariado</option>
 </select>
 
 <button class="ready">
-💾 Guardar Movimiento
+💾 Guardar Ingreso
 </button>
 
 </div>
-  
+
+<div class="actions">
 
 <div class="action save active">
 💾 Guardar
@@ -347,7 +338,7 @@ Gps
 </div>
 
 </div>
-<script>
+
 <script>
 
 function activar(elemento){
@@ -385,7 +376,7 @@ contenido.innerHTML = `
 
 }
 
-if(titulo.includes('Gastos')){
+else if(titulo.includes('Gastos')){
 
 contenido.innerHTML = `
 <h2>💸 Gastos</h2>
@@ -408,7 +399,7 @@ contenido.innerHTML = `
 
 }
 
-if(titulo.includes('Clientes')){
+else if(titulo.includes('Clientes')){
 
 contenido.innerHTML = `
 <h2>👥 Clientes</h2>
@@ -428,7 +419,7 @@ contenido.innerHTML = `
 
 }
 
-if(titulo.includes('Registro')){
+else if(titulo.includes('Registro')){
 
 contenido.innerHTML = `
 <h2>📝 Proveedores</h2>
@@ -448,7 +439,7 @@ contenido.innerHTML = `
 
 }
 
-if(titulo.includes('Viáticos')){
+else if(titulo.includes('Viáticos')){
 
 contenido.innerHTML = `
 <h2>🚚 Viáticos</h2>
@@ -476,7 +467,7 @@ contenido.innerHTML = `
 
 }
 
-if(titulo.includes('Rutas')){
+else if(titulo.includes('Rutas')){
 
 contenido.innerHTML = `
 <h2>🗺️ Rutas</h2>
@@ -511,6 +502,6 @@ elemento.classList.add('active');
 }
 
 </script>
-</script>
+
 </body>
 </html>
