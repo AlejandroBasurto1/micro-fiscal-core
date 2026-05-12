@@ -146,7 +146,8 @@ margin-bottom:15px;
 font-size:20px;
 }
 
-input,select{
+input,
+select{
 width:100%;
 padding:12px;
 border:none;
@@ -155,6 +156,12 @@ margin-bottom:10px;
 background:#1b2f4a;
 color:white;
 font-size:14px;
+outline:none;
+}
+
+select option{
+background:#102544;
+color:white;
 }
 
 button{
@@ -308,12 +315,17 @@ GPS
 
 <input type="number" placeholder="Monto">
 
-<select>
-<option>Actividad Empresarial</option>
-<option>Asalariado</option>
+<select id="regimenSelect">
+<option value="Actividad Empresarial">
+🏢 Actividad Empresarial
+</option>
+
+<option value="Asalariado">
+👨‍💼 Asalariado
+</option>
 </select>
 
-<button class="ready">
+<button class="ready" onclick="guardarRegimen()">
 💾 Guardar Ingreso
 </button>
 
@@ -341,6 +353,8 @@ GPS
 
 <script>
 
+let regimenFiscal = "Actividad Empresarial";
+
 function activar(elemento){
 
 const cards = document.querySelectorAll('.card');
@@ -355,161 +369,387 @@ const titulo = elemento.innerText.trim();
 
 const contenido = document.getElementById('contenido');
 
+
+
 if(titulo.includes('Ingresos')){
 
 contenido.innerHTML = `
+
 <h2>💰 Ingresos</h2>
 
 <input type="text" placeholder="Concepto ingreso">
 
 <input type="number" placeholder="Monto">
 
-<select>
-<option>Actividad Empresarial</option>
-<option>Asalariado</option>
+<select id="regimenSelect">
+
+<option value="Actividad Empresarial">
+🏢 Actividad Empresarial
+</option>
+
+<option value="Asalariado">
+👨‍💼 Asalariado
+</option>
+
 </select>
 
-<button class="ready">
+<button class="ready" onclick="guardarRegimen()">
 💾 Guardar Ingreso
 </button>
+
 `;
 
 }
 
+
+
+/* ========================= */
+/* GASTOS */
+/* ========================= */
+
 else if(titulo.includes('Gastos')){
 
+if(regimenFiscal === "Asalariado"){
+
+activarModuloViaticos();
+return;
+
+}
+
 contenido.innerHTML = `
-<h2>💸 Gastos</h2>
+
+<h2>💸 Gastos Operativos</h2>
 
 <input type="text" placeholder="Concepto gasto">
 
 <input type="number" placeholder="Monto">
 
-<select size="1">
-<select>
-<option>Gasolina Magna</option>
-<option>Gasolina Premium</option>
-<option>Diesel</option>
-<option>Casetas</option>
-<option>Hotel</option>
-<option>Comida</option>
-<option>Otros</option>
+<select id="tipoGasto"
+onchange="mostrarCamposGasolina()">
+
+<option value="Gasolina">
+⛽ Gasolina
+</option>
+
+<option value="Insumos">
+📦 Insumos
+</option>
+
+<option value="Herramientas">
+🔧 Herramientas
+</option>
+
+<option value="Logística">
+🚚 Logística
+</option>
+
+<option value="Otros">
+📁 Otros
+</option>
+
 </select>
 
-<input type="number" placeholder="Costo gasolina">
+<div id="gasolinaCampos">
 
-<input type="number" placeholder="Precio por litro">
+<input type="number"
+placeholder="Total cargado">
 
-<input type="number" placeholder="Odómetro actual">
+<input type="number"
+placeholder="$/Litro">
+
+<input type="number"
+placeholder="Odómetro actual">
+
+</div>
 
 <button class="ready">
-💾 Guardar Movimiento
+💾 Guardar Gasto
 </button>
+
 `;
 
+mostrarCamposGasolina();
+
 }
+
+
+
+/* ========================= */
+/* CLIENTES */
+/* ========================= */
 
 else if(titulo.includes('Clientes')){
 
 contenido.innerHTML = `
+
 <h2>👥 Clientes</h2>
 
-<input type="text" placeholder="Nombre cliente">
+<input type="text"
+placeholder="Nombre cliente">
 
-<input type="number" placeholder="Teléfono principal">
+<input type="number"
+placeholder="Teléfono principal">
 
-<input type="number" placeholder="Teléfono secundario">
+<input type="number"
+placeholder="Teléfono secundario">
 
-<input type="text" placeholder="Referencia">
+<input type="text"
+placeholder="Referencia">
 
 <button class="ready">
 💾 Guardar Cliente
 </button>
+
 `;
 
 }
+
+
+
+/* ========================= */
+/* REGISTRO */
+/* ========================= */
 
 else if(titulo.includes('Registro')){
 
 contenido.innerHTML = `
-<h2>📝 Proveedores</h2>
 
-<input type="text" placeholder="Razón social">
+<h2>📝 Registro Fiscal</h2>
 
-<input type="text" placeholder="RFC">
+<input type="text"
+placeholder="Razón social">
 
-<input type="text" placeholder="Correo">
+<input type="text"
+placeholder="RFC">
 
-<input type="number" placeholder="WhatsApp">
+<input type="text"
+placeholder="Correo">
 
-<button class="ready">
-💾 Guardar Proveedor
+<select id="regimenRegistro">
+
+<option value="Actividad Empresarial">
+🏢 Actividad Empresarial
+</option>
+
+<option value="Asalariado">
+👨‍💼 Asalariado
+</option>
+
+</select>
+
+<button class="ready"
+onclick="guardarRegimenRegistro()">
+
+💾 Guardar Registro
+
 </button>
+
 `;
 
 }
+
+
+
+/* ========================= */
+/* VIATICOS */
+/* ========================= */
 
 else if(titulo.includes('Viáticos')){
 
-contenido.innerHTML = `
-<h2>🚚 Viáticos</h2>
-
-<input type="text" placeholder="Concepto">
-
-<input type="number" placeholder="Monto">
-
-<input type="number" placeholder="Litros gasolina">
-
-<input type="number" placeholder="Odómetro">
-
-<select size="1">
-<option>Gasolina Magna</option>
-<option>Gasolina Premium</option>
-<option>Diesel</option>
-<option>Casetas</option>
-<option>Hotel</option>
-<option>Comida</option>
-<option>Taxi / Transporte</option>
-<option>Otros</option>
-</select>
-<input type="number" placeholder="Costo gasolina">
-
-<input type="number" placeholder="Precio por litro">
-
-<input type="number" placeholder="Odómetro actual">
-
-<button class="ready">
-💾 Guardar Movimiento
-</button>
-`;
+activarModuloViaticos();
 
 }
+
+
+
+/* ========================= */
+/* RUTAS */
+/* ========================= */
 
 else if(titulo.includes('Rutas')){
 
 contenido.innerHTML = `
+
 <h2>🗺️ Rutas</h2>
 
-<input type="text" placeholder="Origen">
+<input type="text"
+placeholder="Origen">
 
-<input type="text" placeholder="Cliente 1">
+<input type="text"
+placeholder="Cliente 1">
 
-<input type="text" placeholder="Cliente 2">
+<input type="text"
+placeholder="Cliente 2">
 
-<input type="text" placeholder="Cliente 3">
+<input type="text"
+placeholder="Cliente 3">
 
 <button class="ready">
 🚀 Calcular Ruta
 </button>
+
 `;
 
 }
 
 }
 
+
+
+/* ========================= */
+/* MODULO VIATICOS */
+/* ========================= */
+
+function activarModuloViaticos(){
+
+const contenido =
+document.getElementById('contenido');
+
+contenido.innerHTML = `
+
+<h2>🚚 Viáticos</h2>
+
+<input type="text"
+placeholder="Concepto">
+
+<input type="number"
+placeholder="Monto recibido">
+
+<select id="tipoViatico"
+onchange="mostrarCamposViaticos()">
+
+<option value="Gasolina">
+⛽ Gasolina
+</option>
+
+<option value="Hotel">
+🏨 Hotel
+</option>
+
+<option value="Comida">
+🍔 Comida
+</option>
+
+<option value="Transporte">
+🚕 Transporte
+</option>
+
+<option value="Casetas">
+🛣️ Casetas
+</option>
+
+<option value="Otros">
+📦 Otros
+</option>
+
+</select>
+
+<div id="camposViaticoGasolina">
+
+<input type="number"
+placeholder="Litros gasolina">
+
+<input type="number"
+placeholder="Total cargado">
+
+<input type="number"
+placeholder="$/Litro">
+
+<input type="number"
+placeholder="Odómetro actual">
+
+</div>
+
+<button class="ready">
+💾 Guardar Viático
+</button>
+
+`;
+
+mostrarCamposViaticos();
+
+}
+
+
+
+function guardarRegimen(){
+
+const select =
+document.getElementById('regimenSelect');
+
+regimenFiscal = select.value;
+
+alert("Régimen guardado: " + regimenFiscal);
+
+}
+
+
+
+function guardarRegimenRegistro(){
+
+const select =
+document.getElementById('regimenRegistro');
+
+regimenFiscal = select.value;
+
+alert("Régimen actualizado: " + regimenFiscal);
+
+}
+
+
+
+function mostrarCamposGasolina(){
+
+const tipo =
+document.getElementById('tipoGasto');
+
+if(!tipo) return;
+
+const campos =
+document.getElementById('gasolinaCampos');
+
+if(tipo.value === "Gasolina"){
+
+campos.style.display = "block";
+
+}else{
+
+campos.style.display = "none";
+
+}
+
+}
+
+
+
+function mostrarCamposViaticos(){
+
+const tipo =
+document.getElementById('tipoViatico');
+
+if(!tipo) return;
+
+const campos =
+document.getElementById('camposViaticoGasolina');
+
+if(tipo.value === "Gasolina"){
+
+campos.style.display = "block";
+
+}else{
+
+campos.style.display = "none";
+
+}
+
+}
+
+
+
 function activarTool(elemento){
 
-const tools = document.querySelectorAll('.tool');
+const tools =
+document.querySelectorAll('.tool');
 
 tools.forEach(tool=>{
 tool.classList.remove('active');
