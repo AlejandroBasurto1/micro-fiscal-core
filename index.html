@@ -6,6 +6,7 @@
 <title>Micro Fiscal Core</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
@@ -16,40 +17,40 @@ font-family:Arial;
 body{
 background:#07111f;
 color:white;
-padding:20px;
+padding:12px;
 }
 
 .header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:25px;
+margin-bottom:15px;
 }
 
 .logo{
-font-size:32px;
+font-size:24px;
 font-weight:bold;
 }
 
 .mode{
 background:#132238;
-padding:10px 15px;
-border-radius:15px;
-font-size:14px;
+padding:8px 12px;
+border-radius:12px;
+font-size:12px;
 }
 
 .grid{
 display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:15px;
-margin-bottom:25px;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+margin-bottom:15px;
 }
 
 .card{
 background:#132238;
-padding:20px;
-border-radius:22px;
-min-height:120px;
+padding:10px;
+border-radius:18px;
+height:85px;
 display:flex;
 flex-direction:column;
 justify-content:center;
@@ -60,217 +61,4 @@ transition:.2s;
 }
 
 .card:hover{
-transform:scale(1.03);
-}
-
-.card span{
-font-size:40px;
-margin-bottom:10px;
-}
-
-.card h3{
-font-size:18px;
-}
-
-.section{
-background:#132238;
-padding:20px;
-border-radius:22px;
-margin-bottom:25px;
-}
-
-.section h2{
-margin-bottom:20px;
-}
-
-input,select{
-width:100%;
-padding:15px;
-border:none;
-border-radius:15px;
-margin-bottom:15px;
-background:#1b2f4a;
-color:white;
-font-size:16px;
-}
-
-button{
-width:100%;
-padding:18px;
-border:none;
-border-radius:18px;
-background:#10b981;
-color:white;
-font-size:18px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.tools{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px;
-margin-bottom:25px;
-}
-
-.tool{
-background:#132238;
-padding:20px;
-border-radius:20px;
-text-align:center;
-}
-
-.tool span{
-font-size:45px;
-display:block;
-margin-bottom:10px;
-}
-
-.actions{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:15px;
-}
-
-.action{
-padding:20px;
-border-radius:20px;
-text-align:center;
-font-weight:bold;
-font-size:18px;
-}
-
-.save{background:#10b981;}
-.edit{background:#3b82f6;}
-.delete{background:#ef4444;}
-.excel{background:#15803d;}
-
-@media(min-width:768px){
-.grid{
-grid-template-columns:repeat(4,1fr);
-}
-
-.tools{
-grid-template-columns:repeat(3,1fr);
-}
-
-.actions{
-grid-template-columns:repeat(4,1fr);
-}
-}
-</style>
-</head>
-
-<body>
-
-<div class="header">
-<div class="logo">🚀 Micro Fiscal Core</div>
-<div class="mode">Modo Repartidor</div>
-</div>
-
-<div class="grid">
-
-<div class="card">
-<span>💰</span>
-<h3>Ingresos</h3>
-</div>
-
-<div class="card">
-<span>💸</span>
-<h3>Gastos</h3>
-</div>
-
-<div class="card">
-<span>📊</span>
-<h3>Estimado</h3>
-</div>
-
-<div class="card">
-<span>🧾</span>
-<h3>IVA</h3>
-</div>
-
-<div class="card">
-<span>📝</span>
-<h3>Registro</h3>
-</div>
-
-<div class="card">
-<span>🚚</span>
-<h3>Viáticos</h3>
-</div>
-
-<div class="card">
-<span>👥</span>
-<h3>Clientes</h3>
-</div>
-
-<div class="card">
-<span>🗺️</span>
-<h3>Rutas</h3>
-</div>
-
-</div>
-
-<div class="section">
-
-<h2>⛽ Nuevo Movimiento</h2>
-
-<input type="text" placeholder="Concepto">
-
-<input type="number" placeholder="Monto">
-
-<input type="number" placeholder="Litros gasolina">
-
-<input type="number" placeholder="Odómetro">
-
-<select>
-<option>Ingreso</option>
-<option>Gasto</option>
-</select>
-
-<button>➕ Guardar Movimiento</button>
-
-</div>
-
-<div class="tools">
-
-<div class="tool">
-<span>📷</span>
-OCR
-</div>
-
-<div class="tool">
-<span>🔳</span>
-QR
-</div>
-
-<div class="tool">
-<span>📦</span>
-Código
-</div>
-
-</div>
-
-<div class="actions">
-
-<div class="action save">
-💾 Guardar
-</div>
-
-<div class="action edit">
-✏️ Editar
-</div>
-
-<div class="action delete">
-🗑️ Borrar
-</div>
-
-<div class="action excel">
-📤 Excel
-</div>
-
-</div>
-
-</body>
-</html>
+transform:scale(
