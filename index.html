@@ -348,6 +348,8 @@ Gps
 
 </div>
 <script>
+<script>
+
 function activar(elemento){
 
 const cards = document.querySelectorAll('.card');
@@ -400,18 +402,102 @@ contenido.innerHTML = `
 </select>
 
 <button class="ready">
-💾 Guard
-function activar(elemento){
-
-const cards = document.querySelectorAll('.card');
-
-cards.forEach(card=>{
-card.classList.remove('active');
-});
-
-elemento.classList.add('active');
+💾 Guardar Gasto
+</button>
+`;
 
 }
+
+if(titulo.includes('Clientes')){
+
+contenido.innerHTML = `
+<h2>👥 Clientes</h2>
+
+<input type="text" placeholder="Nombre cliente">
+
+<input type="number" placeholder="Teléfono principal">
+
+<input type="number" placeholder="Teléfono secundario">
+
+<input type="text" placeholder="Referencia">
+
+<button class="ready">
+💾 Guardar Cliente
+</button>
+`;
+
+}
+
+if(titulo.includes('Registro')){
+
+contenido.innerHTML = `
+<h2>📝 Proveedores</h2>
+
+<input type="text" placeholder="Razón social">
+
+<input type="text" placeholder="RFC">
+
+<input type="text" placeholder="Correo">
+
+<input type="number" placeholder="WhatsApp">
+
+<button class="ready">
+💾 Guardar Proveedor
+</button>
+`;
+
+}
+
+if(titulo.includes('Viáticos')){
+
+contenido.innerHTML = `
+<h2>🚚 Viáticos</h2>
+
+<input type="text" placeholder="Concepto">
+
+<input type="number" placeholder="Monto">
+
+<input type="number" placeholder="Litros gasolina">
+
+<input type="number" placeholder="Odómetro">
+
+<select>
+<option>Gasolina</option>
+<option>Casetas</option>
+<option>Hotel</option>
+<option>Comida</option>
+<option>Otros</option>
+</select>
+
+<button class="ready">
+💾 Guardar Movimiento
+</button>
+`;
+
+}
+
+if(titulo.includes('Rutas')){
+
+contenido.innerHTML = `
+<h2>🗺️ Rutas</h2>
+
+<input type="text" placeholder="Origen">
+
+<input type="text" placeholder="Cliente 1">
+
+<input type="text" placeholder="Cliente 2">
+
+<input type="text" placeholder="Cliente 3">
+
+<button class="ready">
+🚀 Calcular Ruta
+</button>
+`;
+
+}
+
+}
+
 function activarTool(elemento){
 
 const tools = document.querySelectorAll('.tool');
@@ -423,6 +509,8 @@ tool.classList.remove('active');
 elemento.classList.add('active');
 
 }
+
+</script>
 </script>
 </body>
 </html>
