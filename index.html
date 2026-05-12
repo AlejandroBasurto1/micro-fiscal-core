@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Micro Fiscal Core</title>
 
 <style>
@@ -61,4 +63,223 @@ transition:.2s;
 }
 
 .card:hover{
-transform:scale(
+transform:scale(1.03);
+}
+
+.card span{
+font-size:28px;
+margin-bottom:5px;
+}
+
+.card h3{
+font-size:15px;
+}
+
+.section{
+background:#132238;
+padding:15px;
+border-radius:20px;
+margin-bottom:15px;
+}
+
+.section h2{
+margin-bottom:15px;
+font-size:22px;
+}
+
+input,select{
+width:100%;
+padding:12px;
+border:none;
+border-radius:12px;
+margin-bottom:10px;
+background:#1b2f4a;
+color:white;
+font-size:14px;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+background:#10b981;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.tools{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+margin-bottom:15px;
+}
+
+.tool{
+background:#132238;
+padding:10px;
+border-radius:18px;
+text-align:center;
+height:80px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+
+.tool span{
+font-size:26px;
+display:block;
+margin-bottom:5px;
+}
+
+.actions{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+}
+
+.action{
+padding:14px;
+border-radius:16px;
+text-align:center;
+font-weight:bold;
+font-size:14px;
+}
+
+.save{background:#10b981;}
+.edit{background:#3b82f6;}
+.delete{background:#ef4444;}
+.excel{background:#15803d;}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+
+<div class="logo">
+🚀 Micro Fiscal Core
+</div>
+
+<div class="mode">
+Modo Repartidor
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+<span>💰</span>
+<h3>Ingresos</h3>
+</div>
+
+<div class="card">
+<span>💸</span>
+<h3>Gastos</h3>
+</div>
+
+<div class="card">
+<span>📊</span>
+<h3>Estimado</h3>
+</div>
+
+<div class="card">
+<span>🧾</span>
+<h3>IVA</h3>
+</div>
+
+<div class="card">
+<span>📝</span>
+<h3>Registro</h3>
+</div>
+
+<div class="card">
+<span>🚚</span>
+<h3>Viáticos</h3>
+</div>
+
+<div class="card">
+<span>👥</span>
+<h3>Clientes</h3>
+</div>
+
+<div class="card">
+<span>🗺️</span>
+<h3>Rutas</h3>
+</div>
+
+</div>
+
+<div class="tools">
+
+<div class="tool">
+<span>📷</span>
+OCR
+</div>
+
+<div class="tool">
+<span>🔳</span>
+QR
+</div>
+
+<div class="tool">
+<span>📦</span>
+Barras
+</div>
+
+<div class="tool">
+<span>☁️</span>
+Nube
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>⛽ Nuevo Movimiento</h2>
+
+<input type="text" placeholder="Concepto">
+
+<input type="number" placeholder="Monto">
+
+<input type="number" placeholder="Litros gasolina">
+
+<input type="number" placeholder="Odómetro">
+
+<select>
+<option>Ingreso</option>
+<option>Gasto</option>
+</select>
+
+<button>
+➕ Guardar Movimiento
+</button>
+
+</div>
+
+<div class="actions">
+
+<div class="action save">
+💾 Guardar
+</div>
+
+<div class="action edit">
+✏️ Editar
+</div>
+
+<div class="action delete">
+🗑️ Borrar
+</div>
+
+<div class="action excel">
+📤 Excel
+</div>
+
+</div>
+
+</body>
+</html>
