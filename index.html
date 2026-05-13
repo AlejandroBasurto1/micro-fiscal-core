@@ -78,7 +78,8 @@ margin-bottom:15px;
 }
 
 select,
-input{
+input,
+textarea{
 width:100%;
 padding:12px;
 border:none;
@@ -88,6 +89,12 @@ background:#1b2f4a;
 color:white;
 font-size:14px;
 box-sizing:border-box;
+font-family:Arial;
+}
+
+textarea{
+min-height:120px;
+resize:none;
 }
 
 .actions{
@@ -199,7 +206,7 @@ margin:15px 0;
 <h3>Proveedor</h3>
 </div>
 
-<div class="card">
+<div class="card" onclick="abrirModulo('cliente',this)">
 <span>👥</span>
 <h3>Cliente</h3>
 </div>
@@ -414,6 +421,10 @@ case 'proveedor':
 mostrarProveedor();
 break;
 
+case 'cliente':
+mostrarCliente();
+break;
+
 }
 
 }
@@ -606,6 +617,94 @@ document.getElementById('contenido').innerHTML = `
 
 }
 
+function mostrarCliente(){
+
+document.getElementById('contenido').innerHTML = `
+
+<h2>👥 Cliente Operativo</h2>
+
+<input placeholder="Nombre cliente">
+
+<input placeholder="Teléfono">
+
+<input placeholder="Referencia rápida">
+
+<select>
+
+<option>🚚 Distribución</option>
+<option>🛠️ Servicio</option>
+<option>🏪 Venta</option>
+<option>📦 Entrega</option>
+
+</select>
+
+<hr>
+
+<h3>📍 Ubicación Inteligente</h3>
+
+<div class="tag">📍 GPS actual</div>
+<div class="tag">🏠 Dirección manual</div>
+<div class="tag">🗺️ Agregar a ruta</div>
+
+<hr>
+
+<h3>⚡ Acción Operativa</h3>
+
+<div class="tag">Generar ruta</div>
+<div class="tag">Optimizar logística</div>
+<div class="tag">WhatsApp automático</div>
+<div class="tag">Confirmar entrega</div>
+
+<hr>
+
+<h3>💬 Speech Automático</h3>
+
+<textarea>
+
+Hola 👋 buen día.
+
+Voy en camino a su ubicación.
+Mi tiempo aproximado de llegada es de 20 minutos.
+
+Si necesita compartir una referencia adicional
+puede enviarla por este medio.
+
+Gracias.
+
+</textarea>
+
+<hr>
+
+<h3>📊 Resumen Cliente</h3>
+
+<div class="result-grid">
+
+<div class="result-card">
+<h4>Pedidos</h4>
+<p>28</p>
+</div>
+
+<div class="result-card">
+<h4>Zona</h4>
+<p>Norte</p>
+</div>
+
+<div class="result-card">
+<h4>Frecuencia</h4>
+<p>Alta</p>
+</div>
+
+<div class="result-card">
+<h4>Última visita</h4>
+<p>Hoy</p>
+</div>
+
+</div>
+
+`;
+
+}
+
 function herramientaRapida(tipo){
 
 if(tipo === 'ocr'){
@@ -768,6 +867,7 @@ modulos = [
 'Mantenimiento',
 'OCR',
 'Proveedor',
+'Cliente',
 'Rutas'
 ];
 
