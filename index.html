@@ -395,10 +395,11 @@ placeholder="Nombre banco">
 
 <select>
 
+<option>💳 Crédito</option>
 <option>💳 Débito</option>
 <option>💰 Efectivo</option>
-<option>🏦 Nómina</option>
 <option>💼 Negocio</option>
+<option>🏦 Nómina</option>
 
 </select>
 
@@ -415,6 +416,24 @@ placeholder="Saldo inicial">
 <div class="tag">💸 Pago</div>
 <div class="tag">🏧 Retiro</div>
 <div class="tag">📤 Transferencia</div>
+
+<hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
+
+<h3>
+💡 Contexto Inteligente
+</h3>
+
+<div class="tag">
+💳 Crédito ≠ Dinero propio
+</div>
+
+<div class="tag">
+💰 Flujo real
+</div>
+
+<div class="tag">
+📊 Conciliación
+</div>
 
 `;
 
@@ -485,11 +504,11 @@ if(regimen === 'PFAE'){
 if(operacion === 'Distribución'){
 
 modulos = [
+'Estacionamiento',
 'Gasolina',
 'GPS',
 'Mantenimiento',
 'OCR',
-'Estacionamiento',
 'Proveedor',
 'Rutas'
 ];
