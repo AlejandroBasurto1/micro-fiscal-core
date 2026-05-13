@@ -191,6 +191,7 @@ box-shadow:0 0 15px rgba(16,185,129,.5);
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:10px;
+margin-bottom:15px;
 }
 
 .action{
@@ -225,6 +226,41 @@ background:#ef4444;
 background:#15803d;
 }
 
+.results{
+background:#132238;
+padding:15px;
+border-radius:20px;
+}
+
+.results h2{
+margin-bottom:15px;
+font-size:18px;
+}
+
+.result-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.result-card{
+background:#1b2f4a;
+padding:14px;
+border-radius:14px;
+text-align:center;
+}
+
+.result-card h4{
+font-size:12px;
+margin-bottom:8px;
+opacity:.7;
+}
+
+.result-card p{
+font-size:18px;
+font-weight:bold;
+}
+
 </style>
 </head>
 
@@ -244,6 +280,10 @@ background:#15803d;
 
 </div>
 
+
+
+<!-- OPERACIÓN PRINCIPAL -->
+
 <div class="grid">
 
 <div class="card active" onclick="activar(this)">
@@ -252,23 +292,31 @@ background:#15803d;
 </div>
 
 <div class="card" onclick="activar(this)">
+<span>🏦</span>
+<h3>Bancos</h3>
+</div>
+
+<div class="card" onclick="activar(this)">
 <span>💸</span>
 <h3>Gastos</h3>
 </div>
 
 <div class="card" onclick="activar(this)">
-<span>📊</span>
-<h3>Estimado</h3>
+<span>🚚</span>
+<h3>Viáticos</h3>
 </div>
 
-<div class="card" onclick="activar(this)">
-<span>🧾</span>
-<h3>IVA</h3>
 </div>
 
+
+
+<!-- OPERACIÓN SECUNDARIA -->
+
+<div class="grid">
+
 <div class="card" onclick="activar(this)">
-<span>📝</span>
-<h3>Registro</h3>
+<span>📦</span>
+<h3>Proveedores</h3>
 </div>
 
 <div class="card" onclick="activar(this)">
@@ -277,8 +325,8 @@ background:#15803d;
 </div>
 
 <div class="card" onclick="activar(this)">
-<span>🚚</span>
-<h3>Viáticos</h3>
+<span>📍</span>
+<h3>Ruta</h3>
 </div>
 
 <div class="card" onclick="activar(this)">
@@ -287,6 +335,10 @@ background:#15803d;
 </div>
 
 </div>
+
+
+
+<!-- TOOLS -->
 
 <div class="tools">
 
@@ -312,7 +364,15 @@ GPS
 
 </div>
 
+
+
+<!-- CONTENIDO DINÁMICO -->
+
 <div class="section" id="contenido"></div>
+
+
+
+<!-- ACCIONES -->
 
 <div class="actions">
 
@@ -333,6 +393,44 @@ GPS
 </div>
 
 </div>
+
+
+
+<!-- RESULTADOS -->
+
+<div class="results">
+
+<h2>
+📊 Resultado Financiero
+</h2>
+
+<div class="result-grid">
+
+<div class="result-card">
+<h4>IVA</h4>
+<p>$0</p>
+</div>
+
+<div class="result-card">
+<h4>ISR</h4>
+<p>$0</p>
+</div>
+
+<div class="result-card">
+<h4>Ganancia Real</h4>
+<p>$0</p>
+</div>
+
+<div class="result-card">
+<h4>Utilidad</h4>
+<p>$0</p>
+</div>
+
+</div>
+
+</div>
+
+
 
 <script>
 
@@ -420,9 +518,7 @@ onclick="guardarRegimen()">
 
 
 
-/* ========================= */
 /* GASTOS */
-/* ========================= */
 
 else if(titulo.includes('Gastos')){
 
@@ -500,11 +596,7 @@ placeholder="Odómetro actual">
 
 mostrarCamposViaticos();
 
-}
-
-
-
-else{
+}else{
 
 contenido.innerHTML = `
 
@@ -576,107 +668,7 @@ mostrarCamposGasolina();
 
 
 
-/* ========================= */
-/* ESTIMADO */
-/* ========================= */
-
-else if(titulo.includes('Estimado')){
-
-contenido.innerHTML = `
-
-<h2>📊 Estimado</h2>
-
-<input type="number"
-placeholder="Ingreso bruto">
-
-<input type="number"
-placeholder="Gastos">
-
-<input type="number"
-placeholder="ISR aproximado">
-
-<button class="ready">
-📈 Calcular
-</button>
-
-`;
-
-}
-
-
-
-/* ========================= */
-/* IVA */
-/* ========================= */
-
-else if(titulo.includes('IVA')){
-
-contenido.innerHTML = `
-
-<h2>🧾 IVA</h2>
-
-<input type="number"
-placeholder="IVA cobrado">
-
-<input type="number"
-placeholder="IVA pagado">
-
-<button class="ready">
-🧮 Calcular IVA
-</button>
-
-`;
-
-}
-
-
-
-/* ========================= */
-/* REGISTRO */
-/* ========================= */
-
-else if(titulo.includes('Registro')){
-
-contenido.innerHTML = `
-
-<h2>📝 Registro Fiscal</h2>
-
-<select id="regimenRegistro">
-
-<option value="Actividad Empresarial"
-${regimenFiscal === "Actividad Empresarial"
-? "selected" : ""}>
-
-🏢 Actividad Empresarial
-
-</option>
-
-<option value="Asalariado"
-${regimenFiscal === "Asalariado"
-? "selected" : ""}>
-
-👨‍💼 Asalariado
-
-</option>
-
-</select>
-
-<button class="ready"
-onclick="guardarRegimenRegistro()">
-
-💾 Guardar Régimen
-
-</button>
-
-`;
-
-}
-
-
-
-/* ========================= */
 /* CLIENTES */
-/* ========================= */
 
 else if(titulo.includes('Clientes')){
 
@@ -706,91 +698,7 @@ placeholder="Referencia">
 
 
 
-/* ========================= */
-/* VIATICOS */
-/* ========================= */
-
-else if(titulo.includes('Viáticos')){
-
-contenido.innerHTML = `
-
-<h2>🚚 Viáticos</h2>
-
-<input type="text"
-placeholder="Concepto">
-
-<input type="number"
-placeholder="Monto recibido">
-
-<select id="tipoViatico"
-onchange="mostrarCamposViaticos()">
-
-<option value="Gasolina">
-⛽ Gasolina
-</option>
-
-<option value="Hotel">
-🏨 Hotel
-</option>
-
-<option value="Alimentos">
-🍽️ Alimentos
-</option>
-
-<option value="Lavanderia">
-🧺 Lavandería
-</option>
-
-<option value="Transporte">
-🚕 Transporte / Pasajes
-</option>
-
-<option value="Casetas">
-🛣️ Casetas
-</option>
-
-<option value="Propinas">
-💵 Propinas
-</option>
-
-<option value="Otros">
-📦 Otros
-</option>
-
-</select>
-
-<div id="camposViaticoGasolina"
-style="display:none;">
-
-<input type="number"
-placeholder="Litros gasolina">
-
-<input type="number"
-placeholder="Total cargado">
-
-<input type="number"
-placeholder="$/Litro">
-
-<input type="number"
-placeholder="Odómetro actual">
-
-</div>
-
-<button class="ready">
-💾 Guardar Viático
-</button>
-
-`;
-
-mostrarCamposViaticos();
-
-}
-
-
-
-/* ========================= */
 /* MANTENIMIENTO */
-/* ========================= */
 
 else if(titulo.includes('Mantenimiento')){
 
@@ -861,9 +769,7 @@ placeholder="Taller / Referencia">
 
 
 
-/* ========================= */
 /* GUARDAR REGIMEN */
-/* ========================= */
 
 function guardarRegimen(){
 
@@ -883,47 +789,11 @@ alert(
 + regimenFiscal
 );
 
-activar(
-document.querySelector(
-'.card.active'
-)
-);
-
 }
 
 
 
-function guardarRegimenRegistro(){
-
-const select =
-document.getElementById('regimenRegistro');
-
-regimenFiscal =
-select.value;
-
-localStorage.setItem(
-"regimenFiscal",
-regimenFiscal
-);
-
-alert(
-"Régimen actualizado: "
-+ regimenFiscal
-);
-
-activar(
-document.querySelector(
-'.card.active'
-)
-);
-
-}
-
-
-
-/* ========================= */
-/* CAMPOS GASOLINA */
-/* ========================= */
+/* GASOLINA */
 
 function mostrarCamposGasolina(){
 
@@ -951,9 +821,7 @@ campos.style.display =
 
 
 
-/* ========================= */
-/* CAMPOS VIATICOS */
-/* ========================= */
+/* VIATICOS */
 
 function mostrarCamposViaticos(){
 
@@ -983,9 +851,7 @@ campos.style.display =
 
 
 
-/* ========================= */
 /* TOOLS */
-/* ========================= */
 
 function activarTool(elemento){
 
