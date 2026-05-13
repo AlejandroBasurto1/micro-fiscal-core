@@ -11,7 +11,7 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:Arial;
 }
 
 body{
@@ -32,6 +32,35 @@ font-size:22px;
 font-weight:bold;
 }
 
+.status-bar{
+display:flex;
+gap:8px;
+align-items:center;
+}
+
+.status-dot{
+width:10px;
+height:10px;
+border-radius:50%;
+background:#4b5563;
+}
+
+.status-ok{
+background:#10b981;
+box-shadow:0 0 10px #10b981;
+}
+
+.status-alert{
+background:#3b82f6;
+animation:blink 1s infinite;
+}
+
+@keyframes blink{
+0%{opacity:1;}
+50%{opacity:.2;}
+100%{opacity:1;}
+}
+
 .grid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
@@ -49,10 +78,10 @@ flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
-cursor:pointer;
-opacity:.4;
-filter:grayscale(100%);
 transition:.2s;
+cursor:pointer;
+opacity:.35;
+filter:grayscale(100%);
 }
 
 .card.active{
@@ -68,7 +97,41 @@ margin-bottom:5px;
 }
 
 .card h3{
+font-size:13px;
+}
+
+.tools{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+margin-bottom:15px;
+}
+
+.tool{
+background:#132238;
+padding:10px;
+border-radius:18px;
+height:75px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
 font-size:12px;
+opacity:.4;
+filter:grayscale(100%);
+transition:.2s;
+cursor:pointer;
+}
+
+.tool.active{
+opacity:1;
+filter:grayscale(0%);
+}
+
+.tool span{
+font-size:24px;
+margin-bottom:5px;
 }
 
 .section{
@@ -76,6 +139,11 @@ background:#132238;
 padding:15px;
 border-radius:20px;
 margin-bottom:15px;
+}
+
+.section h2{
+margin-bottom:15px;
+font-size:20px;
 }
 
 input,
@@ -88,18 +156,18 @@ margin-bottom:10px;
 background:#1b2f4a;
 color:white;
 font-size:14px;
+outline:none;
 }
 
 button{
 width:100%;
-padding:12px;
+padding:14px;
 border:none;
-border-radius:12px;
+border-radius:14px;
 background:#10b981;
 color:white;
+font-size:15px;
 font-weight:bold;
-margin-top:5px;
-cursor:pointer;
 }
 
 .actions{
@@ -113,20 +181,26 @@ margin-bottom:15px;
 padding:14px;
 border-radius:16px;
 text-align:center;
-font-size:13px;
 font-weight:bold;
+font-size:14px;
+opacity:.5;
+filter:grayscale(100%);
+}
+
+.action.active{
+opacity:1;
+filter:grayscale(0%);
 }
 
 .save{background:#10b981;}
 .edit{background:#3b82f6;}
 .delete{background:#ef4444;}
-.export{background:#15803d;}
+.excel{background:#15803d;}
 
 .results{
 background:#132238;
 padding:15px;
 border-radius:20px;
-margin-bottom:15px;
 }
 
 .result-grid{
@@ -139,26 +213,18 @@ gap:10px;
 background:#1b2f4a;
 padding:14px;
 border-radius:14px;
+text-align:center;
 }
 
 .result-card h4{
+font-size:12px;
 margin-bottom:8px;
-}
-
-.historial-item{
-background:#1b2f4a;
-padding:12px;
-border-radius:12px;
-margin-bottom:10px;
-}
-
-.historial-item small{
 opacity:.7;
 }
 
-.borrar-btn{
-background:#ef4444;
-margin-top:10px;
+.result-card p{
+font-size:18px;
+font-weight:bold;
 }
 
 </style>
@@ -168,6 +234,11 @@ margin-top:10px;
 
 <div class="header">
 <div class="logo">🚀 Micro Fiscal Core</div>
+<div class="status-bar">
+<div class="status-dot status-ok"></div>
+<div class="status-dot"></div>
+<div class="status-dot status-alert"></div>
+</div>
 </div>
 
 <div class="grid">
@@ -178,13 +249,37 @@ margin-top:10px;
 </div>
 
 <div class="card" onclick="activar(this)">
+<span>🏦</span>
+<h3>Bancos</h3>
+</div>
+
+<div class="card" onclick="activar(this)">
 <span>💸</span>
 <h3>Gastos</h3>
 </div>
 
 <div class="card" onclick="activar(this)">
+<span>🚚</span>
+<h3>Viáticos</h3>
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="card" onclick="activar(this)">
+<span>📦</span>
+<h3>Proveedores</h3>
+</div>
+
+<div class="card" onclick="activar(this)">
 <span>👥</span>
 <h3>Clientes</h3>
+</div>
+
+<div class="card" onclick="activar(this)">
+<span>📍</span>
+<h3>Ruta</h3>
 </div>
 
 <div class="card" onclick="activar(this)">
@@ -194,11 +289,35 @@ margin-top:10px;
 
 </div>
 
+<div class="tools">
+
+<div class="tool active" onclick="activarTool(this)">
+<span>📷</span>
+OCR
+</div>
+
+<div class="tool" onclick="activarTool(this)">
+<span>🔳</span>
+QR
+</div>
+
+<div class="tool" onclick="activarTool(this)">
+<span>📦</span>
+Código
+</div>
+
+<div class="tool" onclick="activarTool(this)">
+<span>📍</span>
+GPS
+</div>
+
+</div>
+
 <div class="section" id="contenido"></div>
 
 <div class="actions">
 
-<div class="action save" onclick="guardarActual()">
+<div class="action save active" onclick="guardarActual()">
 💾 Guardar
 </div>
 
@@ -210,7 +329,7 @@ margin-top:10px;
 🗑️ Borrar
 </div>
 
-<div class="action export">
+<div class="action excel">
 📤 Excel
 </div>
 
@@ -246,40 +365,37 @@ margin-top:10px;
 
 </div>
 
-<div class="section">
-
-<h2>📋 Historial Movimientos</h2>
-
-<div id="historialMovimientos"></div>
-
-</div>
-
 <script>
 
 let regimenFiscal =
 localStorage.getItem("regimenFiscal")
 || "Asalariado";
 
-let ingresos =
-JSON.parse(localStorage.getItem("ingresos"))
-|| [];
+let ingresos = JSON.parse(
+localStorage.getItem("ingresos")
+) || [];
 
-let gastos =
-JSON.parse(localStorage.getItem("gastos"))
-|| [];
+let gastosGuardados = JSON.parse(
+localStorage.getItem("gastosGuardados")
+) || [];
 
-window.onload = ()=>{
+window.addEventListener('load', ()=>{
 
 activar(document.querySelector('.card.active'));
 calcularResultados();
-renderHistorial();
 
-};
+});
 
 function activar(elemento){
 
-document.querySelectorAll('.card')
-.forEach(card=>{
+regimenFiscal =
+localStorage.getItem("regimenFiscal")
+|| "Asalariado";
+
+const cards =
+document.querySelectorAll('.card');
+
+cards.forEach(card=>{
 card.classList.remove('active');
 });
 
@@ -297,31 +413,33 @@ contenido.innerHTML = `
 
 <h2>💰 Ingresos</h2>
 
-<input
+<input type="text"
 id="conceptoIngreso"
-type="text"
 placeholder="Concepto ingreso">
 
-<input
+<input type="number"
 id="montoIngreso"
-type="number"
 placeholder="Monto">
 
 <select id="regimenSelect">
 
-<option value="Asalariado"
-${regimenFiscal==="Asalariado" ? "selected" : ""}>
-👨‍💼 Asalariado
+<option value="Actividad Empresarial"
+${regimenFiscal === "Actividad Empresarial"
+? "selected" : ""}>
+
+🏢 Actividad Empresarial
+
 </option>
 
-<option value="Actividad Empresarial"
-${regimenFiscal==="Actividad Empresarial" ? "selected" : ""}>
-🏢 Actividad Empresarial
+<option value="Asalariado"
+${regimenFiscal === "Asalariado"
+? "selected" : ""}>
+
+👨‍💼 Asalariado
+
 </option>
 
 </select>
-
-
 
 `;
 
@@ -329,28 +447,27 @@ ${regimenFiscal==="Actividad Empresarial" ? "selected" : ""}>
 
 else if(titulo.includes('Gastos')){
 
-if(regimenFiscal==="Asalariado"){
+if(regimenFiscal === "Asalariado"){
 
 contenido.innerHTML = `
 
-<h2>🚚 Viáticos</h2>
+<h2>🚚 Viáticos Asalariado</h2>
 
-<input
-id="montoGasto"
-type="number"
+<input type="number"
+id="montoViatico"
 placeholder="Monto">
 
-<select id="tipoGasto">
+<select id="tipoViatico">
 
-<option>⛽ Gasolina</option>
-<option>🏨 Hotel</option>
-<option>🍽️ Alimentos</option>
-<option>🚕 Transporte</option>
-<option>🛣️ Casetas</option>
+<option value="Gasolina">⛽ Gasolina</option>
+<option value="Hotel">🏨 Hotel</option>
+<option value="Alimentos">🍽️ Alimentos</option>
+<option value="Lavanderia">🧺 Lavandería</option>
+<option value="Transporte">🚕 Transporte</option>
+<option value="Casetas">🛣️ Casetas</option>
+<option value="Propinas">💵 Propinas</option>
 
 </select>
-
-
 
 `;
 
@@ -360,69 +477,23 @@ contenido.innerHTML = `
 
 <h2>💸 Gastos Operativos</h2>
 
-<input
+<input type="number"
 id="montoGasto"
-type="number"
 placeholder="Monto">
 
 <select id="tipoGasto">
 
-<option>⛽ Gasolina</option>
-<option>📦 Insumos</option>
-<option>🔧 Herramientas</option>
-<option>🚚 Logística</option>
-<option>🛠️ Mantenimiento</option>
+<option value="Gasolina">⛽ Gasolina</option>
+<option value="Insumos">📦 Insumos</option>
+<option value="Herramientas">🔧 Herramientas</option>
+<option value="Logistica">🚚 Logística</option>
+<option value="Mantenimiento">🛠️ Mantenimiento</option>
 
 </select>
 
-
-
 `;
 
 }
-
-}
-
-else if(titulo.includes('Clientes')){
-
-contenido.innerHTML = `
-
-<h2>👥 Clientes</h2>
-
-<input type="text"
-placeholder="Nombre cliente">
-
-<input type="text"
-placeholder="Teléfono">
-
-<button>
-💾 Guardar Cliente
-</button>
-
-`;
-
-}
-
-else if(titulo.includes('Mantenimiento')){
-
-contenido.innerHTML = `
-
-<h2>🛠️ Mantenimiento</h2>
-
-<input type="text"
-placeholder="Concepto">
-
-<input type="number"
-placeholder="Kilometraje">
-
-<input type="number"
-placeholder="Costo">
-
-<button>
-💾 Guardar Mantenimiento
-</button>
-
-`;
 
 }
 
@@ -430,15 +501,21 @@ placeholder="Costo">
 
 function guardarRegimen(){
 
+const select =
+document.getElementById('regimenSelect');
+
 regimenFiscal =
-document.getElementById('regimenSelect').value;
+select.value;
 
 localStorage.setItem(
 "regimenFiscal",
 regimenFiscal
 );
 
-alert("Régimen guardado");
+alert(
+"Régimen guardado: "
++ regimenFiscal
+);
 
 }
 
@@ -446,22 +523,22 @@ function guardarIngreso(){
 
 const concepto =
 document.getElementById(
-'conceptoIngreso'
+"conceptoIngreso"
 ).value;
 
 const monto =
 parseFloat(
 document.getElementById(
-'montoIngreso'
+"montoIngreso"
 ).value
 ) || 0;
 
-ingresos.push({
-id:Date.now(),
+const nuevoIngreso = {
 concepto,
-monto,
-fecha:new Date().toLocaleString()
-});
+monto
+};
+
+ingresos.push(nuevoIngreso);
 
 localStorage.setItem(
 "ingresos",
@@ -469,7 +546,6 @@ JSON.stringify(ingresos)
 );
 
 calcularResultados();
-renderHistorial();
 
 alert("Ingreso guardado");
 
@@ -477,33 +553,53 @@ alert("Ingreso guardado");
 
 function guardarGasto(){
 
-const concepto =
+let concepto = "";
+let monto = 0;
+
+if(regimenFiscal === "Asalariado"){
+
+concepto =
 document.getElementById(
-'tipoGasto'
+"tipoViatico"
 ).value;
 
-const monto =
+monto =
 parseFloat(
 document.getElementById(
-'montoGasto'
+"montoViatico"
 ).value
 ) || 0;
 
-gastos.push({
-id:Date.now(),
+}else{
+
+concepto =
+document.getElementById(
+"tipoGasto"
+).value;
+
+monto =
+parseFloat(
+document.getElementById(
+"montoGasto"
+).value
+) || 0;
+
+}
+
+const nuevoGasto = {
 concepto,
 monto,
-fecha:new Date().toLocaleString(),
-regimen:regimenFiscal
-});
+regimen: regimenFiscal
+};
+
+gastosGuardados.push(nuevoGasto);
 
 localStorage.setItem(
-"gastos",
-JSON.stringify(gastos)
+"gastosGuardados",
+JSON.stringify(gastosGuardados)
 );
 
 calcularResultados();
-renderHistorial();
 
 alert("Gasto guardado");
 
@@ -518,7 +614,7 @@ ingresos.forEach(item=>{
 totalIngresos += item.monto;
 });
 
-gastos.forEach(item=>{
+gastosGuardados.forEach(item=>{
 totalGastos += item.monto;
 });
 
@@ -535,119 +631,37 @@ const gananciaReal =
 resultado - iva - isr;
 
 document.getElementById(
-'resultadoValor'
+"resultadoValor"
 ).innerText =
-'$' + resultado.toFixed(2);
+"$" + resultado.toFixed(2);
 
 document.getElementById(
-'ivaValor'
+"ivaValor"
 ).innerText =
-'$' + iva.toFixed(2);
+"$" + iva.toFixed(2);
 
 document.getElementById(
-'isrValor'
+"isrValor"
 ).innerText =
-'$' + isr.toFixed(2);
+"$" + isr.toFixed(2);
 
 document.getElementById(
-'gananciaRealValor'
+"gananciaRealValor"
 ).innerText =
-'$' + gananciaReal.toFixed(2);
+"$" + gananciaReal.toFixed(2);
 
 }
 
-function renderHistorial(){
+function activarTool(elemento){
 
-const historial =
-document.getElementById(
-'historialMovimientos'
-);
+const tools =
+document.querySelectorAll('.tool');
 
-let html = "";
-
-ingresos.forEach(item=>{
-
-html += `
-<div class="historial-item">
-
-<h4>💰 ${item.concepto}</h4>
-
-<p>+$${item.monto}</p>
-
-<small>${item.fecha}</small>
-
-<button
-class="borrar-btn"
-onclick="borrarIngreso(${item.id})">
-
-🗑️ Borrar
-
-</button>
-
-</div>
-`;
-
+tools.forEach(tool=>{
+tool.classList.remove('active');
 });
 
-gastos.forEach(item=>{
-
-html += `
-<div class="historial-item">
-
-<h4>${item.concepto}</h4>
-
-<p>-$${item.monto}</p>
-
-<small>${item.fecha}</small>
-
-<button
-class="borrar-btn"
-onclick="borrarGasto(${item.id})">
-
-🗑️ Borrar
-
-</button>
-
-</div>
-`;
-
-});
-
-historial.innerHTML = html;
-
-}
-
-function borrarIngreso(id){
-
-ingresos =
-ingresos.filter(
-item=>item.id!==id
-);
-
-localStorage.setItem(
-"ingresos",
-JSON.stringify(ingresos)
-);
-
-calcularResultados();
-renderHistorial();
-
-}
-
-function borrarGasto(id){
-
-gastos =
-gastos.filter(
-item=>item.id!==id
-);
-
-localStorage.setItem(
-"gastos",
-JSON.stringify(gastos)
-);
-
-calcularResultados();
-renderHistorial();
+elemento.classList.add('active');
 
 }
 
