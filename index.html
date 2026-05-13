@@ -23,9 +23,17 @@ margin-bottom:15px;
 
 .grid{
 display:grid;
-grid-template-columns:repeat(4,1fr);
+grid-template-columns:repeat(2,1fr);
 gap:10px;
 margin-bottom:15px;
+}
+
+@media(min-width:900px){
+
+.grid{
+grid-template-columns:repeat(4,1fr);
+}
+
 }
 
 .card{
@@ -42,12 +50,14 @@ cursor:pointer;
 opacity:.45;
 filter:grayscale(100%);
 transition:.2s;
+border:1px solid rgba(255,255,255,.05);
 }
 
 .card.active{
 opacity:1;
 filter:grayscale(0%);
 box-shadow:0 0 18px rgba(16,185,129,.35);
+transform:translateY(-3px);
 }
 
 .card span{
@@ -77,6 +87,7 @@ margin-bottom:10px;
 background:#1b2f4a;
 color:white;
 font-size:14px;
+box-sizing:border-box;
 }
 
 .actions{
@@ -92,6 +103,11 @@ border-radius:16px;
 text-align:center;
 font-weight:bold;
 cursor:pointer;
+transition:.2s;
+}
+
+.action:hover{
+transform:scale(1.03);
 }
 
 .save{background:#10b981;}
@@ -120,6 +136,25 @@ padding:14px;
 border-radius:14px;
 }
 
+.result-card h4{
+margin-top:0;
+margin-bottom:8px;
+font-size:14px;
+}
+
+.result-card p{
+margin:0;
+font-size:18px;
+font-weight:bold;
+color:#10b981;
+}
+
+hr{
+border-color:#1b2f4a;
+opacity:.4;
+margin:15px 0;
+}
+
 </style>
 </head>
 
@@ -128,6 +163,8 @@ border-radius:14px;
 <div class="logo">
 🚀 Micro Fiscal Core
 </div>
+
+<!-- MODULOS PRINCIPALES -->
 
 <div class="grid">
 
@@ -146,12 +183,14 @@ border-radius:14px;
 <h3>Gastos</h3>
 </div>
 
-<div class="card">
+<div class="card" onclick="abrirModulo('viaticos',this)">
 <span>🚚</span>
 <h3>Viáticos</h3>
 </div>
 
 </div>
+
+<!-- OPERACION -->
 
 <div class="grid">
 
@@ -177,33 +216,39 @@ border-radius:14px;
 
 </div>
 
+<!-- HERRAMIENTAS -->
+
 <div class="grid">
 
-<div class="card">
+<div class="card" onclick="herramientaRapida('ocr')">
 <span>📷</span>
 <h3>OCR</h3>
 </div>
 
-<div class="card">
+<div class="card" onclick="herramientaRapida('qr')">
 <span>🔳</span>
 <h3>QR</h3>
 </div>
 
-<div class="card">
+<div class="card" onclick="herramientaRapida('codigo')">
 <span>📦</span>
 <h3>Código</h3>
 </div>
 
-<div class="card">
+<div class="card" onclick="herramientaRapida('gps')">
 <span>📍</span>
 <h3>GPS</h3>
 </div>
 
 </div>
 
+<!-- CONTENIDO DINAMICO -->
+
 <div class="section">
 <div id="contenido"></div>
 </div>
+
+<!-- ACCIONES -->
 
 <div class="actions">
 
@@ -224,6 +269,8 @@ border-radius:14px;
 </div>
 
 </div>
+
+<!-- RESULTADOS -->
 
 <div class="section">
 
@@ -317,6 +364,7 @@ const catalogoGastos = [
 'Salud',
 'Servicio',
 'Software',
+'Taxi',
 'Transporte'
 
 ];
@@ -356,6 +404,10 @@ if(modulo === 'gastos'){
 mostrarGastos();
 }
 
+if(modulo === 'viaticos'){
+mostrarViaticos();
+}
+
 }
 
 function mostrarActividad(){
@@ -381,7 +433,7 @@ document.getElementById('contenido').innerHTML = `
 
 <div id="actividadPrincipal"></div>
 
-<hr style="border-color:#1b2f4a;opacity:.4;margin:15px 0;">
+<hr>
 
 <h3>📌 Módulos Activos</h3>
 
@@ -413,7 +465,7 @@ document.getElementById('contenido').innerHTML = `
 
 <input placeholder="Saldo inicial">
 
-<hr style="border-color:#1b2f4a;opacity:.4;margin:15px 0;">
+<hr>
 
 <h3>📌 Operaciones Bancarias</h3>
 
@@ -440,6 +492,133 @@ pero participan según actividad.
 ${crearTags(catalogoGastos)}
 
 `;
+
+}
+
+function mostrarViaticos(){
+
+document.getElementById('contenido').innerHTML = `
+
+<h2>🚚 Control de Viáticos</h2>
+
+<input placeholder="Lugar">
+
+<input placeholder="Monto">
+
+<select>
+
+<option>⛽ Gasolina</option>
+<option>🚕 Taxi</option>
+<option>🚌 Transporte</option>
+<option>🏨 Hotel</option>
+<option>🍔 Alimentos</option>
+<option>🛣️ Casetas</option>
+
+</select>
+
+<div class="tag">📍 GPS</div>
+<div class="tag">📷 OCR Ticket</div>
+<div class="tag">💾 Guardar gasto</div>
+
+`;
+
+}
+
+function herramientaRapida(tipo){
+
+if(tipo === 'ocr'){
+
+document.getElementById('contenido').innerHTML = `
+
+<h2>📷 OCR Inteligente</h2>
+
+<p>
+Lee tickets, facturas o documentos
+sin necesidad de vincularlos.
+</p>
+
+<input placeholder="Texto detectado">
+
+<div class="tag">📄 Documento libre</div>
+<div class="tag">⛽ Gasolina</div>
+<div class="tag">🏨 Hotel</div>
+<div class="tag">🧾 Ticket</div>
+
+<hr>
+
+<h3>⚡ Acción Inteligente</h3>
+
+<div class="tag">Guardar proveedor</div>
+<div class="tag">Crear gasto</div>
+<div class="tag">Relacionar GPS</div>
+
+`;
+
+}
+
+if(tipo === 'qr'){
+
+document.getElementById('contenido').innerHTML = `
+
+<h2>🔳 Lector QR</h2>
+
+<p>
+Validación rápida de productos,
+tickets o registros.
+</p>
+
+<input placeholder="Contenido QR">
+
+<div class="tag">📦 Producto</div>
+<div class="tag">🏢 Proveedor</div>
+<div class="tag">🧾 Factura</div>
+
+`;
+
+}
+
+if(tipo === 'codigo'){
+
+document.getElementById('contenido').innerHTML = `
+
+<h2>📦 Código de Barras</h2>
+
+<p>
+Consulta rápida de productos
+o inventario móvil.
+</p>
+
+<input placeholder="Código detectado">
+
+<div class="tag">📦 Inventario</div>
+<div class="tag">💰 Precio</div>
+<div class="tag">📍 Ruta</div>
+
+`;
+
+}
+
+if(tipo === 'gps'){
+
+document.getElementById('contenido').innerHTML = `
+
+<h2>📍 GPS Operativo</h2>
+
+<p>
+Ubicación automática para rutas,
+gastos o validaciones.
+</p>
+
+<input placeholder="Ubicación actual">
+
+<div class="tag">⛽ Gasolinera</div>
+<div class="tag">🚚 Ruta</div>
+<div class="tag">🏨 Hotel</div>
+<div class="tag">📌 Validar ubicación</div>
+
+`;
+
+}
 
 }
 
