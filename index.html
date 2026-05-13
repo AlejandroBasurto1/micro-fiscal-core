@@ -196,25 +196,37 @@ margin-top:10px;
 
 <div class="section" id="contenido"></div>
 
+
 <div class="actions">
 
-<div class="action save">
+<div
+class="action save"
+onclick="guardarActual()">
+
 💾 Guardar
+
 </div>
 
 <div class="action edit">
+
 ✏️ Editar
+
 </div>
 
 <div class="action delete">
+
 🗑️ Borrar
+
 </div>
 
 <div class="action export">
+
 📤 Excel
+
 </div>
 
 </div>
+
 
 <div class="results">
 
@@ -321,13 +333,7 @@ ${regimenFiscal==="Actividad Empresarial" ? "selected" : ""}>
 
 </select>
 
-<button onclick="guardarRegimen()">
-💾 Guardar Régimen
-</button>
 
-<button onclick="guardarIngreso()">
-💰 Guardar Ingreso
-</button>
 
 `;
 
@@ -356,9 +362,7 @@ placeholder="Monto">
 
 </select>
 
-<button onclick="guardarGasto()">
-💾 Guardar Viático
-</button>
+
 
 `;
 
@@ -383,9 +387,7 @@ placeholder="Monto">
 
 </select>
 
-<button onclick="guardarGasto()">
-💾 Guardar Gasto
-</button>
+
 
 `;
 
@@ -661,7 +663,32 @@ renderHistorial();
 
 }
 
+
+
+function guardarActual(){
+
+const activa =
+document.querySelector(
+'.card.active h3'
+).innerText;
+
+if(activa.includes('Ingresos')){
+
+guardarRegimen();
+guardarIngreso();
+
+}
+
+if(activa.includes('Gastos')){
+
+guardarGasto();
+
+}
+
+}
+
 </script>
+
 
 </body>
 </html>
