@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Micro Fiscal Core PRO</title>
+<title>Micro Fiscal Core</title>
 
 <style>
 
@@ -20,21 +20,13 @@ color:white;
 padding:12px;
 }
 
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:15px;
-}
-
 .logo{
 font-size:22px;
 font-weight:bold;
+margin-bottom:15px;
 }
 
-.grid,
-.tools,
-.actions{
+.grid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:10px;
@@ -49,9 +41,10 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
+text-align:center;
 cursor:pointer;
 transition:.2s;
-opacity:.35;
+opacity:.4;
 filter:grayscale(100%);
 }
 
@@ -61,7 +54,6 @@ height:85px;
 
 .tool{
 height:75px;
-font-size:12px;
 }
 
 .card.active,
@@ -78,16 +70,14 @@ font-size:28px;
 margin-bottom:5px;
 }
 
-.section,
-.results{
+.section{
 background:#132238;
 padding:15px;
 border-radius:20px;
 margin-bottom:15px;
 }
 
-.section h2,
-.results h2{
+.section h2{
 margin-bottom:15px;
 }
 
@@ -101,7 +91,13 @@ margin-bottom:10px;
 background:#1b2f4a;
 color:white;
 font-size:14px;
-outline:none;
+}
+
+.actions{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+margin-bottom:15px;
 }
 
 .action{
@@ -114,8 +110,14 @@ cursor:pointer;
 
 .save{background:#10b981;}
 .edit{background:#3b82f6;}
-.delete{background:#ef4444;}
+.clear{background:#ef4444;}
 .excel{background:#15803d;}
+
+.results{
+background:#132238;
+padding:15px;
+border-radius:20px;
+}
 
 .result-grid{
 display:grid;
@@ -134,123 +136,126 @@ margin-bottom:8px;
 opacity:.8;
 }
 
-.historial-item{
-background:#1b2f4a;
-padding:12px;
-border-radius:14px;
-margin-bottom:10px;
-}
-
-.historial-top{
-display:flex;
-justify-content:space-between;
-margin-bottom:8px;
-}
-
-.historial-actions{
-display:flex;
-gap:8px;
-margin-top:10px;
-}
-
-.historial-btn{
-flex:1;
-padding:8px;
-border:none;
-border-radius:10px;
-color:white;
-font-weight:bold;
-cursor:pointer;
-}
-
-.btn-edit{
-background:#3b82f6;
-}
-
-.btn-delete{
-background:#ef4444;
-}
-
-small{
-opacity:.7;
-}
-
-.alert{
-background:#ef4444;
-padding:10px;
-border-radius:12px;
-margin-bottom:10px;
-display:none;
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="header">
-<div class="logo">🚀 Micro Fiscal Core PRO</div>
+<div class="logo">
+🚀 Micro Fiscal Core
 </div>
+
+<!-- LINEA 1 -->
 
 <div class="grid">
 
-<div class="card active" onclick="activar(this)">
-<span>💰</span>
-<h3>Ingresos</h3>
+<div class="card active">
+<span>💼</span>
+<h3>Actividad</h3>
 </div>
 
-<div class="card" onclick="activar(this)">
+<div class="card">
+<span>🏦</span>
+<h3>Bancos</h3>
+</div>
+
+<div class="card">
 <span>💸</span>
 <h3>Gastos</h3>
 </div>
 
-<div class="card" onclick="activar(this)">
-<span>👥</span>
-<h3>Clientes</h3>
+<div class="card">
+<span>🚚</span>
+<h3>Viáticos</h3>
 </div>
 
-<div class="card" onclick="activar(this)">
+</div>
+
+<!-- LINEA 2 -->
+
+<div class="grid">
+
+<div class="card">
+<span>📦</span>
+<h3>Proveedor</h3>
+</div>
+
+<div class="card">
+<span>👥</span>
+<h3>Cliente</h3>
+</div>
+
+<div class="card">
+<span>📍</span>
+<h3>Rutas</h3>
+</div>
+
+<div class="card">
 <span>🛠️</span>
 <h3>Mantenimiento</h3>
 </div>
 
 </div>
 
-<div class="tools">
+<!-- LINEA 3 TOOLS -->
 
-<div class="tool active" onclick="activarTool(this)">
+<div class="grid">
+
+<div class="tool active">
 <span>📷</span>
-OCR
+<h3>OCR</h3>
 </div>
 
-<div class="tool" onclick="activarTool(this)">
+<div class="tool">
 <span>🔳</span>
-QR
+<h3>QR</h3>
 </div>
 
-<div class="tool" onclick="activarTool(this)">
+<div class="tool">
 <span>📦</span>
-Código
+<h3>Código</h3>
 </div>
 
-<div class="tool" onclick="activarTool(this)">
+<div class="tool">
 <span>📍</span>
-GPS
+<h3>GPS</h3>
 </div>
 
 </div>
+
+<!-- OPERACION -->
 
 <div class="section">
 
-<div class="alert" id="alerta"></div>
+<h2>
+⚙️ Ventana Operación
+</h2>
 
-<div id="contenido"></div>
+<input type="text"
+placeholder="Concepto">
+
+<input type="number"
+placeholder="Monto">
+
+<select>
+
+<option>
+👨‍💼 Asalariado
+</option>
+
+<option>
+🏢 Actividad Empresarial
+</option>
+
+</select>
 
 </div>
 
+<!-- BOTONES -->
+
 <div class="actions">
 
-<div class="action save" onclick="guardarActual()">
+<div class="action save">
 💾 Guardar
 </div>
 
@@ -258,7 +263,7 @@ GPS
 ✏️ Editar
 </div>
 
-<div class="action delete" onclick="limpiarTodo()">
+<div class="action clear">
 🗑️ Limpiar
 </div>
 
@@ -268,585 +273,39 @@ GPS
 
 </div>
 
+<!-- RESULTADOS -->
+
 <div class="results">
 
-<h2>📊 Resultado Financiero</h2>
+<h2>
+📊 Resultado Financiero
+</h2>
 
 <div class="result-grid">
 
 <div class="result-card">
-<h4>Resultado</h4>
-<p id="resultadoValor">$0</p>
+<h4>Resultado Utilidad</h4>
+<p>$0.00</p>
 </div>
 
 <div class="result-card">
-<h4>IVA</h4>
-<p id="ivaValor">$0</p>
+<h4>Menos IVA</h4>
+<p>$0.00</p>
 </div>
 
 <div class="result-card">
-<h4>ISR</h4>
-<p id="isrValor">$0</p>
+<h4>Menos ISR</h4>
+<p>$0.00</p>
 </div>
 
 <div class="result-card">
 <h4>Ganancia Real</h4>
-<p id="gananciaRealValor">$0</p>
+<p>$0.00</p>
 </div>
 
 </div>
 
 </div>
-
-<div class="section">
-
-<h2>📋 Historial Movimientos</h2>
-
-<div id="historial"></div>
-
-</div>
-
-<script>
-
-let regimenFiscal =
-localStorage.getItem("regimenFiscal")
-|| "Asalariado";
-
-let ingresos =
-JSON.parse(localStorage.getItem("ingresos"))
-|| [];
-
-let gastos =
-JSON.parse(localStorage.getItem("gastos"))
-|| [];
-
-window.onload = ()=>{
-
-activar(document.querySelector('.card.active'));
-
-calcularResultados();
-
-renderHistorial();
-
-};
-
-
-
-function activar(elemento){
-
-document.querySelectorAll('.card')
-.forEach(card=>{
-card.classList.remove('active');
-});
-
-elemento.classList.add('active');
-
-const titulo =
-elemento.innerText.trim();
-
-const contenido =
-document.getElementById('contenido');
-
-
-
-if(titulo.includes('Ingresos')){
-
-contenido.innerHTML = `
-
-<h2>💰 Ingresos</h2>
-
-<input
-id="conceptoIngreso"
-placeholder="Concepto ingreso">
-
-<input
-id="montoIngreso"
-type="number"
-placeholder="Monto">
-
-<select id="regimenSelect">
-
-<option value="Asalariado"
-${regimenFiscal==="Asalariado" ? "selected" : ""}>
-👨‍💼 Asalariado
-</option>
-
-<option value="Actividad Empresarial"
-${regimenFiscal==="Actividad Empresarial" ? "selected" : ""}>
-🏢 Actividad Empresarial
-</option>
-
-</select>
-
-`;
-
-}
-
-
-
-else if(titulo.includes('Gastos')){
-
-if(regimenFiscal==="Asalariado"){
-
-contenido.innerHTML = `
-
-<h2>🚚 Viáticos</h2>
-
-<input
-id="montoGasto"
-type="number"
-placeholder="Monto">
-
-<select id="tipoGasto">
-
-<option>⛽ Gasolina</option>
-<option>🏨 Hotel</option>
-<option>🍽️ Alimentos</option>
-<option>🧺 Lavandería</option>
-<option>🚕 Transporte</option>
-<option>🛣️ Casetas</option>
-<option>💵 Propinas</option>
-
-</select>
-
-`;
-
-}else{
-
-contenido.innerHTML = `
-
-<h2>💸 Gastos Operativos</h2>
-
-<input
-id="montoGasto"
-type="number"
-placeholder="Monto">
-
-<select id="tipoGasto">
-
-<option>⛽ Gasolina</option>
-<option>📦 Insumos</option>
-<option>🔧 Herramientas</option>
-<option>🚚 Logística</option>
-<option>🛠️ Mantenimiento</option>
-
-</select>
-
-`;
-
-}
-
-}
-
-
-
-else if(titulo.includes('Clientes')){
-
-contenido.innerHTML = `
-
-<h2>👥 Clientes</h2>
-
-<input placeholder="Nombre cliente">
-
-<input placeholder="Teléfono">
-
-<input placeholder="Dirección">
-
-`;
-
-}
-
-
-
-else if(titulo.includes('Mantenimiento')){
-
-contenido.innerHTML = `
-
-<h2>🛠️ Mantenimiento</h2>
-
-<input id="pieza"
-placeholder="Pieza">
-
-<input id="kilometraje"
-type="number"
-placeholder="Kilometraje">
-
-<input id="costo"
-type="number"
-placeholder="Costo">
-
-`;
-
-}
-
-}
-
-
-
-function guardarActual(){
-
-const activa =
-document.querySelector(
-'.card.active h3'
-).innerText;
-
-if(activa.includes('Ingresos')){
-
-guardarIngreso();
-
-}
-
-if(activa.includes('Gastos')){
-
-guardarGasto();
-
-}
-
-}
-
-
-
-function guardarIngreso(){
-
-const concepto =
-document.getElementById(
-'conceptoIngreso'
-).value;
-
-const monto =
-parseFloat(
-document.getElementById(
-'montoIngreso'
-).value
-) || 0;
-
-regimenFiscal =
-document.getElementById(
-'regimenSelect'
-).value;
-
-if(!concepto || monto<=0){
-
-mostrarAlerta(
-'Completa ingreso y monto'
-);
-
-return;
-
-}
-
-localStorage.setItem(
-"regimenFiscal",
-regimenFiscal
-);
-
-ingresos.push({
-
-id:Date.now(),
-concepto,
-monto,
-fecha:new Date().toLocaleString()
-
-});
-
-localStorage.setItem(
-"ingresos",
-JSON.stringify(ingresos)
-);
-
-calcularResultados();
-
-renderHistorial();
-
-limpiarCampos();
-
-}
-
-
-
-function guardarGasto(){
-
-const concepto =
-document.getElementById(
-'tipoGasto'
-).value;
-
-const monto =
-parseFloat(
-document.getElementById(
-'montoGasto'
-).value
-) || 0;
-
-if(monto<=0){
-
-mostrarAlerta(
-'Ingresa monto válido'
-);
-
-return;
-
-}
-
-gastos.push({
-
-id:Date.now(),
-concepto,
-monto,
-fecha:new Date().toLocaleString(),
-regimen:regimenFiscal
-
-});
-
-localStorage.setItem(
-"gastos",
-JSON.stringify(gastos)
-);
-
-calcularResultados();
-
-renderHistorial();
-
-limpiarCampos();
-
-}
-
-
-
-function calcularResultados(){
-
-let totalIngresos = 0;
-let totalGastos = 0;
-
-ingresos.forEach(item=>{
-totalIngresos += item.monto;
-});
-
-gastos.forEach(item=>{
-totalGastos += item.monto;
-});
-
-const resultado =
-totalIngresos - totalGastos;
-
-const iva =
-resultado * 0.16;
-
-const isr =
-resultado * 0.10;
-
-const gananciaReal =
-resultado - iva - isr;
-
-document.getElementById(
-'resultadoValor'
-).innerText =
-'$' + resultado.toFixed(2);
-
-document.getElementById(
-'ivaValor'
-).innerText =
-'$' + iva.toFixed(2);
-
-document.getElementById(
-'isrValor'
-).innerText =
-'$' + isr.toFixed(2);
-
-document.getElementById(
-'gananciaRealValor'
-).innerText =
-'$' + gananciaReal.toFixed(2);
-
-}
-
-
-
-function renderHistorial(){
-
-const historial =
-document.getElementById(
-'historial'
-);
-
-let html = '';
-
-ingresos.forEach(item=>{
-
-html += `
-
-<div class="historial-item">
-
-<div class="historial-top">
-
-<h4>💰 ${item.concepto}</h4>
-
-<strong>+$${item.monto}</strong>
-
-</div>
-
-<small>${item.fecha}</small>
-
-<div class="historial-actions">
-
-<button
-class="historial-btn btn-delete"
-onclick="borrarIngreso(${item.id})">
-
-🗑️ Borrar
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-gastos.forEach(item=>{
-
-html += `
-
-<div class="historial-item">
-
-<div class="historial-top">
-
-<h4>${item.concepto}</h4>
-
-<strong>-$${item.monto}</strong>
-
-</div>
-
-<small>${item.fecha}</small>
-
-<div class="historial-actions">
-
-<button
-class="historial-btn btn-delete"
-onclick="borrarGasto(${item.id})">
-
-🗑️ Borrar
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-historial.innerHTML = html;
-
-}
-
-
-
-function borrarIngreso(id){
-
-ingresos =
-ingresos.filter(
-item=>item.id!==id
-);
-
-localStorage.setItem(
-"ingresos",
-JSON.stringify(ingresos)
-);
-
-calcularResultados();
-
-renderHistorial();
-
-}
-
-
-
-function borrarGasto(id){
-
-gastos =
-gastos.filter(
-item=>item.id!==id
-);
-
-localStorage.setItem(
-"gastos",
-JSON.stringify(gastos)
-);
-
-calcularResultados();
-
-renderHistorial();
-
-}
-
-
-
-function limpiarTodo(){
-
-if(confirm(
-'¿Borrar todos los registros?'
-)){
-
-localStorage.clear();
-
-location.reload();
-
-}
-
-}
-
-
-
-function limpiarCampos(){
-
-document.querySelectorAll('input')
-.forEach(input=>{
-input.value='';
-});
-
-}
-
-
-
-function mostrarAlerta(texto){
-
-const alerta =
-document.getElementById(
-'alerta'
-);
-
-alerta.style.display =
-'block';
-
-alerta.innerText = texto;
-
-setTimeout(()=>{
-
-alerta.style.display =
-'none';
-
-},2000);
-
-}
-
-
-
-function activarTool(elemento){
-
-document.querySelectorAll('.tool')
-.forEach(tool=>{
-tool.classList.remove('active');
-});
-
-elemento.classList.add('active');
-
-}
-
-</script>
 
 </body>
 </html>
