@@ -76,7 +76,6 @@ background:#132238;
 padding:15px;
 border-radius:20px;
 margin-bottom:15px;
-min-height:240px;
 }
 
 input,
@@ -93,15 +92,14 @@ font-size:14px;
 
 button{
 width:100%;
-padding:14px;
+padding:12px;
 border:none;
-border-radius:14px;
+border-radius:12px;
 background:#10b981;
 color:white;
-font-size:15px;
 font-weight:bold;
-cursor:pointer;
 margin-top:5px;
+cursor:pointer;
 }
 
 .actions{
@@ -128,6 +126,7 @@ font-weight:bold;
 background:#132238;
 padding:15px;
 border-radius:20px;
+margin-bottom:15px;
 }
 
 .result-grid{
@@ -140,18 +139,26 @@ gap:10px;
 background:#1b2f4a;
 padding:14px;
 border-radius:14px;
-text-align:center;
 }
 
 .result-card h4{
-font-size:12px;
 margin-bottom:8px;
-opacity:.8;
 }
 
-.result-card p{
-font-size:18px;
-font-weight:bold;
+.historial-item{
+background:#1b2f4a;
+padding:12px;
+border-radius:12px;
+margin-bottom:10px;
+}
+
+.historial-item small{
+opacity:.7;
+}
+
+.borrar-btn{
+background:#ef4444;
+margin-top:10px;
 }
 
 </style>
@@ -239,6 +246,14 @@ font-weight:bold;
 
 </div>
 
+<div class="section">
+
+<h2>📋 Historial Movimientos</h2>
+
+<div id="historialMovimientos"></div>
+
+</div>
+
 <script>
 
 let regimenFiscal =
@@ -257,6 +272,7 @@ window.onload = ()=>{
 
 activar(document.querySelector('.card.active'));
 calcularResultados();
+renderHistorial();
 
 };
 
@@ -274,8 +290,6 @@ elemento.innerText.trim();
 
 const contenido =
 document.getElementById('contenido');
-
-
 
 if(titulo.includes('Ingresos')){
 
@@ -318,8 +332,6 @@ ${regimenFiscal==="Actividad Empresarial" ? "selected" : ""}>
 `;
 
 }
-
-
 
 else if(titulo.includes('Gastos')){
 
@@ -381,8 +393,6 @@ placeholder="Monto">
 
 }
 
-
-
 else if(titulo.includes('Clientes')){
 
 contenido.innerHTML = `
@@ -402,8 +412,6 @@ placeholder="Teléfono">
 `;
 
 }
-
-
 
 else if(titulo.includes('Mantenimiento')){
 
@@ -459,8 +467,10 @@ document.getElementById(
 ) || 0;
 
 ingresos.push({
+id:Date.now(),
 concepto,
-monto
+monto,
+fecha:new Date().toLocaleString()
 });
 
 localStorage.setItem(
@@ -469,6 +479,7 @@ JSON.stringify(ingresos)
 );
 
 calcularResultados();
+renderHistorial();
 
 alert("Ingreso guardado");
 
@@ -489,8 +500,10 @@ document.getElementById(
 ) || 0;
 
 gastos.push({
+id:Date.now(),
 concepto,
 monto,
+fecha:new Date().toLocaleString(),
 regimen:regimenFiscal
 });
 
@@ -500,6 +513,7 @@ JSON.stringify(gastos)
 );
 
 calcularResultados();
+renderHistorial();
 
 alert("Gasto guardado");
 
@@ -549,6 +563,101 @@ document.getElementById(
 'gananciaRealValor'
 ).innerText =
 '$' + gananciaReal.toFixed(2);
+
+}
+
+function renderHistorial(){
+
+const historial =
+document.getElementById(
+'historialMovimientos'
+);
+
+let html = "";
+
+ingresos.forEach(item=>{
+
+html += `
+<div class="historial-item">
+
+<h4>💰 ${item.concepto}</h4>
+
+<p>+$${item.monto}</p>
+
+<small>${item.fecha}</small>
+
+<button
+class="borrar-btn"
+onclick="borrarIngreso(${item.id})">
+
+🗑️ Borrar
+
+</button>
+
+</div>
+`;
+
+});
+
+gastos.forEach(item=>{
+
+html += `
+<div class="historial-item">
+
+<h4>${item.concepto}</h4>
+
+<p>-$${item.monto}</p>
+
+<small>${item.fecha}</small>
+
+<button
+class="borrar-btn"
+onclick="borrarGasto(${item.id})">
+
+🗑️ Borrar
+
+</button>
+
+</div>
+`;
+
+});
+
+historial.innerHTML = html;
+
+}
+
+function borrarIngreso(id){
+
+ingresos =
+ingresos.filter(
+item=>item.id!==id
+);
+
+localStorage.setItem(
+"ingresos",
+JSON.stringify(ingresos)
+);
+
+calcularResultados();
+renderHistorial();
+
+}
+
+function borrarGasto(id){
+
+gastos =
+gastos.filter(
+item=>item.id!==id
+);
+
+localStorage.setItem(
+"gastos",
+JSON.stringify(gastos)
+);
+
+calcularResultados();
+renderHistorial();
 
 }
 
