@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Micro Fiscal Core</title>
 
 <style>
@@ -137,6 +137,10 @@ font-size:18px;
 font-weight:bold;
 }
 
+.hidden{
+display:none;
+}
+
 </style>
 </head>
 
@@ -147,6 +151,7 @@ font-weight:bold;
 </div>
 
 <!-- LINEA 1 -->
+
 <div class="grid">
 
 <div class="card active">
@@ -172,9 +177,10 @@ font-weight:bold;
 </div>
 
 <!-- LINEA 2 -->
+
 <div class="grid">
 
-<div class="card">
+<div class="card" id="proveedorCard">
 <span>📦</span>
 <h3>Proveedor</h3>
 </div>
@@ -184,12 +190,12 @@ font-weight:bold;
 <h3>Cliente</h3>
 </div>
 
-<div class="card">
+<div class="card" id="rutasCard">
 <span>📍</span>
 <h3>Rutas</h3>
 </div>
 
-<div class="card">
+<div class="card" id="mantenimientoCard">
 <span>🛠️</span>
 <h3>Mantenimiento</h3>
 </div>
@@ -197,6 +203,7 @@ font-weight:bold;
 </div>
 
 <!-- LINEA 3 -->
+
 <div class="grid">
 
 <div class="card">
@@ -222,38 +229,29 @@ font-weight:bold;
 </div>
 
 <!-- OPERACION -->
+
 <div class="section">
 
 <h2>
 ⚙️ Operación del Día
 </h2>
 
-<select>
-<option>PFAE</option>
-<option>SUSA</option>
-<option>RESICO</option>
-<option>PLADIG</option>
-<option>RIF</option>
+<select id="regimen" onchange="actualizarSistema()">
+<option value="PFAE">PFAE</option>
+<option value="PLADIG">PLADIG</option>
+<option value="RESICO">RESICO</option>
+<option value="RIF">RIF</option>
+<option value="SUSA">SUSA</option>
 </select>
 
-<select>
-<option>Distribución</option>
-<option>Venta</option>
-<option>Instalación</option>
-<option>Servicio</option>
+<select id="operacion" onchange="actualizarSistema()">
 </select>
 
 <h3>
 🔥 Actividad Principal
 </h3>
 
-<div class="tag">
-PFAE
-</div>
-
-<div class="tag">
-Distribución
-</div>
+<div id="actividadPrincipal"></div>
 
 <hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
 
@@ -261,13 +259,36 @@ Distribución
 📌 Módulos Activos
 </h3>
 
-<div class="tag">⛽ Gasolina</div>
-<div class="tag">🅿️ Estacionamiento</div>
-<div class="tag">📍 Rutas</div>
-<div class="tag">🛠️ Mantenimiento</div>
-<div class="tag">📦 Proveedor</div>
-<div class="tag">📷 OCR</div>
-<div class="tag">📍 GPS</div>
+<div id="modulosActivos"></div>
+
+<hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
+
+<h3>
+💸 Gastos Disponibles
+</h3>
+
+<div id="gastosDisponibles"></div>
+
+<hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
+
+<h3>
+🏦 Bancos
+</h3>
+
+<div id="bancosDisponibles"></div>
+
+<hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
+
+<h3>
+🏦 Funciones Bancarias
+</h3>
+
+<div class="tag">💳 Tipo Cuenta</div>
+<div class="tag">💰 Saldo Inicial</div>
+<div class="tag">📥 Depósitos</div>
+<div class="tag">💸 Pagos</div>
+<div class="tag">🏧 Retiros</div>
+<div class="tag">📤 Transferencias</div>
 
 <hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
 
@@ -275,12 +296,13 @@ Distribución
 ➕ Operaciones Secundarias
 </h3>
 
-<div class="tag">💰 Venta componente</div>
 <div class="tag">🔧 Instalación</div>
+<div class="tag">💰 Venta componente</div>
 
 </div>
 
 <!-- BOTONES -->
+
 <div class="actions">
 
 <div class="action save">
@@ -302,6 +324,7 @@ Distribución
 </div>
 
 <!-- RESULTADOS -->
+
 <div class="section">
 
 <h2>
@@ -333,6 +356,211 @@ Distribución
 </div>
 
 </div>
+
+<script>
+
+const operaciones = {
+
+PFAE:[
+'Distribución',
+'Instalación',
+'Servicio',
+'Venta'
+],
+
+PLADIG:[
+'Reparto',
+'Viajes'
+],
+
+RESICO:[
+'Servicio',
+'Venta'
+],
+
+RIF:[
+'Servicio',
+'Venta'
+],
+
+SUSA:[
+'Apoyo',
+'Comisión',
+'Empleado'
+]
+
+};
+
+const bancos = [
+'BBVA',
+'Efectivo',
+'MercadoPago',
+'Nu'
+].sort();
+
+function crearTags(lista){
+
+return lista.sort().map(item=>
+`<div class="tag">${item}</div>`
+).join('');
+
+}
+
+function actualizarSistema(){
+
+const regimen =
+document.getElementById('regimen').value;
+
+const operacionSelect =
+document.getElementById('operacion');
+
+operacionSelect.innerHTML = '';
+
+operaciones[regimen]
+.sort()
+.forEach(op=>{
+
+operacionSelect.innerHTML +=
+`<option>${op}</option>`;
+
+});
+
+const operacion =
+operacionSelect.value;
+
+document.getElementById(
+'actividadPrincipal'
+).innerHTML =
+
+`
+<div class="tag">${regimen}</div>
+<div class="tag">${operacion}</div>
+`;
+
+let modulos = [];
+let gastos = [];
+
+if(regimen === 'SUSA'){
+
+modulos = [
+'Alimentos',
+'Apoyo gasolina',
+'Hotel',
+'Transporte'
+];
+
+gastos = [
+'Alimentos',
+'Apoyo gasolina',
+'Hotel',
+'Transporte'
+];
+
+document.getElementById(
+'proveedorCard'
+).classList.add('hidden');
+
+document.getElementById(
+'rutasCard'
+).classList.add('hidden');
+
+document.getElementById(
+'mantenimientoCard'
+).classList.add('hidden');
+
+}
+
+if(regimen === 'PFAE'){
+
+document.getElementById(
+'proveedorCard'
+).classList.remove('hidden');
+
+document.getElementById(
+'rutasCard'
+).classList.remove('hidden');
+
+document.getElementById(
+'mantenimientoCard'
+).classList.remove('hidden');
+
+if(operacion === 'Distribución'){
+
+modulos = [
+'Gasolina',
+'GPS',
+'Mantenimiento',
+'OCR',
+'Estacionamiento',
+'Proveedor',
+'Rutas'
+];
+
+gastos = [
+'Estacionamiento',
+'Gasolina',
+'Herramienta',
+'Mantenimiento'
+];
+
+}
+
+if(operacion === 'Instalación'){
+
+modulos = [
+'Cliente',
+'Herramienta',
+'Servicio',
+'Tiempo'
+];
+
+gastos = [
+'Herramienta',
+'Servicio',
+'Tiempo'
+];
+
+}
+
+if(operacion === 'Venta'){
+
+modulos = [
+'Cliente',
+'Código',
+'Inventario',
+'Ticket'
+];
+
+gastos = [
+'Inventario',
+'Producto',
+'Ticket'
+];
+
+}
+
+}
+
+document.getElementById(
+'modulosActivos'
+).innerHTML =
+crearTags(modulos);
+
+document.getElementById(
+'gastosDisponibles'
+).innerHTML =
+crearTags(gastos);
+
+document.getElementById(
+'bancosDisponibles'
+).innerHTML =
+crearTags(bancos);
+
+}
+
+actualizarSistema();
+
+</script>
 
 </body>
 </html>
