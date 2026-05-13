@@ -125,18 +125,6 @@ padding:14px;
 border-radius:14px;
 }
 
-.result-card h4{
-margin:0 0 8px 0;
-font-size:13px;
-opacity:.8;
-}
-
-.result-card p{
-margin:0;
-font-size:18px;
-font-weight:bold;
-}
-
 .hidden{
 display:none;
 }
@@ -150,16 +138,16 @@ display:none;
 🚀 Micro Fiscal Core
 </div>
 
-<!-- LINEA 1 -->
+<!-- MODULOS -->
 
 <div class="grid">
 
-<div class="card active">
+<div class="card active" onclick="abrirModulo('actividad',this)">
 <span>💼</span>
 <h3>Actividad</h3>
 </div>
 
-<div class="card">
+<div class="card" onclick="abrirModulo('bancos',this)">
 <span>🏦</span>
 <h3>Bancos</h3>
 </div>
@@ -175,8 +163,6 @@ display:none;
 </div>
 
 </div>
-
-<!-- LINEA 2 -->
 
 <div class="grid">
 
@@ -202,8 +188,6 @@ display:none;
 
 </div>
 
-<!-- LINEA 3 -->
-
 <div class="grid">
 
 <div class="card">
@@ -228,76 +212,11 @@ display:none;
 
 </div>
 
-<!-- OPERACION -->
+<!-- CONTENIDO DINAMICO -->
 
 <div class="section">
 
-<h2>
-⚙️ Operación del Día
-</h2>
-
-<select id="regimen" onchange="actualizarSistema()">
-<option value="PFAE">PFAE</option>
-<option value="PLADIG">PLADIG</option>
-<option value="RESICO">RESICO</option>
-<option value="RIF">RIF</option>
-<option value="SUSA">SUSA</option>
-</select>
-
-<select id="operacion" onchange="actualizarSistema()">
-</select>
-
-<h3>
-🔥 Actividad Principal
-</h3>
-
-<div id="actividadPrincipal"></div>
-
-<hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
-
-<h3>
-📌 Módulos Activos
-</h3>
-
-<div id="modulosActivos"></div>
-
-<hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
-
-<h3>
-💸 Gastos Disponibles
-</h3>
-
-<div id="gastosDisponibles"></div>
-
-<hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
-
-<h3>
-🏦 Bancos
-</h3>
-
-<div id="bancosDisponibles"></div>
-
-<hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
-
-<h3>
-🏦 Funciones Bancarias
-</h3>
-
-<div class="tag">💳 Tipo Cuenta</div>
-<div class="tag">💰 Saldo Inicial</div>
-<div class="tag">📥 Depósitos</div>
-<div class="tag">💸 Pagos</div>
-<div class="tag">🏧 Retiros</div>
-<div class="tag">📤 Transferencias</div>
-
-<hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
-
-<h3>
-➕ Operaciones Secundarias
-</h3>
-
-<div class="tag">🔧 Instalación</div>
-<div class="tag">💰 Venta componente</div>
+<div id="contenido"></div>
 
 </div>
 
@@ -391,28 +310,131 @@ SUSA:[
 
 };
 
-const bancos = [
-'BBVA',
-'Efectivo',
-'MercadoPago',
-'Nu'
-].sort();
+function abrirModulo(modulo,elemento){
 
-function crearTags(lista){
+document.querySelectorAll('.card')
+.forEach(card=>{
+card.classList.remove('active');
+});
 
-return lista.sort().map(item=>
-`<div class="tag">${item}</div>`
-).join('');
+elemento.classList.add('active');
+
+if(modulo === 'actividad'){
+mostrarActividad();
+}
+
+if(modulo === 'bancos'){
+mostrarBancos();
+}
+
+}
+
+function mostrarActividad(){
+
+const html = `
+
+<h2>
+⚙️ Operación del Día
+</h2>
+
+<select id="regimen" onchange="actualizarSistema()">
+
+<option value="PFAE">PFAE</option>
+<option value="PLADIG">PLADIG</option>
+<option value="RESICO">RESICO</option>
+<option value="RIF">RIF</option>
+<option value="SUSA">SUSA</option>
+
+</select>
+
+<select id="operacion">
+</select>
+
+<h3>
+🔥 Actividad Principal
+</h3>
+
+<div id="actividadPrincipal"></div>
+
+<hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
+
+<h3>
+📌 Módulos Activos
+</h3>
+
+<div id="modulosActivos"></div>
+
+<hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
+
+<h3>
+💸 Gastos Disponibles
+</h3>
+
+<div id="gastosDisponibles"></div>
+
+`;
+
+document.getElementById(
+'contenido'
+).innerHTML = html;
+
+actualizarSistema();
+
+}
+
+function mostrarBancos(){
+
+const html = `
+
+<h2>
+🏦 Bancos
+</h2>
+
+<input
+placeholder="Nombre banco">
+
+<select>
+
+<option>💳 Débito</option>
+<option>💰 Efectivo</option>
+<option>🏦 Nómina</option>
+<option>💼 Negocio</option>
+
+</select>
+
+<input
+placeholder="Saldo inicial">
+
+<hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
+
+<h3>
+📌 Operaciones Bancarias
+</h3>
+
+<div class="tag">📥 Depósito</div>
+<div class="tag">💸 Pago</div>
+<div class="tag">🏧 Retiro</div>
+<div class="tag">📤 Transferencia</div>
+
+`;
+
+document.getElementById(
+'contenido'
+).innerHTML = html;
 
 }
 
 function actualizarSistema(){
 
 const regimen =
-document.getElementById('regimen').value;
+document.getElementById(
+'regimen'
+).value;
 
 const operacionSelect =
-document.getElementById('operacion');
+document.getElementById(
+'operacion'
+);
 
 operacionSelect.innerHTML = '';
 
@@ -456,33 +478,9 @@ gastos = [
 'Transporte'
 ];
 
-document.getElementById(
-'proveedorCard'
-).classList.add('hidden');
-
-document.getElementById(
-'rutasCard'
-).classList.add('hidden');
-
-document.getElementById(
-'mantenimientoCard'
-).classList.add('hidden');
-
 }
 
 if(regimen === 'PFAE'){
-
-document.getElementById(
-'proveedorCard'
-).classList.remove('hidden');
-
-document.getElementById(
-'rutasCard'
-).classList.remove('hidden');
-
-document.getElementById(
-'mantenimientoCard'
-).classList.remove('hidden');
 
 if(operacion === 'Distribución'){
 
@@ -551,14 +549,17 @@ document.getElementById(
 ).innerHTML =
 crearTags(gastos);
 
-document.getElementById(
-'bancosDisponibles'
-).innerHTML =
-crearTags(bancos);
+}
+
+function crearTags(lista){
+
+return lista.sort().map(item=>
+`<div class="tag">${item}</div>`
+).join('');
 
 }
 
-actualizarSistema();
+mostrarActividad();
 
 </script>
 
