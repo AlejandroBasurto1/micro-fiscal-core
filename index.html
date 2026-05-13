@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Micro Fiscal Core</title>
 
 <style>
@@ -12,6 +12,7 @@ background:#07111f;
 color:white;
 font-family:Arial;
 padding:12px;
+margin:0;
 }
 
 .logo{
@@ -37,6 +38,7 @@ flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
+cursor:pointer;
 opacity:.45;
 filter:grayscale(100%);
 transition:.2s;
@@ -53,6 +55,11 @@ font-size:28px;
 margin-bottom:5px;
 }
 
+.card h3{
+font-size:13px;
+margin:0;
+}
+
 .section{
 background:#132238;
 padding:15px;
@@ -61,11 +68,12 @@ margin-bottom:15px;
 }
 
 .section h2{
+margin-top:0;
 margin-bottom:15px;
 }
 
-input,
-select{
+select,
+input{
 width:100%;
 padding:12px;
 border:none;
@@ -88,6 +96,7 @@ padding:14px;
 border-radius:16px;
 text-align:center;
 font-weight:bold;
+cursor:pointer;
 }
 
 .save{background:#10b981;}
@@ -101,14 +110,31 @@ padding:8px 12px;
 border-radius:12px;
 background:#1b2f4a;
 margin:5px;
+font-size:13px;
 }
 
-.alert{
-background:#0f766e;
-padding:12px;
-border-radius:12px;
-margin-bottom:15px;
-display:none;
+.result-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.result-card{
+background:#1b2f4a;
+padding:14px;
+border-radius:14px;
+}
+
+.result-card h4{
+margin:0 0 8px 0;
+font-size:13px;
+opacity:.8;
+}
+
+.result-card p{
+margin:0;
+font-size:18px;
+font-weight:bold;
 }
 
 </style>
@@ -121,7 +147,6 @@ display:none;
 </div>
 
 <!-- LINEA 1 -->
-
 <div class="grid">
 
 <div class="card active">
@@ -147,7 +172,6 @@ display:none;
 </div>
 
 <!-- LINEA 2 -->
-
 <div class="grid">
 
 <div class="card">
@@ -173,7 +197,6 @@ display:none;
 </div>
 
 <!-- LINEA 3 -->
-
 <div class="grid">
 
 <div class="card">
@@ -198,80 +221,69 @@ display:none;
 
 </div>
 
-<div class="alert" id="alerta"></div>
-
 <!-- OPERACION -->
-
 <div class="section">
 
 <h2>
 ⚙️ Operación del Día
 </h2>
 
-<select id="regimen">
+<select>
+<option>PFAE</option>
+<option>SUSA</option>
+<option>RESICO</option>
+<option>PLADIG</option>
+<option>RIF</option>
+</select>
 
-<option value="">
-Selecciona régimen
-</option>
+<select>
+<option>Distribución</option>
+<option>Venta</option>
+<option>Instalación</option>
+<option>Servicio</option>
+</select>
 
-<option value="PFAE">
+<h3>
+🔥 Actividad Principal
+</h3>
+
+<div class="tag">
 PFAE
-</option>
+</div>
 
-<option value="SUSA">
-SUSA
-</option>
-
-<option value="RESICO">
-RESICO
-</option>
-
-<option value="PLADIG">
-PLADIG
-</option>
-
-<option value="RIF">
-RIF
-</option>
-
-</select>
-
-<select id="operacion">
-
-<option value="">
-Selecciona operación
-</option>
-
-<option value="Distribucion">
+<div class="tag">
 Distribución
-</option>
+</div>
 
-<option value="Venta">
-Venta
-</option>
+<hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
 
-<option value="Instalacion">
-Instalación
-</option>
+<h3>
+📌 Módulos Activos
+</h3>
 
-<option value="Servicio">
-Servicio
-</option>
+<div class="tag">⛽ Gasolina</div>
+<div class="tag">🅿️ Estacionamiento</div>
+<div class="tag">📍 Rutas</div>
+<div class="tag">🛠️ Mantenimiento</div>
+<div class="tag">📦 Proveedor</div>
+<div class="tag">📷 OCR</div>
+<div class="tag">📍 GPS</div>
 
-</select>
+<hr style="border-color:#1b2f4a; opacity:.4; margin:15px 0;">
 
-<div id="modoActual"></div>
+<h3>
+➕ Operaciones Secundarias
+</h3>
 
-<div id="modulosActivos"></div>
+<div class="tag">💰 Venta componente</div>
+<div class="tag">🔧 Instalación</div>
 
 </div>
 
 <!-- BOTONES -->
-
 <div class="actions">
 
-<div class="action save"
-onclick="guardarModo()">
+<div class="action save">
 💾 Guardar
 </div>
 
@@ -279,8 +291,7 @@ onclick="guardarModo()">
 ✏️ Editar
 </div>
 
-<div class="action clear"
-onclick="limpiarModo()">
+<div class="action clear">
 🗑️ Limpiar
 </div>
 
@@ -290,225 +301,38 @@ onclick="limpiarModo()">
 
 </div>
 
-<script>
+<!-- RESULTADOS -->
+<div class="section">
 
-function guardarModo(){
+<h2>
+📊 Resultado Financiero
+</h2>
 
-const regimen =
-document.getElementById(
-'regimen'
-).value;
+<div class="result-grid">
 
-const operacion =
-document.getElementById(
-'operacion'
-).value;
-
-const alerta =
-document.getElementById(
-'alerta'
-);
-
-if(!regimen || !operacion){
-
-alerta.style.display =
-'block';
-
-alerta.innerText =
-'Selecciona régimen y operación';
-
-return;
-
-}
-
-localStorage.setItem(
-'regimenDia',
-regimen
-);
-
-localStorage.setItem(
-'operacionDia',
-operacion
-);
-
-mostrarContexto();
-
-alerta.style.display =
-'block';
-
-alerta.innerText =
-'Modo operativo guardado';
-
-}
-
-
-
-function mostrarContexto(){
-
-const regimen =
-localStorage.getItem(
-'regimenDia'
-);
-
-const operacion =
-localStorage.getItem(
-'operacionDia'
-);
-
-document.getElementById(
-'modoActual'
-).innerHTML = `
-
-<h3>
-🔥 Modo principal del día
-</h3>
-
-<div class="tag">
-${regimen}
+<div class="result-card">
+<h4>Resultado Utilidad</h4>
+<p>$3,850</p>
 </div>
 
-<div class="tag">
-${operacion}
+<div class="result-card">
+<h4>Menos IVA</h4>
+<p>$616</p>
 </div>
 
-`;
-
-
-
-let html = '';
-
-
-
-if(regimen === 'SUSA'){
-
-html += `
-
-<div class="tag">
-🏨 Hotel
+<div class="result-card">
+<h4>Menos ISR</h4>
+<p>$385</p>
 </div>
 
-<div class="tag">
-🍽️ Alimentos
+<div class="result-card">
+<h4>Ganancia Real</h4>
+<p>$2,849</p>
 </div>
 
-<div class="tag">
-🚕 Transporte
 </div>
 
-<div class="tag">
-🧾 Apoyo gasolina
 </div>
-
-`;
-
-}
-
-
-
-if(regimen === 'PFAE'
-&& operacion === 'Distribucion'){
-
-html += `
-
-<div class="tag">
-⛽ Gasolina
-</div>
-
-<div class="tag">
-🅿️ Estacionamiento
-</div>
-
-<div class="tag">
-📍 Rutas
-</div>
-
-<div class="tag">
-🛠️ Mantenimiento
-</div>
-
-`;
-
-}
-
-
-
-if(regimen === 'PFAE'
-&& operacion === 'Venta'){
-
-html += `
-
-<div class="tag">
-📦 Inventario
-</div>
-
-<div class="tag">
-💰 Venta
-</div>
-
-<div class="tag">
-🧾 Ticket
-</div>
-
-`;
-
-}
-
-
-
-if(regimen === 'PFAE'
-&& operacion === 'Instalacion'){
-
-html += `
-
-<div class="tag">
-🔧 Mano de obra
-</div>
-
-<div class="tag">
-🪛 Herramienta
-</div>
-
-<div class="tag">
-⏱️ Tiempo servicio
-</div>
-
-`;
-
-}
-
-
-
-document.getElementById(
-'modulosActivos'
-).innerHTML = html;
-
-}
-
-
-
-function limpiarModo(){
-
-localStorage.removeItem(
-'regimenDia'
-);
-
-localStorage.removeItem(
-'operacionDia'
-);
-
-location.reload();
-
-}
-
-
-
-window.onload = ()=>{
-
-mostrarContexto();
-
-}
-
-</script>
 
 </body>
 </html>
