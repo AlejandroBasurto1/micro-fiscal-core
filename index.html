@@ -67,11 +67,6 @@ border-radius:20px;
 margin-bottom:15px;
 }
 
-.section h2{
-margin-top:0;
-margin-bottom:15px;
-}
-
 select,
 input{
 width:100%;
@@ -99,21 +94,10 @@ font-weight:bold;
 cursor:pointer;
 }
 
-.save{
-background:#10b981;
-}
-
-.edit{
-background:#3b82f6;
-}
-
-.clear{
-background:#ef4444;
-}
-
-.excel{
-background:#15803d;
-}
+.save{background:#10b981;}
+.edit{background:#3b82f6;}
+.clear{background:#ef4444;}
+.excel{background:#15803d;}
 
 .tag{
 display:inline-block;
@@ -145,24 +129,19 @@ border-radius:14px;
 🚀 Micro Fiscal Core
 </div>
 
-<!-- MODULOS PRINCIPALES -->
-
 <div class="grid">
 
-<div class="card active"
-onclick="abrirModulo('actividad',this)">
+<div class="card active" onclick="abrirModulo('actividad',this)">
 <span>💼</span>
 <h3>Actividad</h3>
 </div>
 
-<div class="card"
-onclick="abrirModulo('bancos',this)">
+<div class="card" onclick="abrirModulo('bancos',this)">
 <span>🏦</span>
 <h3>Bancos</h3>
 </div>
 
-<div class="card"
-onclick="abrirModulo('gastos',this)">
+<div class="card" onclick="abrirModulo('gastos',this)">
 <span>💸</span>
 <h3>Gastos</h3>
 </div>
@@ -173,8 +152,6 @@ onclick="abrirModulo('gastos',this)">
 </div>
 
 </div>
-
-<!-- MODULOS SECUNDARIOS -->
 
 <div class="grid">
 
@@ -200,8 +177,6 @@ onclick="abrirModulo('gastos',this)">
 
 </div>
 
-<!-- HERRAMIENTAS -->
-
 <div class="grid">
 
 <div class="card">
@@ -226,15 +201,9 @@ onclick="abrirModulo('gastos',this)">
 
 </div>
 
-<!-- CONTENIDO DINAMICO -->
-
 <div class="section">
-
 <div id="contenido"></div>
-
 </div>
-
-<!-- BOTONES -->
 
 <div class="actions">
 
@@ -255,8 +224,6 @@ onclick="abrirModulo('gastos',this)">
 </div>
 
 </div>
-
-<!-- RESULTADOS -->
 
 <div class="section">
 
@@ -330,8 +297,6 @@ SUSA:[
 
 };
 
-
-
 const catalogoGastos = [
 
 'Alimentos',
@@ -356,7 +321,19 @@ const catalogoGastos = [
 
 ];
 
+function crearTags(lista){
 
+lista.sort();
+
+let html = '';
+
+lista.forEach(item=>{
+html += '<div class="tag">'+item+'</div>';
+});
+
+return html;
+
+}
 
 function abrirModulo(modulo,elemento){
 
@@ -381,173 +358,79 @@ mostrarGastos();
 
 }
 
-
-
 function mostrarActividad(){
 
-const html = `
+document.getElementById('contenido').innerHTML = `
 
-<h2>
-⚙️ Operación del Día
-</h2>
+<h2>⚙️ Operación del Día</h2>
 
-<select id="regimen"
-onchange="actualizarSistema()">
+<select id="regimen" onchange="actualizarSistema()">
 
-<option value="GENERAL">
-GENERAL
-</option>
-
-<option value="PFAE">
-PFAE
-</option>
-
-<option value="PLADIG">
-PLADIG
-</option>
-
-<option value="RESICO">
-RESICO
-</option>
-
-<option value="RIF">
-RIF
-</option>
-
-<option value="SUSA">
-SUSA
-</option>
+<option value="GENERAL">GENERAL</option>
+<option value="PFAE">PFAE</option>
+<option value="PLADIG">PLADIG</option>
+<option value="RESICO">RESICO</option>
+<option value="RIF">RIF</option>
+<option value="SUSA">SUSA</option>
 
 </select>
 
-<select id="operacion">
-</select>
+<select id="operacion"></select>
 
-<h3>
-🔥 Actividad Principal
-</h3>
+<h3>🔥 Actividad Principal</h3>
 
 <div id="actividadPrincipal"></div>
 
-<hr style="border-color:#1b2f4a;
-opacity:.4;
-margin:15px 0;">
+<hr style="border-color:#1b2f4a;opacity:.4;margin:15px 0;">
 
-<h3>
-📌 Módulos Activos
-</h3>
+<h3>📌 Módulos Activos</h3>
 
 <div id="modulosActivos"></div>
 
 `;
 
-document.getElementById(
-'contenido'
-).innerHTML = html;
-
 actualizarSistema();
 
 }
 
-
-
 function mostrarBancos(){
 
-const html = `
+document.getElementById('contenido').innerHTML = `
 
-<h2>
-🏦 Bancos
-</h2>
+<h2>🏦 Bancos</h2>
 
 <input placeholder="Nombre banco">
 
 <select>
 
-<option>
-💳 Crédito
-</option>
-
-<option>
-💳 Débito
-</option>
-
-<option>
-💰 Efectivo
-</option>
-
-<option>
-💼 Negocio
-</option>
-
-<option>
-🏦 Nómina
-</option>
+<option>💳 Crédito</option>
+<option>💳 Débito</option>
+<option>💰 Efectivo</option>
+<option>💼 Negocio</option>
+<option>🏦 Nómina</option>
 
 </select>
 
 <input placeholder="Saldo inicial">
 
-<hr style="border-color:#1b2f4a;
-opacity:.4;
-margin:15px 0;">
+<hr style="border-color:#1b2f4a;opacity:.4;margin:15px 0;">
 
-<h3>
-📌 Operaciones Bancarias
-</h3>
+<h3>📌 Operaciones Bancarias</h3>
 
-<div class="tag">
-📥 Depósito
-</div>
-
-<div class="tag">
-💸 Pago
-</div>
-
-<div class="tag">
-🏧 Retiro
-</div>
-
-<div class="tag">
-📤 Transferencia
-</div>
-
-<hr style="border-color:#1b2f4a;
-opacity:.4;
-margin:15px 0;">
-
-<h3>
-💡 Contexto Inteligente
-</h3>
-
-<div class="tag">
-💳 Crédito ≠ Dinero propio
-</div>
-
-<div class="tag">
-💰 Flujo real
-</div>
-
-<div class="tag">
-📊 Conciliación
-</div>
+<div class="tag">📥 Depósito</div>
+<div class="tag">💸 Pago</div>
+<div class="tag">🏧 Retiro</div>
+<div class="tag">📤 Transferencia</div>
 
 `;
 
-document.getElementById(
-'contenido'
-).innerHTML = html;
-
 }
-
-
 
 function mostrarGastos(){
 
-const html = `
+document.getElementById('contenido').innerHTML = `
 
-<h2>
-💸 Catálogo Universal de Gastos
-</h2>
+<h2>💸 Catálogo Universal de Gastos</h2>
 
 <p>
 Todos los conceptos existen,
@@ -558,25 +441,15 @@ ${crearTags(catalogoGastos)}
 
 `;
 
-document.getElementById(
-'contenido'
-).innerHTML = html;
-
 }
-
-
 
 function actualizarSistema(){
 
 const regimen =
-document.getElementById(
-'regimen'
-).value;
+document.getElementById('regimen').value;
 
 const operacionSelect =
-document.getElementById(
-'operacion'
-);
+document.getElementById('operacion');
 
 operacionSelect.innerHTML = '';
 
@@ -585,30 +458,19 @@ operaciones[regimen]
 .forEach(op=>{
 
 operacionSelect.innerHTML +=
-\`<option>\${op}</option>\`;
+'<option>'+op+'</option>';
 
 });
 
 const operacion =
 operacionSelect.value;
 
-document.getElementById(
-'actividadPrincipal'
-).innerHTML =
+document.getElementById('actividadPrincipal').innerHTML =
 
-\`
-<div class="tag">
-\${regimen}
-</div>
-
-<div class="tag">
-\${operacion}
-</div>
-\`;
+'<div class="tag">'+regimen+'</div>' +
+'<div class="tag">'+operacion+'</div>';
 
 let modulos = [];
-
-
 
 if(regimen === 'GENERAL'){
 
@@ -623,8 +485,6 @@ modulos = [
 
 }
 
-
-
 if(regimen === 'SUSA'){
 
 modulos = [
@@ -635,8 +495,6 @@ modulos = [
 ];
 
 }
-
-
 
 if(regimen === 'PFAE'){
 
@@ -654,8 +512,6 @@ modulos = [
 
 }
 
-
-
 if(operacion === 'Instalación'){
 
 modulos = [
@@ -666,8 +522,6 @@ modulos = [
 ];
 
 }
-
-
 
 if(operacion === 'Venta'){
 
@@ -682,26 +536,10 @@ modulos = [
 
 }
 
-
-
-document.getElementById(
-'modulosActivos'
-).innerHTML =
+document.getElementById('modulosActivos').innerHTML =
 crearTags(modulos);
 
 }
-
-
-
-function crearTags(lista){
-
-return lista.sort().map(item=>
-\`<div class="tag">\${item}</div>\`
-).join('');
-
-}
-
-
 
 mostrarActividad();
 
