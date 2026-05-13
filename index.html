@@ -7,21 +7,15 @@
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-}
-
 body{
 background:#07111f;
 color:white;
+font-family:Arial;
 padding:12px;
 }
 
 .logo{
-font-size:22px;
+font-size:24px;
 font-weight:bold;
 margin-bottom:15px;
 }
@@ -33,39 +27,28 @@ gap:10px;
 margin-bottom:15px;
 }
 
-.card,
-.tool{
+.card{
 background:#132238;
 border-radius:18px;
+padding:10px;
+height:85px;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
-cursor:pointer;
-transition:.2s;
-opacity:.4;
+opacity:.45;
 filter:grayscale(100%);
+transition:.2s;
 }
 
-.card{
-height:85px;
-}
-
-.tool{
-height:75px;
-}
-
-.card.active,
-.tool.active{
+.card.active{
 opacity:1;
 filter:grayscale(0%);
-transform:scale(1.02);
 box-shadow:0 0 18px rgba(16,185,129,.35);
 }
 
-.card span,
-.tool span{
+.card span{
 font-size:28px;
 margin-bottom:5px;
 }
@@ -105,7 +88,6 @@ padding:14px;
 border-radius:16px;
 text-align:center;
 font-weight:bold;
-cursor:pointer;
 }
 
 .save{background:#10b981;}
@@ -113,27 +95,20 @@ cursor:pointer;
 .clear{background:#ef4444;}
 .excel{background:#15803d;}
 
-.results{
-background:#132238;
-padding:15px;
-border-radius:20px;
-}
-
-.result-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px;
-}
-
-.result-card{
+.tag{
+display:inline-block;
+padding:8px 12px;
+border-radius:12px;
 background:#1b2f4a;
-padding:14px;
-border-radius:14px;
+margin:5px;
 }
 
-.result-card h4{
-margin-bottom:8px;
-opacity:.8;
+.alert{
+background:#0f766e;
+padding:12px;
+border-radius:12px;
+margin-bottom:15px;
+display:none;
 }
 
 </style>
@@ -197,57 +172,97 @@ opacity:.8;
 
 </div>
 
-<!-- LINEA 3 TOOLS -->
+<!-- LINEA 3 -->
 
 <div class="grid">
 
-<div class="tool active">
+<div class="card">
 <span>📷</span>
 <h3>OCR</h3>
 </div>
 
-<div class="tool">
+<div class="card">
 <span>🔳</span>
 <h3>QR</h3>
 </div>
 
-<div class="tool">
+<div class="card">
 <span>📦</span>
 <h3>Código</h3>
 </div>
 
-<div class="tool">
+<div class="card">
 <span>📍</span>
 <h3>GPS</h3>
 </div>
 
 </div>
 
+<div class="alert" id="alerta"></div>
+
 <!-- OPERACION -->
 
 <div class="section">
 
 <h2>
-⚙️ Ventana Operación
+⚙️ Operación del Día
 </h2>
 
-<input type="text"
-placeholder="Concepto">
+<select id="regimen">
 
-<input type="number"
-placeholder="Monto">
-
-<select>
-
-<option>
-👨‍💼 Asalariado
+<option value="">
+Selecciona régimen
 </option>
 
-<option>
-🏢 Actividad Empresarial
+<option value="PFAE">
+PFAE
+</option>
+
+<option value="SUSA">
+SUSA
+</option>
+
+<option value="RESICO">
+RESICO
+</option>
+
+<option value="PLADIG">
+PLADIG
+</option>
+
+<option value="RIF">
+RIF
 </option>
 
 </select>
+
+<select id="operacion">
+
+<option value="">
+Selecciona operación
+</option>
+
+<option value="Distribucion">
+Distribución
+</option>
+
+<option value="Venta">
+Venta
+</option>
+
+<option value="Instalacion">
+Instalación
+</option>
+
+<option value="Servicio">
+Servicio
+</option>
+
+</select>
+
+<div id="modoActual"></div>
+
+<div id="modulosActivos"></div>
 
 </div>
 
@@ -255,7 +270,8 @@ placeholder="Monto">
 
 <div class="actions">
 
-<div class="action save">
+<div class="action save"
+onclick="guardarModo()">
 💾 Guardar
 </div>
 
@@ -263,7 +279,8 @@ placeholder="Monto">
 ✏️ Editar
 </div>
 
-<div class="action clear">
+<div class="action clear"
+onclick="limpiarModo()">
 🗑️ Limpiar
 </div>
 
@@ -273,39 +290,225 @@ placeholder="Monto">
 
 </div>
 
-<!-- RESULTADOS -->
+<script>
 
-<div class="results">
+function guardarModo(){
 
-<h2>
-📊 Resultado Financiero
-</h2>
+const regimen =
+document.getElementById(
+'regimen'
+).value;
 
-<div class="result-grid">
+const operacion =
+document.getElementById(
+'operacion'
+).value;
 
-<div class="result-card">
-<h4>Resultado Utilidad</h4>
-<p>$0.00</p>
+const alerta =
+document.getElementById(
+'alerta'
+);
+
+if(!regimen || !operacion){
+
+alerta.style.display =
+'block';
+
+alerta.innerText =
+'Selecciona régimen y operación';
+
+return;
+
+}
+
+localStorage.setItem(
+'regimenDia',
+regimen
+);
+
+localStorage.setItem(
+'operacionDia',
+operacion
+);
+
+mostrarContexto();
+
+alerta.style.display =
+'block';
+
+alerta.innerText =
+'Modo operativo guardado';
+
+}
+
+
+
+function mostrarContexto(){
+
+const regimen =
+localStorage.getItem(
+'regimenDia'
+);
+
+const operacion =
+localStorage.getItem(
+'operacionDia'
+);
+
+document.getElementById(
+'modoActual'
+).innerHTML = `
+
+<h3>
+🔥 Modo principal del día
+</h3>
+
+<div class="tag">
+${regimen}
 </div>
 
-<div class="result-card">
-<h4>Menos IVA</h4>
-<p>$0.00</p>
+<div class="tag">
+${operacion}
 </div>
 
-<div class="result-card">
-<h4>Menos ISR</h4>
-<p>$0.00</p>
+`;
+
+
+
+let html = '';
+
+
+
+if(regimen === 'SUSA'){
+
+html += `
+
+<div class="tag">
+🏨 Hotel
 </div>
 
-<div class="result-card">
-<h4>Ganancia Real</h4>
-<p>$0.00</p>
+<div class="tag">
+🍽️ Alimentos
 </div>
 
+<div class="tag">
+🚕 Transporte
 </div>
 
+<div class="tag">
+🧾 Apoyo gasolina
 </div>
+
+`;
+
+}
+
+
+
+if(regimen === 'PFAE'
+&& operacion === 'Distribucion'){
+
+html += `
+
+<div class="tag">
+⛽ Gasolina
+</div>
+
+<div class="tag">
+🅿️ Estacionamiento
+</div>
+
+<div class="tag">
+📍 Rutas
+</div>
+
+<div class="tag">
+🛠️ Mantenimiento
+</div>
+
+`;
+
+}
+
+
+
+if(regimen === 'PFAE'
+&& operacion === 'Venta'){
+
+html += `
+
+<div class="tag">
+📦 Inventario
+</div>
+
+<div class="tag">
+💰 Venta
+</div>
+
+<div class="tag">
+🧾 Ticket
+</div>
+
+`;
+
+}
+
+
+
+if(regimen === 'PFAE'
+&& operacion === 'Instalacion'){
+
+html += `
+
+<div class="tag">
+🔧 Mano de obra
+</div>
+
+<div class="tag">
+🪛 Herramienta
+</div>
+
+<div class="tag">
+⏱️ Tiempo servicio
+</div>
+
+`;
+
+}
+
+
+
+document.getElementById(
+'modulosActivos'
+).innerHTML = html;
+
+}
+
+
+
+function limpiarModo(){
+
+localStorage.removeItem(
+'regimenDia'
+);
+
+localStorage.removeItem(
+'operacionDia'
+);
+
+location.reload();
+
+}
+
+
+
+window.onload = ()=>{
+
+mostrarContexto();
+
+}
+
+</script>
 
 </body>
 </html>
