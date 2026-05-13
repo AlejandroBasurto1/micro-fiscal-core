@@ -194,7 +194,7 @@ margin:15px 0;
 
 <div class="grid">
 
-<div class="card">
+<div class="card" onclick="abrirModulo('proveedor',this)">
 <span>📦</span>
 <h3>Proveedor</h3>
 </div>
@@ -392,20 +392,28 @@ card.classList.remove('active');
 
 elemento.classList.add('active');
 
-if(modulo === 'actividad'){
+switch(modulo){
+
+case 'actividad':
 mostrarActividad();
-}
+break;
 
-if(modulo === 'bancos'){
+case 'bancos':
 mostrarBancos();
-}
+break;
 
-if(modulo === 'gastos'){
+case 'gastos':
 mostrarGastos();
-}
+break;
 
-if(modulo === 'viaticos'){
+case 'viaticos':
 mostrarViaticos();
+break;
+
+case 'proveedor':
+mostrarProveedor();
+break;
+
 }
 
 }
@@ -519,6 +527,80 @@ document.getElementById('contenido').innerHTML = `
 <div class="tag">📍 GPS</div>
 <div class="tag">📷 OCR Ticket</div>
 <div class="tag">💾 Guardar gasto</div>
+
+`;
+
+}
+
+function mostrarProveedor(){
+
+document.getElementById('contenido').innerHTML = `
+
+<h2>📦 Proveedor Inteligente</h2>
+
+<input placeholder="Nombre proveedor">
+
+<select>
+
+<option>⛽ Gasolinera</option>
+<option>🏨 Hotel</option>
+<option>🛠️ Servicio</option>
+<option>📦 Producto</option>
+<option>🚚 Transporte</option>
+
+</select>
+
+<input placeholder="RFC">
+
+<input placeholder="Teléfono">
+
+<input placeholder="Correo">
+
+<hr>
+
+<h3>📍 Información Operativa</h3>
+
+<div class="tag">📷 OCR Ticket</div>
+<div class="tag">📍 GPS</div>
+<div class="tag">💳 Banco</div>
+<div class="tag">🧾 Factura</div>
+
+<hr>
+
+<h3>⚡ Acción Inteligente</h3>
+
+<div class="tag">Guardar proveedor</div>
+<div class="tag">Crear gasto</div>
+<div class="tag">Relacionar ruta</div>
+<div class="tag">Usar ubicación actual</div>
+
+<hr>
+
+<h3>📊 Historial Rápido</h3>
+
+<div class="result-grid">
+
+<div class="result-card">
+<h4>Compras</h4>
+<p>14</p>
+</div>
+
+<div class="result-card">
+<h4>Total</h4>
+<p>$8,250</p>
+</div>
+
+<div class="result-card">
+<h4>Último gasto</h4>
+<p>$650</p>
+</div>
+
+<div class="result-card">
+<h4>Frecuencia</h4>
+<p>Alta</p>
+</div>
+
+</div>
 
 `;
 
