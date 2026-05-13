@@ -218,7 +218,7 @@ margin:15px 0;
 
 <div class="search-global">
 
-<input placeholder="Buscar cliente, teléfono, ticket, factura, GPS...">
+<input placeholder="Buscar cliente, factura, ticket, GPS, proveedor, folio...">
 
 <button class="search-btn">
 🔍
@@ -273,7 +273,7 @@ margin:15px 0;
 <h3>Rutas</h3>
 </div>
 
-<div class="card">
+<div class="card" onclick="abrirModulo('mantenimiento',this)">
 <span>🛠️</span>
 <h3>Mantenimiento</h3>
 </div>
@@ -364,83 +364,6 @@ margin:15px 0;
 
 <script>
 
-const operaciones = {
-
-GENERAL:[
-'Finanzas',
-'Gastos',
-'Personal'
-],
-
-PFAE:[
-'Distribución',
-'Instalación',
-'Servicio',
-'Venta'
-],
-
-PLADIG:[
-'Reparto',
-'Viajes'
-],
-
-RESICO:[
-'Servicio',
-'Venta'
-],
-
-RIF:[
-'Servicio',
-'Venta'
-],
-
-SUSA:[
-'Apoyo',
-'Comisión',
-'Empleado'
-]
-
-};
-
-const catalogoGastos = [
-
-'Alimentos',
-'Apoyo gasolina',
-'Casetas',
-'Estacionamiento',
-'Gasolina',
-'Herramienta',
-'Hogar',
-'Hotel',
-'Impuestos',
-'Internet',
-'Inventario',
-'Mantenimiento',
-'Papelería',
-'Publicidad',
-'Renta',
-'Salud',
-'Servicio',
-'Software',
-'Taxi',
-'Transporte'
-
-];
-
-function crearTags(lista){
-
-lista.sort();
-
-let html = '';
-
-lista.forEach(item=>{
-html += '<div class="tag">'+item+'</div>';
-});
-
-return html;
-
-}
-
 function abrirModulo(modulo,elemento){
 
 document.querySelectorAll('.card')
@@ -480,6 +403,10 @@ case 'rutas':
 mostrarRutas();
 break;
 
+case 'mantenimiento':
+mostrarMantenimiento();
+break;
+
 }
 
 }
@@ -490,32 +417,19 @@ document.getElementById('contenido').innerHTML = `
 
 <h2>⚙️ Operación del Día</h2>
 
-<select id="regimen" onchange="actualizarSistema()">
+<select>
 
-<option value="GENERAL">GENERAL</option>
-<option value="PFAE">PFAE</option>
-<option value="PLADIG">PLADIG</option>
-<option value="RESICO">RESICO</option>
-<option value="RIF">RIF</option>
-<option value="SUSA">SUSA</option>
+<option>🚚 Distribución</option>
+<option>🛠️ Servicio</option>
+<option>🏪 Venta</option>
 
 </select>
 
-<select id="operacion"></select>
-
-<h3>🔥 Actividad Principal</h3>
-
-<div id="actividadPrincipal"></div>
-
-<hr>
-
-<h3>📌 Módulos Activos</h3>
-
-<div id="modulosActivos"></div>
+<div class="tag">Cliente</div>
+<div class="tag">Ruta</div>
+<div class="tag">Viáticos</div>
 
 `;
-
-actualizarSistema();
 
 }
 
@@ -526,18 +440,7 @@ document.getElementById('contenido').innerHTML = `
 <h2>🏦 Bancos</h2>
 
 <input placeholder="Nombre banco">
-
-<select>
-
-<option>💳 Crédito</option>
-<option>💳 Débito</option>
-<option>💰 Efectivo</option>
-<option>💼 Negocio</option>
-<option>🏦 Nómina</option>
-
-</select>
-
-<input placeholder="Saldo inicial">
+<input placeholder="Saldo">
 
 `;
 
@@ -547,9 +450,12 @@ function mostrarGastos(){
 
 document.getElementById('contenido').innerHTML = `
 
-<h2>💸 Catálogo Universal de Gastos</h2>
+<h2>💸 Gastos</h2>
 
-${crearTags(catalogoGastos)}
+<div class="tag">Gasolina</div>
+<div class="tag">Casetas</div>
+<div class="tag">Internet</div>
+<div class="tag">Herramienta</div>
 
 `;
 
@@ -570,12 +476,33 @@ document.getElementById('contenido').innerHTML = `
 <option>🚕 Taxi</option>
 <option>🚌 Transporte</option>
 <option>🏨 Hotel</option>
-<option>🍔 Alimentos</option>
+<option>🍔 Restaurante</option>
 
 </select>
 
+<input placeholder="💰 Propina">
+
 <div class="tag">📍 GPS</div>
 <div class="tag">📷 OCR Ticket</div>
+<div class="tag">🧾 Factura</div>
+
+<hr>
+
+<h3>📊 Resumen</h3>
+
+<div class="result-grid">
+
+<div class="result-card">
+<h4>Consumo</h4>
+<p>$580</p>
+</div>
+
+<div class="result-card">
+<h4>Propinas</h4>
+<p>$35</p>
+</div>
+
+</div>
 
 `;
 
@@ -585,23 +512,11 @@ function mostrarProveedor(){
 
 document.getElementById('contenido').innerHTML = `
 
-<h2>📦 Proveedor Inteligente</h2>
+<h2>📦 Proveedor</h2>
 
 <input placeholder="Nombre proveedor">
 <input placeholder="RFC">
 <input placeholder="Teléfono">
-
-<select>
-
-<option>⛽ Gasolinera</option>
-<option>🏨 Hotel</option>
-<option>🛠️ Servicio</option>
-
-</select>
-
-<div class="tag">📷 OCR</div>
-<div class="tag">📍 GPS</div>
-<div class="tag">🧾 Factura</div>
 
 `;
 
@@ -611,22 +526,13 @@ function mostrarCliente(){
 
 document.getElementById('contenido').innerHTML = `
 
-<h2>👥 Cliente Operativo</h2>
+<h2>👥 Cliente</h2>
 
 <input placeholder="Nombre cliente">
 <input placeholder="Teléfono">
-<input placeholder="Referencia rápida">
-
-<select>
-
-<option>🚚 Distribución</option>
-<option>🛠️ Servicio</option>
-<option>🏪 Venta</option>
-
-</select>
+<input placeholder="Referencia">
 
 <div class="tag">📍 GPS</div>
-<div class="tag">🗺️ Ruta</div>
 <div class="tag">💬 WhatsApp</div>
 
 `;
@@ -639,7 +545,7 @@ document.getElementById('contenido').innerHTML = `
 
 <h2>📍 Rutas Inteligentes</h2>
 
-<input placeholder="Buscar cliente por teléfono, nombre, GPS o dirección">
+<input placeholder="Buscar cliente">
 
 <div class="route-client">
 <div>
@@ -661,55 +567,16 @@ Agregar
 </button>
 </div>
 
-<div class="route-client">
-<div>
-<strong>María López</strong><br>
-📞 5588776655
-</div>
-<button>
-Agregar
-</button>
-</div>
-
 <hr>
 
 <h3>🚚 Ruta Generada</h3>
 
 <div class="tag">Cliente 1</div>
 <div class="tag">Cliente 2</div>
-<div class="tag">Cliente 3</div>
 
 <hr>
 
-<h3>📊 Logística Inteligente</h3>
-
-<div class="result-grid">
-
-<div class="result-card">
-<h4>Distancia</h4>
-<p>24 km</p>
-</div>
-
-<div class="result-card">
-<h4>Tiempo</h4>
-<p>1.4 hrs</p>
-</div>
-
-<div class="result-card">
-<h4>Gasolina</h4>
-<p>$210</p>
-</div>
-
-<div class="result-card">
-<h4>Entregas</h4>
-<p>8</p>
-</div>
-
-</div>
-
-<hr>
-
-<h3>💬 Speech WhatsApp</h3>
+<h3>💬 WhatsApp</h3>
 
 <textarea>
 
@@ -717,13 +584,77 @@ Hola 👋 buen día.
 
 Hoy estaremos realizando entregas en su zona.
 
-Si necesita compartir una referencia
-o ubicación adicional puede responder
-a este mensaje.
-
 Gracias.
 
 </textarea>
+
+`;
+
+}
+
+function mostrarMantenimiento(){
+
+document.getElementById('contenido').innerHTML = `
+
+<h2>🛠️ Control de Mantenimiento</h2>
+
+<select>
+
+<option>🚗 Auto</option>
+<option>🏍️ Moto</option>
+<option>🚚 Camioneta</option>
+<option>💻 Computadora</option>
+<option>📱 Celular</option>
+<option>🏠 Boiler</option>
+<option>❄️ Aire acondicionado</option>
+
+</select>
+
+<input placeholder="Descripción">
+
+<input placeholder="Fecha realizada">
+
+<input placeholder="Próximo cambio">
+
+<input placeholder="Costo">
+
+<hr>
+
+<h3>⚡ Recordatorios Inteligentes</h3>
+
+<div class="tag">Aceite</div>
+<div class="tag">Llantas</div>
+<div class="tag">Afinación</div>
+<div class="tag">Respaldo PC</div>
+<div class="tag">Filtro boiler</div>
+
+<hr>
+
+<h3>📊 Estado</h3>
+
+<div class="result-grid">
+
+<div class="result-card">
+<h4>Próximo servicio</h4>
+<p>12 días</p>
+</div>
+
+<div class="result-card">
+<h4>Costo anual</h4>
+<p>$8,200</p>
+</div>
+
+<div class="result-card">
+<h4>Alertas</h4>
+<p>3</p>
+</div>
+
+<div class="result-card">
+<h4>Equipos</h4>
+<p>6</p>
+</div>
+
+</div>
 
 `;
 
@@ -740,38 +671,8 @@ document.getElementById('contenido').innerHTML = `
 <div class="tag">OCR</div>
 <div class="tag">GPS</div>
 <div class="tag">QR</div>
-<div class="tag">Factura</div>
 
 `;
-
-}
-
-function actualizarSistema(){
-
-const regimen =
-document.getElementById('regimen').value;
-
-const operacionSelect =
-document.getElementById('operacion');
-
-operacionSelect.innerHTML = '';
-
-operaciones[regimen]
-.sort()
-.forEach(op=>{
-
-operacionSelect.innerHTML +=
-'<option>'+op+'</option>';
-
-});
-
-const operacion =
-operacionSelect.value;
-
-document.getElementById('actividadPrincipal').innerHTML =
-
-'<div class="tag">'+regimen+'</div>' +
-'<div class="tag">'+operacion+'</div>';
 
 }
 
