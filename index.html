@@ -19,6 +19,30 @@ margin:0;
 font-size:24px;
 font-weight:bold;
 margin-bottom:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+}
+
+.search-global{
+flex:1;
+display:flex;
+gap:10px;
+}
+
+.search-global input{
+margin:0;
+}
+
+.search-btn{
+background:#10b981;
+border:none;
+border-radius:12px;
+padding:12px 16px;
+color:white;
+font-size:18px;
+cursor:pointer;
 }
 
 .grid{
@@ -156,6 +180,25 @@ font-weight:bold;
 color:#10b981;
 }
 
+.route-client{
+background:#1b2f4a;
+padding:12px;
+border-radius:14px;
+margin-bottom:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.route-client button{
+background:#10b981;
+border:none;
+padding:8px 12px;
+border-radius:10px;
+color:white;
+cursor:pointer;
+}
+
 hr{
 border-color:#1b2f4a;
 opacity:.4;
@@ -168,7 +211,21 @@ margin:15px 0;
 <body>
 
 <div class="logo">
+
+<div>
 🚀 Micro Fiscal Core
+</div>
+
+<div class="search-global">
+
+<input placeholder="Buscar cliente, teléfono, ticket, factura, GPS...">
+
+<button class="search-btn">
+🔍
+</button>
+
+</div>
+
 </div>
 
 <!-- MODULOS PRINCIPALES -->
@@ -211,7 +268,7 @@ margin:15px 0;
 <h3>Cliente</h3>
 </div>
 
-<div class="card">
+<div class="card" onclick="abrirModulo('rutas',this)">
 <span>📍</span>
 <h3>Rutas</h3>
 </div>
@@ -249,13 +306,9 @@ margin:15px 0;
 
 </div>
 
-<!-- CONTENIDO DINAMICO -->
-
 <div class="section">
 <div id="contenido"></div>
 </div>
-
-<!-- ACCIONES -->
 
 <div class="actions">
 
@@ -276,8 +329,6 @@ margin:15px 0;
 </div>
 
 </div>
-
-<!-- RESULTADOS -->
 
 <div class="section">
 
@@ -425,6 +476,10 @@ case 'cliente':
 mostrarCliente();
 break;
 
+case 'rutas':
+mostrarRutas();
+break;
+
 }
 
 }
@@ -484,15 +539,6 @@ document.getElementById('contenido').innerHTML = `
 
 <input placeholder="Saldo inicial">
 
-<hr>
-
-<h3>📌 Operaciones Bancarias</h3>
-
-<div class="tag">📥 Depósito</div>
-<div class="tag">💸 Pago</div>
-<div class="tag">🏧 Retiro</div>
-<div class="tag">📤 Transferencia</div>
-
 `;
 
 }
@@ -502,11 +548,6 @@ function mostrarGastos(){
 document.getElementById('contenido').innerHTML = `
 
 <h2>💸 Catálogo Universal de Gastos</h2>
-
-<p>
-Todos los conceptos existen,
-pero participan según actividad.
-</p>
 
 ${crearTags(catalogoGastos)}
 
@@ -521,7 +562,6 @@ document.getElementById('contenido').innerHTML = `
 <h2>🚚 Control de Viáticos</h2>
 
 <input placeholder="Lugar">
-
 <input placeholder="Monto">
 
 <select>
@@ -531,13 +571,11 @@ document.getElementById('contenido').innerHTML = `
 <option>🚌 Transporte</option>
 <option>🏨 Hotel</option>
 <option>🍔 Alimentos</option>
-<option>🛣️ Casetas</option>
 
 </select>
 
 <div class="tag">📍 GPS</div>
 <div class="tag">📷 OCR Ticket</div>
-<div class="tag">💾 Guardar gasto</div>
 
 `;
 
@@ -550,68 +588,20 @@ document.getElementById('contenido').innerHTML = `
 <h2>📦 Proveedor Inteligente</h2>
 
 <input placeholder="Nombre proveedor">
+<input placeholder="RFC">
+<input placeholder="Teléfono">
 
 <select>
 
 <option>⛽ Gasolinera</option>
 <option>🏨 Hotel</option>
 <option>🛠️ Servicio</option>
-<option>📦 Producto</option>
-<option>🚚 Transporte</option>
 
 </select>
 
-<input placeholder="RFC">
-
-<input placeholder="Teléfono">
-
-<input placeholder="Correo">
-
-<hr>
-
-<h3>📍 Información Operativa</h3>
-
-<div class="tag">📷 OCR Ticket</div>
+<div class="tag">📷 OCR</div>
 <div class="tag">📍 GPS</div>
-<div class="tag">💳 Banco</div>
 <div class="tag">🧾 Factura</div>
-
-<hr>
-
-<h3>⚡ Acción Inteligente</h3>
-
-<div class="tag">Guardar proveedor</div>
-<div class="tag">Crear gasto</div>
-<div class="tag">Relacionar ruta</div>
-<div class="tag">Usar ubicación actual</div>
-
-<hr>
-
-<h3>📊 Historial Rápido</h3>
-
-<div class="result-grid">
-
-<div class="result-card">
-<h4>Compras</h4>
-<p>14</p>
-</div>
-
-<div class="result-card">
-<h4>Total</h4>
-<p>$8,250</p>
-</div>
-
-<div class="result-card">
-<h4>Último gasto</h4>
-<p>$650</p>
-</div>
-
-<div class="result-card">
-<h4>Frecuencia</h4>
-<p>Alta</p>
-</div>
-
-</div>
 
 `;
 
@@ -624,9 +614,7 @@ document.getElementById('contenido').innerHTML = `
 <h2>👥 Cliente Operativo</h2>
 
 <input placeholder="Nombre cliente">
-
 <input placeholder="Teléfono">
-
 <input placeholder="Referencia rápida">
 
 <select>
@@ -634,72 +622,108 @@ document.getElementById('contenido').innerHTML = `
 <option>🚚 Distribución</option>
 <option>🛠️ Servicio</option>
 <option>🏪 Venta</option>
-<option>📦 Entrega</option>
 
 </select>
 
+<div class="tag">📍 GPS</div>
+<div class="tag">🗺️ Ruta</div>
+<div class="tag">💬 WhatsApp</div>
+
+`;
+
+}
+
+function mostrarRutas(){
+
+document.getElementById('contenido').innerHTML = `
+
+<h2>📍 Rutas Inteligentes</h2>
+
+<input placeholder="Buscar cliente por teléfono, nombre, GPS o dirección">
+
+<div class="route-client">
+<div>
+<strong>Juan Pérez</strong><br>
+📞 5512345678
+</div>
+<button>
+Agregar
+</button>
+</div>
+
+<div class="route-client">
+<div>
+<strong>Tienda Norte</strong><br>
+📍 Zona Industrial
+</div>
+<button>
+Agregar
+</button>
+</div>
+
+<div class="route-client">
+<div>
+<strong>María López</strong><br>
+📞 5588776655
+</div>
+<button>
+Agregar
+</button>
+</div>
+
 <hr>
 
-<h3>📍 Ubicación Inteligente</h3>
+<h3>🚚 Ruta Generada</h3>
 
-<div class="tag">📍 GPS actual</div>
-<div class="tag">🏠 Dirección manual</div>
-<div class="tag">🗺️ Agregar a ruta</div>
-
-<hr>
-
-<h3>⚡ Acción Operativa</h3>
-
-<div class="tag">Generar ruta</div>
-<div class="tag">Optimizar logística</div>
-<div class="tag">WhatsApp automático</div>
-<div class="tag">Confirmar entrega</div>
+<div class="tag">Cliente 1</div>
+<div class="tag">Cliente 2</div>
+<div class="tag">Cliente 3</div>
 
 <hr>
 
-<h3>💬 Speech Automático</h3>
+<h3>📊 Logística Inteligente</h3>
+
+<div class="result-grid">
+
+<div class="result-card">
+<h4>Distancia</h4>
+<p>24 km</p>
+</div>
+
+<div class="result-card">
+<h4>Tiempo</h4>
+<p>1.4 hrs</p>
+</div>
+
+<div class="result-card">
+<h4>Gasolina</h4>
+<p>$210</p>
+</div>
+
+<div class="result-card">
+<h4>Entregas</h4>
+<p>8</p>
+</div>
+
+</div>
+
+<hr>
+
+<h3>💬 Speech WhatsApp</h3>
 
 <textarea>
 
 Hola 👋 buen día.
 
-Voy en camino a su ubicación.
-Mi tiempo aproximado de llegada es de 20 minutos.
+Hoy estaremos realizando entregas en su zona.
 
-Si necesita compartir una referencia adicional
-puede enviarla por este medio.
+Si necesita compartir una referencia
+o ubicación adicional puede responder
+a este mensaje.
 
 Gracias.
 
 </textarea>
-
-<hr>
-
-<h3>📊 Resumen Cliente</h3>
-
-<div class="result-grid">
-
-<div class="result-card">
-<h4>Pedidos</h4>
-<p>28</p>
-</div>
-
-<div class="result-card">
-<h4>Zona</h4>
-<p>Norte</p>
-</div>
-
-<div class="result-card">
-<h4>Frecuencia</h4>
-<p>Alta</p>
-</div>
-
-<div class="result-card">
-<h4>Última visita</h4>
-<p>Hoy</p>
-</div>
-
-</div>
 
 `;
 
@@ -707,99 +731,18 @@ Gracias.
 
 function herramientaRapida(tipo){
 
-if(tipo === 'ocr'){
-
 document.getElementById('contenido').innerHTML = `
 
-<h2>📷 OCR Inteligente</h2>
+<h2>⚡ Herramienta Inteligente</h2>
 
-<p>
-Lee tickets, facturas o documentos
-sin necesidad de vincularlos.
-</p>
+<input placeholder="Captura rápida">
 
-<input placeholder="Texto detectado">
-
-<div class="tag">📄 Documento libre</div>
-<div class="tag">⛽ Gasolina</div>
-<div class="tag">🏨 Hotel</div>
-<div class="tag">🧾 Ticket</div>
-
-<hr>
-
-<h3>⚡ Acción Inteligente</h3>
-
-<div class="tag">Guardar proveedor</div>
-<div class="tag">Crear gasto</div>
-<div class="tag">Relacionar GPS</div>
+<div class="tag">OCR</div>
+<div class="tag">GPS</div>
+<div class="tag">QR</div>
+<div class="tag">Factura</div>
 
 `;
-
-}
-
-if(tipo === 'qr'){
-
-document.getElementById('contenido').innerHTML = `
-
-<h2>🔳 Lector QR</h2>
-
-<p>
-Validación rápida de productos,
-tickets o registros.
-</p>
-
-<input placeholder="Contenido QR">
-
-<div class="tag">📦 Producto</div>
-<div class="tag">🏢 Proveedor</div>
-<div class="tag">🧾 Factura</div>
-
-`;
-
-}
-
-if(tipo === 'codigo'){
-
-document.getElementById('contenido').innerHTML = `
-
-<h2>📦 Código de Barras</h2>
-
-<p>
-Consulta rápida de productos
-o inventario móvil.
-</p>
-
-<input placeholder="Código detectado">
-
-<div class="tag">📦 Inventario</div>
-<div class="tag">💰 Precio</div>
-<div class="tag">📍 Ruta</div>
-
-`;
-
-}
-
-if(tipo === 'gps'){
-
-document.getElementById('contenido').innerHTML = `
-
-<h2>📍 GPS Operativo</h2>
-
-<p>
-Ubicación automática para rutas,
-gastos o validaciones.
-</p>
-
-<input placeholder="Ubicación actual">
-
-<div class="tag">⛽ Gasolinera</div>
-<div class="tag">🚚 Ruta</div>
-<div class="tag">🏨 Hotel</div>
-<div class="tag">📌 Validar ubicación</div>
-
-`;
-
-}
 
 }
 
@@ -829,76 +772,6 @@ document.getElementById('actividadPrincipal').innerHTML =
 
 '<div class="tag">'+regimen+'</div>' +
 '<div class="tag">'+operacion+'</div>';
-
-let modulos = [];
-
-if(regimen === 'GENERAL'){
-
-modulos = [
-'Alimentos',
-'Finanzas',
-'Gasolina',
-'Hogar',
-'Internet',
-'Salud'
-];
-
-}
-
-if(regimen === 'SUSA'){
-
-modulos = [
-'Alimentos',
-'Apoyo gasolina',
-'Hotel',
-'Transporte'
-];
-
-}
-
-if(regimen === 'PFAE'){
-
-if(operacion === 'Distribución'){
-
-modulos = [
-'Estacionamiento',
-'Gasolina',
-'GPS',
-'Mantenimiento',
-'OCR',
-'Proveedor',
-'Cliente',
-'Rutas'
-];
-
-}
-
-if(operacion === 'Instalación'){
-
-modulos = [
-'Cliente',
-'Herramienta',
-'Servicio',
-'Tiempo'
-];
-
-}
-
-if(operacion === 'Venta'){
-
-modulos = [
-'Cliente',
-'Código',
-'Inventario',
-'Ticket'
-];
-
-}
-
-}
-
-document.getElementById('modulosActivos').innerHTML =
-crearTags(modulos);
 
 }
 
