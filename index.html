@@ -36,43 +36,6 @@ flex-wrap:wrap;
 display:flex;
 gap:6px;
 align-items:center;
-flex-wrap:wrap;
-}
-
-/* FECHA */
-
-.datetime-box{
-display:flex;
-flex-direction:column;
-justify-content:center;
-font-size:10px;
-background:#132238;
-padding:6px 10px;
-border-radius:10px;
-border:1px solid #28415f;
-min-width:110px;
-}
-
-/* BOTONES MINI */
-
-.mini-btn{
-width:34px;
-height:34px;
-border-radius:10px;
-background:#132238;
-display:flex;
-align-items:center;
-justify-content:center;
-border:1px solid #28415f;
-font-size:12px;
-cursor:pointer;
-transition:.2s;
-user-select:none;
-}
-
-.mini-btn:hover{
-background:#1d3557;
-transform:translateY(-1px);
 }
 
 /* LOGO */
@@ -106,7 +69,39 @@ font-size:20px;
 .logo-text p{
 font-size:10px;
 opacity:.7;
-margin-top:2px;
+}
+
+/* FECHA */
+
+.datetime-box{
+display:flex;
+flex-direction:column;
+justify-content:center;
+font-size:10px;
+background:#132238;
+padding:6px 10px;
+border-radius:10px;
+border:1px solid #28415f;
+}
+
+/* BOTONES MINI */
+
+.mini-btn{
+width:34px;
+height:34px;
+border-radius:10px;
+background:#132238;
+display:flex;
+align-items:center;
+justify-content:center;
+border:1px solid #28415f;
+font-size:12px;
+cursor:pointer;
+transition:.2s;
+}
+
+.mini-btn:hover{
+background:#1d3557;
 }
 
 /* BUSCADOR */
@@ -149,12 +144,10 @@ width:14px;
 height:14px;
 border-radius:50%;
 opacity:.25;
-transition:.2s;
 }
 
 .luz.active{
 opacity:1;
-box-shadow:0 0 8px rgba(255,255,255,.4);
 }
 
 .rojo{
@@ -173,7 +166,7 @@ background:#22c55e;
 
 .grid{
 display:grid;
-grid-template-columns:repeat(4,minmax(70px,1fr));
+grid-template-columns:repeat(4,1fr);
 gap:8px;
 margin-bottom:8px;
 }
@@ -181,6 +174,7 @@ margin-bottom:8px;
 /* TARJETAS */
 
 .card{
+width:100%;
 background:#132238;
 border-radius:12px;
 padding:8px;
@@ -219,6 +213,8 @@ opacity:1;
 .card.inactive{
 opacity:.55;
 transform:scale(.82);
+max-width:70px;
+margin:auto;
 }
 
 .card.inactive h3{
@@ -230,7 +226,6 @@ margin:0;
 .card.inactive span{
 font-size:16px;
 margin:0;
-}
 }
 
 /* HERRAMIENTAS */
@@ -252,8 +247,8 @@ border-radius:10px;
 font-size:12px;
 background:#132238;
 border:1px solid #28415f;
-transition:.2s;
 cursor:pointer;
+transition:.2s;
 }
 
 .tool-btn:hover,
@@ -261,7 +256,7 @@ cursor:pointer;
 background:#1d3557;
 }
 
-/* PANEL CENTRAL */
+/* PANEL */
 
 .section{
 background:#132238;
@@ -428,24 +423,24 @@ onkeyup="buscarModulo()"
 
 <!-- OPERACION -->
 
-<div class="grid" id="grupoOperacion">
+<div class="grid">
 
 <div class="card active">
 <span>💼</span>
 <h3>Actividad</h3>
 </div>
 
-<div class="card">
+<div class="card inactive">
 <span>🏦</span>
 <h3>Bancos</h3>
 </div>
 
-<div class="card">
+<div class="card inactive">
 <span>💸</span>
 <h3>Gastos</h3>
 </div>
 
-<div class="card">
+<div class="card inactive">
 <span>🚚</span>
 <h3>Viáticos</h3>
 </div>
@@ -454,24 +449,24 @@ onkeyup="buscarModulo()"
 
 <!-- APOYO -->
 
-<div class="grid" id="grupoSecundario">
+<div class="grid">
 
-<div class="card">
+<div class="card inactive">
 <span>📦</span>
 <h3>Proveedor</h3>
 </div>
 
-<div class="card">
+<div class="card inactive">
 <span>👥</span>
 <h3>Cliente</h3>
 </div>
 
-<div class="card">
+<div class="card inactive">
 <span>📍</span>
 <h3>Rutas</h3>
 </div>
 
-<div class="card">
+<div class="card inactive">
 <span>🛠️</span>
 <h3>Mantenimiento</h3>
 </div>
@@ -524,9 +519,11 @@ SUSA
 </select>
 
 <select id="operacion">
+
 <option value="">
 Selecciona operación
 </option>
+
 </select>
 
 </div>
@@ -590,8 +587,10 @@ tarjetas.forEach(card=>{
 card.addEventListener('click',()=>{
 
 tarjetas.forEach(c=>{
+
 c.classList.remove('active');
 c.classList.add('inactive');
+
 });
 
 card.classList.remove('inactive');
