@@ -101,7 +101,6 @@ font-weight:bold;
 
 .logo-text h1{
 font-size:20px;
-margin:0;
 }
 
 .logo-text p{
@@ -209,7 +208,6 @@ font-weight:normal;
 .card.active{
 border:1px solid #10b981;
 box-shadow:0 0 14px rgba(16,185,129,.18);
-transform:translateY(-1px);
 }
 
 .card.inactive{
@@ -252,7 +250,7 @@ background:#132238;
 padding:16px;
 border-radius:16px;
 margin-bottom:10px;
-min-height:40vh;
+min-height:45vh;
 border:1px solid #1d3557;
 }
 
@@ -274,25 +272,7 @@ color:white;
 outline:none;
 }
 
-/* MODULOS ACTIVOS */
-
-#modoActual,
-#modulosActivos{
-margin-top:10px;
-}
-
-/* TAGS */
-
-.tag{
-display:inline-block;
-padding:6px 10px;
-background:#1b2f4a;
-border-radius:10px;
-margin:4px;
-font-size:12px;
-}
-
-/* BOTONES COLORES */
+/* BOTONES */
 
 .save{
 color:#10b981;
@@ -327,19 +307,23 @@ margin-top:10px;
 background:#132238;
 border:1px solid #28415f;
 border-radius:12px;
-padding:12px;
+padding:10px;
 text-align:center;
+min-height:60px;
+display:flex;
+flex-direction:column;
+justify-content:center;
 }
 
 .result-card h4{
-font-size:11px;
+font-size:10px;
 font-weight:normal;
 opacity:.7;
-margin-bottom:6px;
+margin-bottom:5px;
 }
 
 .result-card span{
-font-size:16px;
+font-size:15px;
 font-weight:bold;
 color:#22c55e;
 }
@@ -417,11 +401,9 @@ onkeyup="buscarModulo()"
 </div>
 
 <div class="semaforo">
-
 <div class="luz rojo active"></div>
 <div class="luz amarillo"></div>
 <div class="luz verde"></div>
-
 </div>
 
 </div>
@@ -430,22 +412,22 @@ onkeyup="buscarModulo()"
 
 <div class="grid" id="grupoOperacion">
 
-<div class="card active" data-nombre="actividad">
+<div class="card active">
 <span>💼</span>
 <h3>Actividad</h3>
 </div>
 
-<div class="card" data-nombre="bancos">
+<div class="card">
 <span>🏦</span>
 <h3>Bancos</h3>
 </div>
 
-<div class="card" data-nombre="gastos">
+<div class="card">
 <span>💸</span>
 <h3>Gastos</h3>
 </div>
 
-<div class="card" data-nombre="viaticos">
+<div class="card">
 <span>🚚</span>
 <h3>Viáticos</h3>
 </div>
@@ -456,22 +438,22 @@ onkeyup="buscarModulo()"
 
 <div class="grid" id="grupoSecundario">
 
-<div class="card" data-nombre="cliente">
-<span>👥</span>
-<h3>Cliente</h3>
-</div>
-
-<div class="card" data-nombre="proveedor">
+<div class="card">
 <span>📦</span>
 <h3>Proveedor</h3>
 </div>
 
-<div class="card" data-nombre="rutas">
+<div class="card">
+<span>👥</span>
+<h3>Cliente</h3>
+</div>
+
+<div class="card">
 <span>📍</span>
 <h3>Rutas</h3>
 </div>
 
-<div class="card" data-nombre="mantenimiento">
+<div class="card">
 <span>🛠️</span>
 <h3>Mantenimiento</h3>
 </div>
@@ -524,42 +506,10 @@ SUSA
 </select>
 
 <select id="operacion">
-
 <option value="">
 Selecciona operación
 </option>
-
 </select>
-
-<div id="modoActual"></div>
-
-<div id="modulosActivos"></div>
-
-<!-- RESULTADOS -->
-
-<div class="results-panel">
-
-<div class="result-card">
-<h4>Resultado</h4>
-<span>$0.00</span>
-</div>
-
-<div class="result-card">
-<h4>IVA</h4>
-<span>$0.00</span>
-</div>
-
-<div class="result-card">
-<h4>ISR</h4>
-<span>$0.00</span>
-</div>
-
-<div class="result-card">
-<h4>Ganancia Real</h4>
-<span>$0.00</span>
-</div>
-
-</div>
 
 </div>
 
@@ -585,13 +535,37 @@ Selecciona operación
 
 </div>
 
+<!-- RESULTADOS -->
+
+<div class="results-panel">
+
+<div class="result-card">
+<h4>RESULTADO</h4>
+<span>$0.00</span>
+</div>
+
+<div class="result-card">
+<h4>IVA</h4>
+<span>$0.00</span>
+</div>
+
+<div class="result-card">
+<h4>ISR</h4>
+<span>$0.00</span>
+</div>
+
+<div class="result-card">
+<h4>GANANCIA REAL</h4>
+<span>$0.00</span>
+</div>
+
+</div>
+
 <script>
 
 /* TARJETAS */
 
-const tarjetas = document.querySelectorAll(
-'#grupoOperacion .card, #grupoSecundario .card'
-);
+const tarjetas = document.querySelectorAll('.card');
 
 tarjetas.forEach(card=>{
 
@@ -645,8 +619,6 @@ SUSA:[
 
 };
 
-/* CAMBIO ACTIVIDAD */
-
 document
 .getElementById('actividadFiscal')
 .addEventListener('change',function(){
@@ -674,7 +646,7 @@ selectOperacion.innerHTML +=
 
 });
 
-/* FECHA Y HORA */
+/* FECHA */
 
 function actualizarFechaHora(){
 
@@ -691,7 +663,7 @@ minute:'2-digit'
 
 }
 
-/* CALCULADORA SEGURA */
+/* CALCULADORA */
 
 function abrirCalculadora(){
 
