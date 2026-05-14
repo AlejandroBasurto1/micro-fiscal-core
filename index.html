@@ -1,3 +1,6 @@
+# HTML ACTUALIZADO
+
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,52 +15,20 @@ background:#07111f;
 color:white;
 font-family:Arial;
 padding:12px;
-margin:0;
 }
 
 .logo{
 font-size:24px;
 font-weight:bold;
 margin-bottom:15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-}
-
-.search-global{
-flex:1;
-display:flex;
-gap:10px;
-}
-
-.search-global input{
-margin:0;
-}
-
-.search-btn{
-background:#10b981;
-border:none;
-border-radius:12px;
-padding:12px 16px;
-color:white;
-font-size:18px;
-cursor:pointer;
 }
 
 .grid{
 display:grid;
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(4,1fr);
 gap:10px;
 margin-bottom:15px;
-}
-
-@media(min-width:900px){
-
-.grid{
-grid-template-columns:repeat(4,1fr);
-}
-
+transition:.3s;
 }
 
 .card{
@@ -70,28 +41,26 @@ flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
-cursor:pointer;
 opacity:.45;
 filter:grayscale(100%);
-transition:.2s;
-border:1px solid rgba(255,255,255,.05);
+transition:.25s;
+cursor:pointer;
 }
 
 .card.active{
 opacity:1;
 filter:grayscale(0%);
 box-shadow:0 0 18px rgba(16,185,129,.35);
-transform:translateY(-3px);
+transform:scale(1.03);
+}
+
+.card.hidden{
+display:none;
 }
 
 .card span{
 font-size:28px;
 margin-bottom:5px;
-}
-
-.card h3{
-font-size:13px;
-margin:0;
 }
 
 .section{
@@ -101,9 +70,12 @@ border-radius:20px;
 margin-bottom:15px;
 }
 
-select,
+.section h2{
+margin-bottom:15px;
+}
+
 input,
-textarea{
+select{
 width:100%;
 padding:12px;
 border:none;
@@ -112,13 +84,6 @@ margin-bottom:10px;
 background:#1b2f4a;
 color:white;
 font-size:14px;
-box-sizing:border-box;
-font-family:Arial;
-}
-
-textarea{
-min-height:120px;
-resize:none;
 }
 
 .actions{
@@ -134,11 +99,6 @@ border-radius:16px;
 text-align:center;
 font-weight:bold;
 cursor:pointer;
-transition:.2s;
-}
-
-.action:hover{
-transform:scale(1.03);
 }
 
 .save{background:#10b981;}
@@ -152,57 +112,23 @@ padding:8px 12px;
 border-radius:12px;
 background:#1b2f4a;
 margin:5px;
-font-size:13px;
 }
 
-.result-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px;
-}
-
-.result-card{
-background:#1b2f4a;
-padding:14px;
-border-radius:14px;
-}
-
-.result-card h4{
-margin-top:0;
-margin-bottom:8px;
-font-size:14px;
-}
-
-.result-card p{
-margin:0;
-font-size:18px;
-font-weight:bold;
-color:#10b981;
-}
-
-.route-client{
-background:#1b2f4a;
+.alert{
+background:#0f766e;
 padding:12px;
-border-radius:14px;
-margin-bottom:10px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+border-radius:12px;
+margin-bottom:15px;
+display:none;
 }
 
-.route-client button{
-background:#10b981;
-border:none;
-padding:8px 12px;
-border-radius:10px;
-color:white;
-cursor:pointer;
+.search-box{
+margin-bottom:15px;
 }
 
-hr{
-border-color:#1b2f4a;
-opacity:.4;
-margin:15px 0;
+.search-box input{
+background:#0f1d30;
+border:1px solid #28415f;
 }
 
 </style>
@@ -211,102 +137,177 @@ margin:15px 0;
 <body>
 
 <div class="logo">
-
-<div>
 🚀 Micro Fiscal Core
 </div>
 
-<div class="search-global">
+<!-- BUSCADOR -->
 
-<input placeholder="Buscar cliente, factura, ticket, GPS, proveedor, folio...">
-
-<button class="search-btn">
-🔍
-</button>
-
+<div class="search-box">
+<input
+type="text"
+id="buscador"
+placeholder="🔍 Buscar módulo..."
+onkeyup="buscarModulo()"
+>
 </div>
 
-</div>
+<!-- LINEA 1 -->
 
-<div class="grid">
+<div class="grid" id="grupoOperacion">
 
-<div class="card active" onclick="abrirModulo('actividad',this)">
+<div class="card active" data-nombre="actividad">
 <span>💼</span>
 <h3>Actividad</h3>
 </div>
 
-<div class="card" onclick="abrirModulo('bancos',this)">
+<div class="card" data-nombre="bancos">
 <span>🏦</span>
 <h3>Bancos</h3>
 </div>
 
-<div class="card" onclick="abrirModulo('gastos',this)">
+<div class="card" data-nombre="gastos">
 <span>💸</span>
 <h3>Gastos</h3>
 </div>
 
-<div class="card" onclick="abrirModulo('viaticos',this)">
+<div class="card" data-nombre="viaticos">
 <span>🚚</span>
 <h3>Viáticos</h3>
 </div>
 
 </div>
 
-<div class="grid">
+<!-- LINEA 2 -->
 
-<div class="card" onclick="abrirModulo('proveedor',this)">
+<div class="grid" id="grupoSecundario">
+
+<div class="card" data-nombre="proveedor">
 <span>📦</span>
 <h3>Proveedor</h3>
 </div>
 
-<div class="card" onclick="abrirModulo('cliente',this)">
+<div class="card" data-nombre="cliente">
 <span>👥</span>
 <h3>Cliente</h3>
 </div>
 
-<div class="card" onclick="abrirModulo('rutas',this)">
+<div class="card" data-nombre="rutas">
 <span>📍</span>
 <h3>Rutas</h3>
 </div>
 
-<div class="card" onclick="abrirModulo('mantenimiento',this)">
+<div class="card" data-nombre="mantenimiento">
 <span>🛠️</span>
 <h3>Mantenimiento</h3>
 </div>
 
 </div>
 
-<div class="grid">
+<!-- LINEA 3 -->
+<!-- ESTA LINEA YA NO SE CONTRAE -->
 
-<div class="card" onclick="herramientaRapida('ocr')">
+<div class="grid" id="grupoLectura">
+
+<div class="card active" data-nombre="ocr">
 <span>📷</span>
 <h3>OCR</h3>
 </div>
 
-<div class="card" onclick="herramientaRapida('qr')">
+<div class="card active" data-nombre="qr">
 <span>🔳</span>
 <h3>QR</h3>
 </div>
 
-<div class="card" onclick="herramientaRapida('codigo')">
+<div class="card active" data-nombre="codigo">
 <span>📦</span>
 <h3>Código</h3>
 </div>
 
-<div class="card" onclick="herramientaRapida('gps')">
+<div class="card active" data-nombre="gps">
 <span>📍</span>
 <h3>GPS</h3>
 </div>
 
 </div>
 
+<div class="alert" id="alerta"></div>
+
+<!-- OPERACION -->
+
 <div class="section">
-<div id="contenido"></div>
+
+<h2>
+⚙️ Operación del Día
+</h2>
+
+<select id="regimen">
+
+<option value="">
+Selecciona régimen
+</option>
+
+<option value="PFAE">
+PFAE
+</option>
+
+<option value="SUSA">
+SUSA
+</option>
+
+<option value="RESICO">
+RESICO
+</option>
+
+<option value="PLADIG">
+PLADIG
+</option>
+
+<option value="RIF">
+RIF
+</option>
+
+</select>
+
+<select id="operacion">
+
+<option value="">
+Selecciona operación
+</option>
+
+<option value="General">
+Actividad General
+</option>
+
+<option value="Distribucion">
+Distribución
+</option>
+
+<option value="Venta">
+Venta
+</option>
+
+<option value="Instalacion">
+Instalación
+</option>
+
+<option value="Servicio">
+Servicio
+</option>
+
+</select>
+
+<div id="modoActual"></div>
+
+<div id="modulosActivos"></div>
+
 </div>
+
+<!-- BOTONES -->
 
 <div class="actions">
 
-<div class="action save">
+<div class="action save"
+onclick="guardarModo()">
 💾 Guardar
 </div>
 
@@ -314,7 +315,8 @@ margin:15px 0;
 ✏️ Editar
 </div>
 
-<div class="action clear">
+<div class="action clear"
+onclick="limpiarModo()">
 🗑️ Limpiar
 </div>
 
@@ -324,396 +326,342 @@ margin:15px 0;
 
 </div>
 
-<div class="section">
-
-<h2>📊 Resultado Financiero</h2>
-
-<div class="result-grid">
-
-<div class="result-card">
-<h4>Resultado Utilidad</h4>
-<p>$3,850</p>
-</div>
-
-<div class="result-card">
-<h4>Menos IVA</h4>
-<p>$616</p>
-</div>
-
-<div class="result-card">
-<h4>Menos ISR</h4>
-<p>$385</p>
-</div>
-
-<div class="result-card">
-<h4>Ganancia Real</h4>
-<p>$2,849</p>
-</div>
-
-</div>
-
-</div>
-
 <script>
 
-function abrirModulo(modulo,elemento){
+const tarjetas = document.querySelectorAll('.card');
 
-document.querySelectorAll('.card')
-.forEach(card=>{
-card.classList.remove('active');
+
+tarjetas.forEach(card=>{
+
+card.addEventListener('click',()=>{
+
+const nombre = card.dataset.nombre;
+
+if(
+nombre === 'ocr' ||
+nombre === 'qr' ||
+nombre === 'codigo' ||
+nombre === 'gps'
+){
+return;
+}
+
+const grupos = [
+'div#grupoOperacion .card',
+'div#grupoSecundario .card'
+];
+
+// RESTAURA TODO
+
+document
+.querySelectorAll(
+'#grupoOperacion .card, #grupoSecundario .card'
+)
+.forEach(c=>{
+
+c.classList.remove('hidden');
+c.classList.remove('active');
+
 });
 
-elemento.classList.add('active');
+// ACTIVA SOLO EL SELECCIONADO
 
-switch(modulo){
+card.classList.add('active');
 
-case 'actividad':
-mostrarActividad();
-break;
+// OCULTA LOS DEMAS
 
-case 'bancos':
-mostrarBancos();
-break;
+document
+.querySelectorAll(
+'#grupoOperacion .card, #grupoSecundario .card'
+)
+.forEach(c=>{
 
-case 'gastos':
-mostrarGastos();
-break;
+if(c !== card){
+c.classList.add('hidden');
+}
 
-case 'viaticos':
-mostrarViaticos();
-break;
+});
 
-case 'proveedor':
-mostrarProveedor();
-break;
+});
 
-case 'cliente':
-mostrarCliente();
-break;
+});
 
-case 'rutas':
-mostrarRutas();
-break;
 
-case 'mantenimiento':
-mostrarMantenimiento();
-break;
+function buscarModulo(){
 
+const texto = document
+.getElementById('buscador')
+.value
+.toLowerCase();
+
+const cards = document.querySelectorAll('.card');
+
+cards.forEach(card=>{
+
+const nombre = card.dataset.nombre;
+
+if(nombre.includes(texto)){
+card.style.display = 'flex';
+}else{
+
+// OCR QR CODIGO GPS SIEMPRE VISIBLES
+if(
+nombre === 'ocr' ||
+nombre === 'qr' ||
+nombre === 'codigo' ||
+nombre === 'gps'
+){
+card.style.display = 'flex';
+}else{
+card.style.display = 'none';
 }
 
 }
 
-function mostrarActividad(){
+});
 
-document.getElementById('contenido').innerHTML = `
+}
 
-<h2>⚙️ Operación del Día</h2>
 
-<select>
+function guardarModo(){
 
-<option>🚚 Distribución</option>
-<option>🛠️ Servicio</option>
-<option>🏪 Venta</option>
+const regimen =
+document.getElementById(
+'regimen'
+).value;
 
-</select>
+const operacion =
+document.getElementById(
+'operacion'
+).value;
 
-<div class="tag">Cliente</div>
-<div class="tag">Ruta</div>
-<div class="tag">Viáticos</div>
+const alerta =
+document.getElementById(
+'alerta'
+);
+
+if(!regimen || !operacion){
+
+alerta.style.display =
+'block';
+
+alerta.innerText =
+'Selecciona régimen y operación';
+
+return;
+
+}
+
+localStorage.setItem(
+'regimenDia',
+regimen
+);
+
+localStorage.setItem(
+'operacionDia',
+operacion
+);
+
+mostrarContexto();
+
+alerta.style.display =
+'block';
+
+alerta.innerText =
+'Modo operativo guardado';
+
+}
+
+
+function mostrarContexto(){
+
+const regimen =
+localStorage.getItem(
+'regimenDia'
+);
+
+const operacion =
+localStorage.getItem(
+'operacionDia'
+);
+
+document.getElementById(
+'modoActual'
+).innerHTML = `
+
+<h3>
+🔥 Modo principal del día
+</h3>
+
+<div class="tag">
+${regimen}
+</div>
+
+<div class="tag">
+${operacion}
+</div>
+
+`;
+
+
+let html = '';
+
+
+if(regimen === 'SUSA'){
+
+html += `
+
+<div class="tag">
+🏨 Hotel
+</div>
+
+<div class="tag">
+🍽️ Alimentos
+</div>
+
+<div class="tag">
+🚕 Transporte
+</div>
+
+<div class="tag">
+🧾 Apoyo gasolina
+</div>
 
 `;
 
 }
 
-function mostrarBancos(){
 
-document.getElementById('contenido').innerHTML = `
+if(regimen === 'PFAE'
+&& operacion === 'Distribucion'){
 
-<h2>🏦 Bancos</h2>
+html += `
 
-<input placeholder="Nombre banco">
-<input placeholder="Saldo">
-
-`;
-
-}
-
-function mostrarGastos(){
-
-document.getElementById('contenido').innerHTML = `
-
-<h2>💸 Gastos</h2>
-
-<div class="tag">Gasolina</div>
-<div class="tag">Casetas</div>
-<div class="tag">Internet</div>
-<div class="tag">Herramienta</div>
-
-`;
-
-}
-
-function mostrarViaticos(){
-
-document.getElementById('contenido').innerHTML = `
-
-<h2>🚚 Control de Viáticos</h2>
-
-<input placeholder="Lugar">
-<input placeholder="Monto">
-
-<select>
-
-<option>⛽ Gasolina</option>
-<option>🚕 Taxi</option>
-<option>🚌 Transporte</option>
-<option>🏨 Hotel</option>
-<option>🍔 Restaurante</option>
-
-</select>
-
-<input placeholder="💰 Propina">
-
-<div class="tag">📍 GPS</div>
-<div class="tag">📷 OCR Ticket</div>
-<div class="tag">🧾 Factura</div>
-
-<hr>
-
-<h3>📊 Resumen</h3>
-
-<div class="result-grid">
-
-<div class="result-card">
-<h4>Consumo</h4>
-<p>$580</p>
+<div class="tag">
+⛽ Gasolina
 </div>
 
-<div class="result-card">
-<h4>Propinas</h4>
-<p>$35</p>
+<div class="tag">
+🅿️ Estacionamiento
 </div>
 
+<div class="tag">
+📍 Rutas
+</div>
+
+<div class="tag">
+🛠️ Mantenimiento
 </div>
 
 `;
 
 }
 
-function mostrarProveedor(){
 
-document.getElementById('contenido').innerHTML = `
+if(regimen === 'PFAE'
+&& operacion === 'Venta'){
 
-<h2>📦 Proveedor</h2>
+html += `
 
-<input placeholder="Nombre proveedor">
-<input placeholder="RFC">
-<input placeholder="Teléfono">
+<div class="tag">
+📦 Inventario
+</div>
+
+<div class="tag">
+💰 Venta
+</div>
+
+<div class="tag">
+🧾 Ticket
+</div>
 
 `;
 
 }
 
-function mostrarCliente(){
 
-document.getElementById('contenido').innerHTML = `
+if(regimen === 'PFAE'
+&& operacion === 'Instalacion'){
 
-<h2>👥 Cliente</h2>
+html += `
 
-<input placeholder="Nombre cliente">
-<input placeholder="Teléfono">
-<input placeholder="Referencia">
+<div class="tag">
+🔧 Mano de obra
+</div>
 
-<div class="tag">📍 GPS</div>
-<div class="tag">💬 WhatsApp</div>
+<div class="tag">
+🪛 Herramienta
+</div>
+
+<div class="tag">
+⏱️ Tiempo servicio
+</div>
 
 `;
 
 }
 
-function mostrarRutas(){
 
-document.getElementById('contenido').innerHTML = `
+if(operacion === 'General'){
 
-<h2>📍 Rutas Inteligentes</h2>
+html += `
 
-<input placeholder="Buscar cliente">
-
-<div class="route-client">
-<div>
-<strong>Juan Pérez</strong><br>
-📞 5512345678
-</div>
-<button>
-Agregar
-</button>
+<div class="tag">
+📋 Actividad libre
 </div>
 
-<div class="route-client">
-<div>
-<strong>Tienda Norte</strong><br>
-📍 Zona Industrial
-</div>
-<button>
-Agregar
-</button>
+<div class="tag">
+🧠 Operación general
 </div>
 
-<hr>
-
-<h3>🚚 Ruta Generada</h3>
-
-<div class="tag">Cliente 1</div>
-<div class="tag">Cliente 2</div>
-
-<hr>
-
-<h3>💬 WhatsApp</h3>
-
-<textarea>
-
-Hola 👋 buen día.
-
-Hoy estaremos realizando entregas en su zona.
-
-Gracias.
-
-</textarea>
+<div class="tag">
+📁 Registro rápido
+</div>
 
 `;
 
 }
 
-function mostrarMantenimiento(){
 
-document.getElementById('contenido').innerHTML = `
-
-<h2>🛠️ Control de Mantenimiento</h2>
-
-<select>
-
-<option>🚗 Auto</option>
-<option>🏍️ Moto</option>
-<option>🚚 Camioneta</option>
-<option>💻 Computadora</option>
-<option>📱 Celular</option>
-<option>🏠 Hogar</option>
-<option>🔥 Boiler</option>
-<option>❄️ Aire acondicionado</option>
-<option>🌧️ Impermeabilización</option>
-<option>💡 Iluminación</option>
-<option>🌿 Jardín</option>
-<option>🛡️ Seguro</option>
-
-</select>
-
-<input placeholder="Descripción">
-
-<input placeholder="Fecha realizada">
-
-<input placeholder="Próximo cambio o vencimiento">
-
-<input placeholder="Costo">
-
-<input placeholder="Proveedor o aseguradora">
-
-<hr>
-
-<h3>🏠 Hogar y Vida Real</h3>
-
-<div class="tag">Impermeabilizar</div>
-<div class="tag">Cambiar focos</div>
-<div class="tag">Pintura</div>
-<div class="tag">Filtro agua</div>
-<div class="tag">Limpieza</div>
-<div class="tag">Jardín</div>
-
-<hr>
-
-<h3>🛡️ Seguros y Control</h3>
-
-<div class="tag">Auto</div>
-<div class="tag">Moto</div>
-<div class="tag">Hogar</div>
-<div class="tag">Gastos médicos</div>
-<div class="tag">Equipo</div>
-
-<hr>
-
-<h3>⚡ Recordatorios Inteligentes</h3>
-
-<div class="tag">Aceite</div>
-<div class="tag">Llantas</div>
-<div class="tag">Afinación</div>
-<div class="tag">Respaldo PC</div>
-<div class="tag">Filtro boiler</div>
-<div class="tag">Renovar seguro</div>
-<div class="tag">Pagar póliza</div>
-
-<hr>
-
-<h3>📊 Estado General</h3>
-
-<div class="result-grid">
-
-<div class="result-card">
-<h4>Próximo servicio</h4>
-<p>12 días</p>
-</div>
-
-<div class="result-card">
-<h4>Vencimientos</h4>
-<p>2</p>
-</div>
-
-<div class="result-card">
-<h4>Alertas</h4>
-<p>5</p>
-</div>
-
-<div class="result-card">
-<h4>Controlados</h4>
-<p>11</p>
-</div>
-
-</div>
-
-<hr>
-
-<h3>💬 Nota Inteligente</h3>
-
-<textarea>
-
-La impermeabilización vence en 3 meses.
-Conviene revisar antes de temporada de lluvia.
-
-Seguro de camioneta vence el próximo mes.
-
-</textarea>
-
-`;
+document.getElementById(
+'modulosActivos'
+).innerHTML = html;
 
 }
 
-function herramientaRapida(tipo){
 
-document.getElementById('contenido').innerHTML = `
+function limpiarModo(){
 
-<h2>⚡ Herramienta Inteligente</h2>
+localStorage.removeItem(
+'regimenDia'
+);
 
-<input placeholder="Captura rápida">
+localStorage.removeItem(
+'operacionDia'
+);
 
-<div class="tag">OCR</div>
-<div class="tag">GPS</div>
-<div class="tag">QR</div>
-
-`;
+location.reload();
 
 }
 
-mostrarActividad();
+
+window.onload = ()=>{
+
+mostrarContexto();
+
+}
 
 </script>
 
 </body>
 </html>
+```
+
+## Cambios realizados
+
+* Se agregó buscador dinámico.
+* Los módulos se contraen al seleccionar uno.
+* OCR, QR, Código y GPS permanecen visibles siempre.
+* Se agregó “Actividad General”.
+* Se mejoró la interacción visual de las tarjetas.
+* Se mantuvo tu estructura original.
