@@ -1,5 +1,5 @@
+```html
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -150,6 +150,7 @@ justify-content:center;
 font-size:9px;
 opacity:.45;
 transition:.2s;
+cursor:pointer;
 }
 
 .card span{
@@ -209,6 +210,7 @@ font-size:12px;
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:6px;
+margin-bottom:8px;
 }
 
 .action{
@@ -228,9 +230,9 @@ border:1px solid #28415f;
 .excel{color:#60a5fa;border-color:#2563eb;}
 
 @media(max-width:900px){
-.grid{grid-template-columns:repeat(2,1fr);} 
-.actions{grid-template-columns:repeat(2,1fr);} 
-.topbar{flex-wrap:wrap;} 
+.grid{grid-template-columns:repeat(2,1fr);}
+.actions{grid-template-columns:repeat(2,1fr);}
+.topbar{flex-wrap:wrap;}
 }
 
 </style>
@@ -286,29 +288,38 @@ border:1px solid #28415f;
 <div class="card" data-nombre="mantenimiento"><span>🛠️</span><h3>Mantenimiento</h3></div>
 </div>
 
-<div class="grid" id="grupoLectura">
-<div class="card active"><span>📷</span><h3>OCR</h3></div>
-<div class="card active"><span>🔳</span><h3>QR</h3></div>
-<div class="card active"><span>📦</span><h3>Código</h3></div>
-<div class="card active"><span>📍</span><h3>GPS</h3></div>
+<div class="actions">
+<div class="action save">📷 OCR</div>
+<div class="action edit">🔳 QR</div>
+<div class="action excel">📦 Código</div>
+<div class="action clear">📍 GPS</div>
 </div>
 
 <div class="section">
+
 <h2>⚙️ Operación del Día</h2>
-<select>
-<option>Selecciona contexto fiscal</option>
-<option>PFAE</option>
-<option>RESICO</option>
-<option>GENERAL</option>
+
+<select id="actividadFiscal">
+
+<option value="">Selecciona actividad fiscal</option>
+
+<option value="GENERAL">GENERAL / UNIVERSAL</option>
+<option value="PFAE">PFAE</option>
+<option value="RESICO">RESICO</option>
+<option value="RIF">RIF</option>
+<option value="SUSA">SUSA</option>
+
 </select>
-<select>
-<option>Selecciona operación</option>
-<option>Distribución</option>
-<option>Venta</option>
-<option>Servicio</option>
+
+<select id="operacion">
+
+<option value="">Selecciona operación</option>
+
 </select>
+
 <div id="modoActual"></div>
 <div id="modulosActivos"></div>
+
 </div>
 
 <div class="actions">
@@ -323,6 +334,7 @@ border:1px solid #28415f;
 const tarjetas = document.querySelectorAll('#grupoOperacion .card, #grupoSecundario .card');
 
 tarjetas.forEach(card=>{
+
 card.addEventListener('click',()=>{
 
 tarjetas.forEach(c=>{
@@ -332,49 +344,138 @@ c.classList.remove('hidden');
 
 card.classList.add('active');
 
- tarjetas.forEach(c=>{
+tarjetas.forEach(c=>{
 if(c!==card){
 c.classList.add('hidden');
 }
 });
 
 });
+
+});
+
+const operaciones = {
+
+GENERAL:[
+'Personal',
+'Universal'
+],
+
+PFAE:[
+'Distribución',
+'Instalación',
+'Servicio',
+'Venta'
+],
+
+RESICO:[
+'Distribución',
+'Servicio',
+'Venta'
+],
+
+RIF:[
+'General',
+'Venta'
+],
+
+SUSA:[
+'Alimentos',
+'Hotel',
+'Transporte',
+'Viáticos'
+]
+
+};
+
+document
+.getElementById('actividadFiscal')
+.addEventListener('change',function(){
+
+const valor = this.value;
+
+const selectOperacion =
+document.getElementById('operacion');
+
+selectOperacion.innerHTML =
+'<option value="">Selecciona operación</option>';
+
+if(operaciones[valor]){
+
+operaciones[valor]
+.sort()
+.forEach(op=>{
+
+selectOperacion.innerHTML +=
+`<option>${op}</option>`;
+
+});
+
+}
+
 });
 
 function actualizarFechaHora(){
+
 const ahora = new Date();
-document.getElementById('fechaActual').innerText='📅 '+ahora.toLocaleDateString('es-MX');
-document.getElementById('horaActual').innerText='⏰ '+ahora.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+
+document.getElementById('fechaActual').innerText =
+'📅 '+ahora.toLocaleDateString('es-MX');
+
+document.getElementById('horaActual').innerText =
+'⏰ '+ahora.toLocaleTimeString('es-MX',{
+hour:'2-digit',
+minute:'2-digit'
+});
+
 }
 
 function abrirCalculadora(){
+
 const valor = prompt('Calculadora rápida');
+
 if(valor){
+
 try{
 alert(eval(valor));
 }catch(e){
 alert('Operación inválida');
 }
+
 }
+
 }
 
 function buscarModulo(){
-const texto=document.getElementById('buscador').value.toLowerCase();
-document.querySelectorAll('.card').forEach(card=>{
+
+const texto =
+document.getElementById('buscador')
+.value
+.toLowerCase();
+
+document.querySelectorAll('.card')
+.forEach(card=>{
+
 if(card.innerText.toLowerCase().includes(texto)){
 card.style.display='flex';
 }else{
 card.style.display='none';
 }
+
 });
+
 }
 
 window.onload=()=>{
+
 actualizarFechaHora();
+
 setInterval(actualizarFechaHora,1000);
+
 }
 
 </script>
 
 </body>
 </html>
+```
