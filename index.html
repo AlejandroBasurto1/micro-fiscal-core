@@ -12,6 +12,7 @@ background:#07111f;
 color:white;
 font-family:Arial;
 padding:12px;
+margin:0;
 }
 
 .logo{
@@ -20,6 +21,8 @@ font-weight:bold;
 margin-bottom:15px;
 }
 
+/* GRID */
+
 .grid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
@@ -27,6 +30,8 @@ gap:10px;
 margin-bottom:15px;
 transition:.3s;
 }
+
+/* TARJETAS */
 
 .card{
 background:#132238;
@@ -42,6 +47,7 @@ opacity:.45;
 filter:grayscale(100%);
 transition:.25s;
 cursor:pointer;
+overflow:hidden;
 }
 
 .card.active{
@@ -60,6 +66,13 @@ font-size:28px;
 margin-bottom:5px;
 }
 
+.card h3{
+font-size:14px;
+margin:0;
+}
+
+/* SECCIONES */
+
 .section{
 background:#132238;
 padding:15px;
@@ -71,6 +84,8 @@ margin-bottom:15px;
 margin-bottom:15px;
 }
 
+/* INPUTS */
+
 input,
 select{
 width:100%;
@@ -81,7 +96,10 @@ margin-bottom:10px;
 background:#1b2f4a;
 color:white;
 font-size:14px;
+box-sizing:border-box;
 }
+
+/* BOTONES */
 
 .actions{
 display:grid;
@@ -96,12 +114,19 @@ border-radius:16px;
 text-align:center;
 font-weight:bold;
 cursor:pointer;
+transition:.2s;
+}
+
+.action:hover{
+transform:scale(1.02);
 }
 
 .save{background:#10b981;}
 .edit{background:#3b82f6;}
 .clear{background:#ef4444;}
 .excel{background:#15803d;}
+
+/* TAGS */
 
 .tag{
 display:inline-block;
@@ -110,6 +135,8 @@ border-radius:12px;
 background:#1b2f4a;
 margin:5px;
 }
+
+/* ALERTA */
 
 .alert{
 background:#0f766e;
@@ -130,12 +157,12 @@ margin-bottom:15px;
 
 .search-box{
 flex:1;
-margin-bottom:0;
 }
 
 .search-box input{
 background:#0f1d30;
 border:1px solid #28415f;
+margin-bottom:0;
 }
 
 /* SEMAFORO */
@@ -176,6 +203,20 @@ background:#facc15;
 background:#22c55e;
 }
 
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+.grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.actions{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
 </style>
 </head>
 
@@ -185,7 +226,7 @@ background:#22c55e;
 🚀 Micro Fiscal Core
 </div>
 
-<!-- BUSCADOR + SEMAFORO -->
+<!-- BUSCADOR -->
 
 <div class="search-row">
 
@@ -333,7 +374,7 @@ Selecciona operación
 </option>
 
 <option value="General">
-Actividad General
+General
 </option>
 
 <option value="Distribucion">
@@ -386,6 +427,8 @@ onclick="limpiarModo()">
 
 <script>
 
+/* TARJETAS */
+
 const tarjetas = document.querySelectorAll('.card');
 
 tarjetas.forEach(card=>{
@@ -393,6 +436,8 @@ tarjetas.forEach(card=>{
 card.addEventListener('click',()=>{
 
 const nombre = card.dataset.nombre;
+
+/* OCR QR GPS CODIGO SIEMPRE ACTIVOS */
 
 if(
 nombre === 'ocr' ||
@@ -403,7 +448,7 @@ nombre === 'gps'
 return;
 }
 
-// RESTAURA TODO
+/* RESTAURA */
 
 document
 .querySelectorAll(
@@ -416,11 +461,11 @@ c.classList.remove('active');
 
 });
 
-// ACTIVA SOLO EL SELECCIONADO
+/* ACTIVA */
 
 card.classList.add('active');
 
-// OCULTA LOS DEMAS
+/* OCULTA */
 
 document
 .querySelectorAll(
@@ -437,6 +482,8 @@ c.classList.add('hidden');
 });
 
 });
+
+/* BUSCADOR */
 
 function buscarModulo(){
 
@@ -478,6 +525,8 @@ card.style.display = 'none';
 
 }
 
+/* SEMAFORO */
+
 function actualizarSemaforo(estado){
 
 document
@@ -509,6 +558,8 @@ document
 }
 
 }
+
+/* GUARDAR */
 
 function guardarModo(){
 
@@ -563,6 +614,8 @@ alerta.innerText =
 
 }
 
+/* CONTEXTO */
+
 function mostrarContexto(){
 
 const regimen =
@@ -595,6 +648,8 @@ ${operacion}
 
 let html = '';
 
+/* SUSA */
+
 if(regimen === 'SUSA'){
 
 html += `
@@ -618,6 +673,8 @@ html += `
 `;
 
 }
+
+/* PFAE DISTRIBUCION */
 
 if(regimen === 'PFAE'
 && operacion === 'Distribucion'){
@@ -644,6 +701,8 @@ html += `
 
 }
 
+/* PFAE VENTA */
+
 if(regimen === 'PFAE'
 && operacion === 'Venta'){
 
@@ -665,6 +724,8 @@ html += `
 
 }
 
+/* PFAE INSTALACION */
+
 if(regimen === 'PFAE'
 && operacion === 'Instalacion'){
 
@@ -685,6 +746,8 @@ html += `
 `;
 
 }
+
+/* GENERAL */
 
 if(operacion === 'General'){
 
@@ -712,6 +775,8 @@ document.getElementById(
 
 }
 
+/* LIMPIAR */
+
 function limpiarModo(){
 
 localStorage.removeItem(
@@ -725,6 +790,8 @@ localStorage.removeItem(
 location.reload();
 
 }
+
+/* INICIO */
 
 window.onload = ()=>{
 
