@@ -7,210 +7,92 @@
 
 <style>
 
-body{
-background:#07111f;
-color:white;
-font-family:Arial;
-padding:12px;
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
-/* LOGO */
+body{
+background:#081120;
+color:white;
+padding:18px;
+}
+
+/* TOPBAR */
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+margin-bottom:18px;
+flex-wrap:wrap;
+}
 
 .logo-box{
 display:flex;
 align-items:center;
-gap:15px;
-margin-bottom:18px;
-background:#132238;
-padding:15px;
-border-radius:22px;
-border:1px solid #1d3557;
+gap:12px;
 }
 
 .logo-icon{
-width:65px;
-height:65px;
-border-radius:18px;
-background:linear-gradient(135deg,#10b981,#3b82f6);
+width:55px;
+height:55px;
+border-radius:14px;
+background:#132238;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:28px;
+font-size:20px;
 font-weight:bold;
-box-shadow:0 0 20px rgba(16,185,129,.35);
-}
-
-.logo-text h1{
-margin:0;
-font-size:24px;
-}
-
-.logo-text p{
-margin:4px 0 0 0;
-font-size:12px;
-opacity:.7;
-letter-spacing:1px;
-}
-
-/* GRID */
-
-.grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:10px;
-margin-bottom:15px;
-transition:.3s;
-}
-
-/* TARJETAS */
-
-.card{
-background:#132238;
-border-radius:18px;
-padding:10px;
-height:85px;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-opacity:.45;
-filter:grayscale(100%);
-transition:.25s;
-cursor:pointer;
-overflow:hidden;
-}
-
-.card.active{
-opacity:1;
-filter:grayscale(0%);
-box-shadow:0 0 18px rgba(16,185,129,.35);
-transform:scale(1.03);
-}
-
-.card.hidden{
-display:none;
-}
-
-.card span{
-font-size:28px;
-margin-bottom:5px;
-}
-
-.card h3{
-font-size:14px;
-margin:0;
-}
-
-/* SECCIONES */
-
-.section{
-background:#132238;
-padding:15px;
-border-radius:20px;
-margin-bottom:15px;
-}
-
-.section h2{
-margin-bottom:15px;
-}
-
-/* INPUTS */
-
-input,
-select{
-width:100%;
-padding:12px;
-border:none;
-border-radius:12px;
-margin-bottom:10px;
-background:#1b2f4a;
-color:white;
-font-size:14px;
-box-sizing:border-box;
-}
-```css id="g6wq4n"
-/* NAVEGACION */
-
-.nav-flow{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
-margin-bottom:15px;
-}
-
-.nav-btn{
-background:#132238;
-padding:14px;
-border-radius:16px;
-text-align:center;
-font-weight:bold;
-cursor:pointer;
-transition:.25s;
 border:1px solid #28415f;
 }
 
-.nav-btn:hover{
-transform:scale(1.02);
-background:#1b2f4a;
+.logo-text h1{
+font-size:26px;
 }
-```
 
-/* BOTONES */
+.logo-text p{
+font-size:12px;
+opacity:.7;
+letter-spacing:2px;
+}
 
-.actions{
-display:grid;
-grid-template-columns:repeat(4,1fr);
+.top-actions{
+display:flex;
 gap:10px;
-margin-bottom:15px;
+flex-wrap:wrap;
 }
 
-.action{
-padding:14px;
-border-radius:16px;
-text-align:center;
-font-weight:bold;
+.mini-btn{
+width:42px;
+height:42px;
+border-radius:12px;
+background:#132238;
+display:flex;
+align-items:center;
+justify-content:center;
 cursor:pointer;
-transition:.2s;
+transition:.25s;
+border:1px solid #28415f;
+font-size:18px;
 }
 
-.action:hover{
-transform:scale(1.02);
-}
-
-.save{background:#10b981;}
-.edit{background:#3b82f6;}
-.clear{background:#ef4444;}
-.excel{background:#15803d;}
-
-/* TAGS */
-
-.tag{
-display:inline-block;
-padding:8px 12px;
-border-radius:12px;
+.mini-btn:hover{
+transform:scale(1.08);
 background:#1b2f4a;
-margin:5px;
-}
-
-/* ALERTA */
-
-.alert{
-background:#0f766e;
-padding:12px;
-border-radius:12px;
-margin-bottom:15px;
-display:none;
 }
 
 /* BUSCADOR */
 
 .search-row{
 display:flex;
-gap:12px;
+gap:15px;
+margin-bottom:18px;
 align-items:center;
-margin-bottom:15px;
+flex-wrap:wrap;
 }
 
 .search-box{
@@ -218,66 +100,147 @@ flex:1;
 }
 
 .search-box input{
-background:#0f1d30;
-border:1px solid #28415f;
-margin-bottom:0;
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+background:#132238;
+color:white;
+font-size:15px;
 }
 
 /* SEMAFORO */
 
 .semaforo{
 display:flex;
-align-items:center;
 gap:8px;
-background:#132238;
-padding:10px 14px;
-border-radius:16px;
-min-width:95px;
-justify-content:center;
+align-items:center;
 }
 
 .luz{
 width:18px;
 height:18px;
 border-radius:50%;
-opacity:.25;
-transition:.3s;
+opacity:.3;
 }
+
+.rojo{background:#ef4444;}
+.amarillo{background:#facc15;}
+.verde{background:#10b981;}
 
 .luz.active{
 opacity:1;
 box-shadow:0 0 12px currentColor;
 }
 
-.rojo{
+/* GRID */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+gap:14px;
+margin-bottom:18px;
+}
+
+.card{
+background:#132238;
+padding:22px;
+border-radius:18px;
+text-align:center;
+cursor:pointer;
+transition:.25s;
+border:1px solid #28415f;
+}
+
+.card:hover{
+transform:translateY(-3px);
+}
+
+.card span{
+font-size:28px;
+display:block;
+margin-bottom:10px;
+}
+
+.card h3{
+font-size:16px;
+}
+
+/* ALERTA */
+
+.alert{
+margin-bottom:18px;
+font-size:14px;
+color:#93c5fd;
+}
+
+/* SECCION */
+
+.section{
+background:#132238;
+padding:20px;
+border-radius:18px;
+margin-bottom:18px;
+border:1px solid #28415f;
+}
+
+.section h2{
+margin-bottom:18px;
+font-size:28px;
+}
+
+select{
+width:100%;
+padding:14px;
+margin-bottom:14px;
+border:none;
+border-radius:14px;
+background:#1b3150;
+color:white;
+font-size:15px;
+}
+
+#modoActual,
+#modulosActivos{
+margin-top:12px;
+}
+
+/* BOTONES */
+
+.actions{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:14px;
+}
+
+.action{
+padding:16px;
+text-align:center;
+border-radius:16px;
+font-weight:bold;
+cursor:pointer;
+transition:.25s;
+}
+
+.action:hover{
+transform:scale(1.02);
+}
+
+.save{
+background:#10b981;
+}
+
+.edit{
+background:#facc15;
+color:black;
+}
+
+.clear{
 background:#ef4444;
 }
 
-.amarillo{
-background:#facc15;
-}
-
-.verde{
-background:#22c55e;
-}
-
-/* RESPONSIVE */
-
-@media(max-width:900px){
-
-.grid{
-grid-template-columns:repeat(2,1fr);
-}
-
-.actions{
-grid-template-columns:repeat(2,1fr);
-}
-
-.logo-box{
-flex-direction:column;
-align-items:flex-start;
-}
-
+.excel{
+background:#2563eb;
 }
 
 </style>
@@ -285,7 +248,9 @@ align-items:flex-start;
 
 <body>
 
-<!-- LOGO -->
+<!-- TOPBAR -->
+
+<div class="topbar">
 
 <div class="logo-box">
 
@@ -300,51 +265,64 @@ MR
 
 </div>
 
+<div class="top-actions">
+
+<div class="mini-btn" onclick="location.reload()">
+🏠
+</div>
+
+<div class="mini-btn">
+⬅️
+</div>
+
+<div class="mini-btn">
+➡️
+</div>
+
+<div class="mini-btn">
+📸
+</div>
+
+</div>
+
+</div>
+
 <!-- BUSCADOR -->
 
 <div class="search-row">
 
 <div class="search-box">
-<input
-type="text"
-id="buscador"
-placeholder="🔍 Buscar módulo..."
-onkeyup="buscarModulo()"
->
+<input type="text" id="buscador" placeholder="🔍 Buscar módulo...">
 </div>
 
 <div class="semaforo">
-
 <div class="luz rojo active"></div>
-
 <div class="luz amarillo"></div>
-
 <div class="luz verde"></div>
-
 </div>
 
 </div>
 
 <!-- LINEA 1 -->
 
-<div class="grid" id="grupoOperacion">
+<div class="grid">
 
-<div class="card active" data-nombre="actividad">
+<div class="card">
 <span>💼</span>
 <h3>Actividad</h3>
 </div>
 
-<div class="card" data-nombre="bancos">
+<div class="card">
 <span>🏦</span>
 <h3>Bancos</h3>
 </div>
 
-<div class="card" data-nombre="gastos">
+<div class="card">
 <span>💸</span>
 <h3>Gastos</h3>
 </div>
 
-<div class="card" data-nombre="viaticos">
+<div class="card">
 <span>🚚</span>
 <h3>Viáticos</h3>
 </div>
@@ -353,24 +331,24 @@ onkeyup="buscarModulo()"
 
 <!-- LINEA 2 -->
 
-<div class="grid" id="grupoSecundario">
+<div class="grid">
 
-<div class="card" data-nombre="cliente">
+<div class="card">
 <span>👥</span>
 <h3>Cliente</h3>
 </div>
 
-<div class="card" data-nombre="mantenimiento">
+<div class="card">
 <span>🛠️</span>
 <h3>Mantenimiento</h3>
 </div>
 
-<div class="card" data-nombre="proveedor">
+<div class="card">
 <span>📦</span>
 <h3>Proveedor</h3>
 </div>
 
-<div class="card" data-nombre="rutas">
+<div class="card">
 <span>📍</span>
 <h3>Rutas</h3>
 </div>
@@ -379,24 +357,24 @@ onkeyup="buscarModulo()"
 
 <!-- LINEA 3 -->
 
-<div class="grid" id="grupoLectura">
+<div class="grid">
 
-<div class="card active" data-nombre="codigo">
+<div class="card">
 <span>📦</span>
 <h3>Código</h3>
 </div>
 
-<div class="card active" data-nombre="gps">
+<div class="card">
 <span>📍</span>
 <h3>GPS</h3>
 </div>
 
-<div class="card active" data-nombre="ocr">
+<div class="card">
 <span>📷</span>
 <h3>OCR</h3>
 </div>
 
-<div class="card active" data-nombre="qr">
+<div class="card">
 <span>🔳</span>
 <h3>QR</h3>
 </div>
@@ -409,108 +387,38 @@ onkeyup="buscarModulo()"
 
 <div class="section">
 
-<h2>
-⚙️ Operación del Día
-</h2>
+<h2>⚙️ Operación del Día</h2>
 
-<select id="regimen">
-
-<option value="">
-Selecciona contexto fiscal
-</option>
-
-<option value="GENERAL">
-General / Universal
-</option>
-
-<option value="PFAE">
-PFAE
-</option>
-
-<option value="PLADIG">
-PLADIG
-</option>
-
-<option value="RESICO">
-RESICO
-</option>
-
-<option value="RIF">
-RIF
-</option>
-
-<option value="SUSA">
-SUSA
-</option>
-
+<select>
+<option>Selecciona contexto fiscal</option>
+<option>GENERAL</option>
+<option>PFAE</option>
+<option>PLADIG</option>
+<option>RESICO</option>
+<option>RIF</option>
+<option>SUSA</option>
 </select>
 
-<select id="operacion">
-
-<option value="">
-Selecciona operación
-</option>
-
-<option value="Distribucion">
-Distribución
-</option>
-
-<option value="General">
-General
-</option>
-
-<option value="Instalacion">
-Instalación
-</option>
-
-<option value="Personal">
-Personal
-</option>
-
-<option value="Servicio">
-Servicio
-</option>
-
-<option value="Venta">
-Venta
-</option>
-
+<select>
+<option>Selecciona operación</option>
+<option>Distribución</option>
+<option>General</option>
+<option>Instalación</option>
+<option>Personal</option>
+<option>Servicio</option>
+<option>Venta</option>
 </select>
 
 <div id="modoActual"></div>
-
 <div id="modulosActivos"></div>
 
 </div>
-```html id="y7fj9v"
-<!-- NAVEGACION -->
-
-<div class="nav-flow">
-
-<div class="nav-btn"
-onclick="irInicio()">
-🏠 Inicio
-</div>
-
-<div class="nav-btn"
-onclick="retrocederVista()">
-⬅️ Retroceder
-</div>
-
-<div class="nav-btn"
-onclick="avanzarVista()">
-➡️ Avanzar
-</div>
-
-</div>
-```
 
 <!-- BOTONES -->
 
 <div class="actions">
 
-<div class="action save"
-onclick="guardarModo()">
+<div class="action save">
 💾 Guardar
 </div>
 
@@ -518,8 +426,7 @@ onclick="guardarModo()">
 ✏️ Editar
 </div>
 
-<div class="action clear"
-onclick="limpiarModo()">
+<div class="action clear">
 🗑️ Limpiar
 </div>
 
@@ -529,476 +436,6 @@ onclick="limpiarModo()">
 
 </div>
 
-<script>
-
-const tarjetas = document.querySelectorAll('.card');
-
-tarjetas.forEach(card=>{
-
-card.addEventListener('click',()=>{
-
-const nombre = card.dataset.nombre;
-
-if(
-nombre === 'ocr' ||
-nombre === 'qr' ||
-nombre === 'codigo' ||
-nombre === 'gps'
-){
-return;
-}
-
-document
-.querySelectorAll(
-'#grupoOperacion .card, #grupoSecundario .card'
-)
-.forEach(c=>{
-
-c.classList.remove('hidden');
-c.classList.remove('active');
-
-});
-
-card.classList.add('active');
-```javascript id="cx3ye9"
-guardarVista(nombre);
-```
-
-document
-.querySelectorAll(
-'#grupoOperacion .card, #grupoSecundario .card'
-)
-.forEach(c=>{
-
-if(c !== card){
-c.classList.add('hidden');
-}
-
-});
-
-});
-
-});
-
-function buscarModulo(){
-
-const texto = document
-.getElementById('buscador')
-.value
-.toLowerCase();
-
-const cards = document.querySelectorAll('.card');
-
-cards.forEach(card=>{
-
-const nombre = card.dataset.nombre;
-
-if(nombre.includes(texto)){
-
-card.style.display = 'flex';
-
-}else{
-
-if(
-nombre === 'ocr' ||
-nombre === 'qr' ||
-nombre === 'codigo' ||
-nombre === 'gps'
-){
-
-card.style.display = 'flex';
-
-}else{
-
-card.style.display = 'none';
-
-}
-
-}
-
-});
-
-}
-
-function actualizarSemaforo(estado){
-
-document
-.querySelectorAll('.luz')
-.forEach(l=>l.classList.remove('active'));
-
-if(estado === 'rojo'){
-document.querySelector('.rojo').classList.add('active');
-}
-
-if(estado === 'amarillo'){
-document.querySelector('.amarillo').classList.add('active');
-}
-
-if(estado === 'verde'){
-document.querySelector('.verde').classList.add('active');
-}
-
-}
-
-function guardarModo(){
-
-const regimen =
-document.getElementById('regimen').value;
-
-const operacion =
-document.getElementById('operacion').value;
-
-const alerta =
-document.getElementById('alerta');
-
-if(!regimen || !operacion){
-
-alerta.style.display = 'block';
-
-alerta.innerText =
-'Selecciona contexto y operación';
-
-actualizarSemaforo('rojo');
-
-return;
-
-}
-
-localStorage.setItem(
-'regimenDia',
-regimen
-);
-
-localStorage.setItem(
-'operacionDia',
-operacion
-);
-
-mostrarContexto();
-
-actualizarSemaforo('verde');
-
-alerta.style.display = 'block';
-
-alerta.innerText =
-'Modo operativo guardado';
-
-}
-
-function mostrarContexto(){
-
-const regimen =
-localStorage.getItem('regimenDia');
-
-const operacion =
-localStorage.getItem('operacionDia');
-
-document.getElementById(
-'modoActual'
-).innerHTML = `
-
-<h3>
-🔥 Modo principal del día
-</h3>
-
-<div class="tag">
-${regimen}
-</div>
-
-<div class="tag">
-${operacion}
-</div>
-
-`;
-
-let html = '';
-
-/* GENERAL */
-
-if(regimen === 'GENERAL'){
-
-html += `
-
-<div class="tag">
-🌎 Universal
-</div>
-
-<div class="tag">
-📁 Registro libre
-</div>
-
-<div class="tag">
-🧠 Sin restricciones SAT
-</div>
-
-`;
-
-}
-
-/* PERSONAL */
-
-if(operacion === 'Personal'){
-
-html += `
-
-<div class="tag">
-🏠 Hogar
-</div>
-
-<div class="tag">
-🛒 Compras
-</div>
-
-<div class="tag">
-💳 Gastos personales
-</div>
-
-<div class="tag">
-📅 Organización diaria
-</div>
-
-`;
-
-}
-
-/* SUSA */
-
-if(regimen === 'SUSA'){
-
-html += `
-
-<div class="tag">
-🍽️ Alimentos
-</div>
-
-<div class="tag">
-🏨 Hotel
-</div>
-
-<div class="tag">
-🚕 Transporte
-</div>
-
-<div class="tag">
-🧾 Viáticos
-</div>
-
-`;
-
-}
-
-if(regimen === 'PFAE'
-&& operacion === 'Distribucion'){
-
-html += `
-
-<div class="tag">
-⛽ Gasolina
-</div>
-
-<div class="tag">
-🛠️ Mantenimiento
-</div>
-
-<div class="tag">
-📍 Rutas
-</div>
-
-<div class="tag">
-🅿️ Estacionamiento
-</div>
-
-`;
-
-}
-
-if(regimen === 'PFAE'
-&& operacion === 'Venta'){
-
-html += `
-
-<div class="tag">
-📦 Inventario
-</div>
-
-<div class="tag">
-🧾 Ticket
-</div>
-
-<div class="tag">
-💰 Venta
-</div>
-
-`;
-
-}
-
-if(regimen === 'PFAE'
-&& operacion === 'Instalacion'){
-
-html += `
-
-<div class="tag">
-🔧 Mano de obra
-</div>
-
-<div class="tag">
-🪛 Herramienta
-</div>
-
-<div class="tag">
-⏱️ Tiempo servicio
-</div>
-
-`;
-
-}
-
-if(operacion === 'General'){
-
-html += `
-
-<div class="tag">
-📋 Actividad libre
-</div>
-
-<div class="tag">
-🧠 Operación universal
-</div>
-
-<div class="tag">
-📁 Registro rápido
-</div>
-
-`;
-
-}
-
-document.getElementById(
-'modulosActivos'
-).innerHTML = html;
-
-}
-
-function limpiarModo(){
-
-localStorage.removeItem('regimenDia');
-localStorage.removeItem('operacionDia');
-
-location.reload();
-
-}
-```javascript id="qu0sww"
-let historialVista = [];
-let posicionVista = -1;
-
-function guardarVista(nombre){
-
-historialVista.push(nombre);
-
-posicionVista =
-historialVista.length - 1;
-
-}
-
-function irInicio(){
-
-document
-.querySelectorAll(
-'#grupoOperacion .card, #grupoSecundario .card'
-)
-.forEach(c=>{
-
-c.classList.remove('hidden');
-c.classList.remove('active');
-
-});
-
-actualizarSemaforo('amarillo');
-
-}
-
-function retrocederVista(){
-
-if(posicionVista > 0){
-
-posicionVista--;
-
-const nombre =
-historialVista[posicionVista];
-
-activarVista(nombre);
-
-}
-
-}
-
-function avanzarVista(){
-
-if(
-posicionVista <
-historialVista.length - 1
-){
-
-posicionVista++;
-
-const nombre =
-historialVista[posicionVista];
-
-activarVista(nombre);
-
-}
-
-}
-
-function activarVista(nombre){
-
-document
-.querySelectorAll(
-'#grupoOperacion .card, #grupoSecundario .card'
-)
-.forEach(c=>{
-
-c.classList.remove('hidden');
-c.classList.remove('active');
-
-});
-
-const card =
-document.querySelector(
-`[data-nombre="${nombre}"]`
-);
-
-if(card){
-
-card.classList.add('active');
-
-document
-.querySelectorAll(
-'#grupoOperacion .card, #grupoSecundario .card'
-)
-.forEach(c=>{
-
-if(c !== card){
-
-c.classList.add('hidden');
-
-}
-
-});
-
-}
-
-}
-```
-
-window.onload = ()=>{
-
-mostrarContexto();
-
-}
-
-</script>
-
 </body>
 </html>
+```
