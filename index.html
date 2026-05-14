@@ -345,6 +345,14 @@ onkeyup="buscarModulo()"
 Selecciona régimen
 </option>
 
+<option value="GENERAL">
+General
+</option>
+
+<option value="PERSONAL">
+Personal
+</option>
+
 <option value="PFAE">
 PFAE
 </option>
@@ -648,6 +656,54 @@ ${operacion}
 
 let html = '';
 
+/* GENERAL */
+
+if(regimen === 'GENERAL'){
+
+html += `
+
+<div class="tag">
+📋 Uso general
+</div>
+
+<div class="tag">
+🧠 Control básico
+</div>
+
+<div class="tag">
+📁 Registro libre
+</div>
+
+`;
+
+}
+
+/* PERSONAL */
+
+if(regimen === 'PERSONAL'){
+
+html += `
+
+<div class="tag">
+🏠 Hogar
+</div>
+
+<div class="tag">
+🛒 Compras
+</div>
+
+<div class="tag">
+💳 Gastos personales
+</div>
+
+<div class="tag">
+📅 Organización diaria
+</div>
+
+`;
+
+}
+
 /* SUSA */
 
 if(regimen === 'SUSA'){
@@ -747,7 +803,7 @@ html += `
 
 }
 
-/* GENERAL */
+/* GENERAL OPERACION */
 
 if(operacion === 'General'){
 
