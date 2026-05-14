@@ -442,7 +442,7 @@ flex-wrap:wrap;
 <div class="action excel">📤 Exportar</div>
 
 </div>
-
+<!-- AGREGA ESTO ABAJO --> <div class="results-panel"> <div class="result-card"> <h4>Resultado</h4> <span>$0.00</span> </div> <div class="result-card"> <h4>IVA</h4> <span>$0.00</span> </div> <div class="result-card"> <h4>ISR</h4> <span>$0.00</span> </div> <div class="result-card"> <h4>Ganancia Real</h4> <span>$0.00</span> </div> </div> <!-- Y EN EL CSS AGREGA ESTO --> .results-panel{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:8px; } .result-card{ background:#132238; border:1px solid #28415f; border-radius:12px; padding:10px; text-align:center; } .result-card h4{ margin:0 0 6px 0; font-size:10px; opacity:.7; font-weight:normal; } .result-card span{ font-size:15px; font-weight:bold; color:#22c55e; } @media(max-width:900px){ .results-panel{ grid-template-columns:repeat(2,1fr); } }
 <script>
 
 const tarjetas =
