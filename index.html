@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Micro Fiscal Core</title>
+<title>MRFC - Micro Real Fiscal Core</title>
 
 <style>
 
@@ -15,10 +15,42 @@ padding:12px;
 margin:0;
 }
 
-.logo{
-font-size:24px;
+/* LOGO */
+
+.logo-box{
+display:flex;
+align-items:center;
+gap:15px;
+margin-bottom:18px;
+background:#132238;
+padding:15px;
+border-radius:22px;
+border:1px solid #1d3557;
+}
+
+.logo-icon{
+width:65px;
+height:65px;
+border-radius:18px;
+background:linear-gradient(135deg,#10b981,#3b82f6);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
 font-weight:bold;
-margin-bottom:15px;
+box-shadow:0 0 20px rgba(16,185,129,.35);
+}
+
+.logo-text h1{
+margin:0;
+font-size:24px;
+}
+
+.logo-text p{
+margin:4px 0 0 0;
+font-size:12px;
+opacity:.7;
+letter-spacing:1px;
 }
 
 /* GRID */
@@ -215,6 +247,11 @@ grid-template-columns:repeat(2,1fr);
 grid-template-columns:repeat(2,1fr);
 }
 
+.logo-box{
+flex-direction:column;
+align-items:flex-start;
+}
+
 }
 
 </style>
@@ -222,8 +259,19 @@ grid-template-columns:repeat(2,1fr);
 
 <body>
 
-<div class="logo">
-🚀 Micro Fiscal Core
+<!-- LOGO -->
+
+<div class="logo-box">
+
+<div class="logo-icon">
+MR
+</div>
+
+<div class="logo-text">
+<h1>MRFC</h1>
+<p>MICRO REAL FISCAL CORE</p>
+</div>
+
 </div>
 
 <!-- BUSCADOR -->
@@ -281,19 +329,9 @@ onkeyup="buscarModulo()"
 
 <div class="grid" id="grupoSecundario">
 
-<div class="card" data-nombre="proveedor">
-<span>📦</span>
-<h3>Proveedor</h3>
-</div>
-
 <div class="card" data-nombre="cliente">
 <span>👥</span>
 <h3>Cliente</h3>
-</div>
-
-<div class="card" data-nombre="rutas">
-<span>📍</span>
-<h3>Rutas</h3>
 </div>
 
 <div class="card" data-nombre="mantenimiento">
@@ -301,21 +339,21 @@ onkeyup="buscarModulo()"
 <h3>Mantenimiento</h3>
 </div>
 
+<div class="card" data-nombre="proveedor">
+<span>📦</span>
+<h3>Proveedor</h3>
+</div>
+
+<div class="card" data-nombre="rutas">
+<span>📍</span>
+<h3>Rutas</h3>
+</div>
+
 </div>
 
 <!-- LINEA 3 -->
 
 <div class="grid" id="grupoLectura">
-
-<div class="card active" data-nombre="ocr">
-<span>📷</span>
-<h3>OCR</h3>
-</div>
-
-<div class="card active" data-nombre="qr">
-<span>🔳</span>
-<h3>QR</h3>
-</div>
 
 <div class="card active" data-nombre="codigo">
 <span>📦</span>
@@ -325,6 +363,16 @@ onkeyup="buscarModulo()"
 <div class="card active" data-nombre="gps">
 <span>📍</span>
 <h3>GPS</h3>
+</div>
+
+<div class="card active" data-nombre="ocr">
+<span>📷</span>
+<h3>OCR</h3>
+</div>
+
+<div class="card active" data-nombre="qr">
+<span>🔳</span>
+<h3>QR</h3>
 </div>
 
 </div>
@@ -342,35 +390,31 @@ onkeyup="buscarModulo()"
 <select id="regimen">
 
 <option value="">
-Selecciona régimen
+Selecciona contexto fiscal
 </option>
 
 <option value="GENERAL">
-General
-</option>
-
-<option value="PERSONAL">
-Personal
+General / Universal
 </option>
 
 <option value="PFAE">
 PFAE
 </option>
 
-<option value="SUSA">
-SUSA
+<option value="PLADIG">
+PLADIG
 </option>
 
 <option value="RESICO">
 RESICO
 </option>
 
-<option value="PLADIG">
-PLADIG
-</option>
-
 <option value="RIF">
 RIF
+</option>
+
+<option value="SUSA">
+SUSA
 </option>
 
 </select>
@@ -381,24 +425,28 @@ RIF
 Selecciona operación
 </option>
 
-<option value="General">
-General
-</option>
-
 <option value="Distribucion">
 Distribución
 </option>
 
-<option value="Venta">
-Venta
+<option value="General">
+General
 </option>
 
 <option value="Instalacion">
 Instalación
 </option>
 
+<option value="Personal">
+Personal
+</option>
+
 <option value="Servicio">
 Servicio
+</option>
+
+<option value="Venta">
+Venta
 </option>
 
 </select>
@@ -435,8 +483,6 @@ onclick="limpiarModo()">
 
 <script>
 
-/* TARJETAS */
-
 const tarjetas = document.querySelectorAll('.card');
 
 tarjetas.forEach(card=>{
@@ -444,8 +490,6 @@ tarjetas.forEach(card=>{
 card.addEventListener('click',()=>{
 
 const nombre = card.dataset.nombre;
-
-/* OCR QR GPS CODIGO SIEMPRE ACTIVOS */
 
 if(
 nombre === 'ocr' ||
@@ -455,8 +499,6 @@ nombre === 'gps'
 ){
 return;
 }
-
-/* RESTAURA */
 
 document
 .querySelectorAll(
@@ -469,11 +511,7 @@ c.classList.remove('active');
 
 });
 
-/* ACTIVA */
-
 card.classList.add('active');
-
-/* OCULTA */
 
 document
 .querySelectorAll(
@@ -490,8 +528,6 @@ c.classList.add('hidden');
 });
 
 });
-
-/* BUSCADOR */
 
 function buscarModulo(){
 
@@ -533,8 +569,6 @@ card.style.display = 'none';
 
 }
 
-/* SEMAFORO */
-
 function actualizarSemaforo(estado){
 
 document
@@ -542,57 +576,36 @@ document
 .forEach(l=>l.classList.remove('active'));
 
 if(estado === 'rojo'){
-
-document
-.querySelector('.rojo')
-.classList.add('active');
-
+document.querySelector('.rojo').classList.add('active');
 }
 
 if(estado === 'amarillo'){
-
-document
-.querySelector('.amarillo')
-.classList.add('active');
-
+document.querySelector('.amarillo').classList.add('active');
 }
 
 if(estado === 'verde'){
-
-document
-.querySelector('.verde')
-.classList.add('active');
-
+document.querySelector('.verde').classList.add('active');
 }
 
 }
-
-/* GUARDAR */
 
 function guardarModo(){
 
 const regimen =
-document.getElementById(
-'regimen'
-).value;
+document.getElementById('regimen').value;
 
 const operacion =
-document.getElementById(
-'operacion'
-).value;
+document.getElementById('operacion').value;
 
 const alerta =
-document.getElementById(
-'alerta'
-);
+document.getElementById('alerta');
 
 if(!regimen || !operacion){
 
-alerta.style.display =
-'block';
+alerta.style.display = 'block';
 
 alerta.innerText =
-'Selecciona régimen y operación';
+'Selecciona contexto y operación';
 
 actualizarSemaforo('rojo');
 
@@ -614,27 +627,20 @@ mostrarContexto();
 
 actualizarSemaforo('verde');
 
-alerta.style.display =
-'block';
+alerta.style.display = 'block';
 
 alerta.innerText =
 'Modo operativo guardado';
 
 }
 
-/* CONTEXTO */
-
 function mostrarContexto(){
 
 const regimen =
-localStorage.getItem(
-'regimenDia'
-);
+localStorage.getItem('regimenDia');
 
 const operacion =
-localStorage.getItem(
-'operacionDia'
-);
+localStorage.getItem('operacionDia');
 
 document.getElementById(
 'modoActual'
@@ -663,15 +669,15 @@ if(regimen === 'GENERAL'){
 html += `
 
 <div class="tag">
-📋 Uso general
-</div>
-
-<div class="tag">
-🧠 Control básico
+🌎 Universal
 </div>
 
 <div class="tag">
 📁 Registro libre
+</div>
+
+<div class="tag">
+🧠 Sin restricciones SAT
 </div>
 
 `;
@@ -680,7 +686,7 @@ html += `
 
 /* PERSONAL */
 
-if(regimen === 'PERSONAL'){
+if(operacion === 'Personal'){
 
 html += `
 
@@ -711,11 +717,11 @@ if(regimen === 'SUSA'){
 html += `
 
 <div class="tag">
-🏨 Hotel
+🍽️ Alimentos
 </div>
 
 <div class="tag">
-🍽️ Alimentos
+🏨 Hotel
 </div>
 
 <div class="tag">
@@ -723,14 +729,12 @@ html += `
 </div>
 
 <div class="tag">
-🧾 Apoyo gasolina
+🧾 Viáticos
 </div>
 
 `;
 
 }
-
-/* PFAE DISTRIBUCION */
 
 if(regimen === 'PFAE'
 && operacion === 'Distribucion'){
@@ -742,7 +746,7 @@ html += `
 </div>
 
 <div class="tag">
-🅿️ Estacionamiento
+🛠️ Mantenimiento
 </div>
 
 <div class="tag">
@@ -750,14 +754,12 @@ html += `
 </div>
 
 <div class="tag">
-🛠️ Mantenimiento
+🅿️ Estacionamiento
 </div>
 
 `;
 
 }
-
-/* PFAE VENTA */
 
 if(regimen === 'PFAE'
 && operacion === 'Venta'){
@@ -769,18 +771,16 @@ html += `
 </div>
 
 <div class="tag">
-💰 Venta
+🧾 Ticket
 </div>
 
 <div class="tag">
-🧾 Ticket
+💰 Venta
 </div>
 
 `;
 
 }
-
-/* PFAE INSTALACION */
 
 if(regimen === 'PFAE'
 && operacion === 'Instalacion'){
@@ -803,8 +803,6 @@ html += `
 
 }
 
-/* GENERAL OPERACION */
-
 if(operacion === 'General'){
 
 html += `
@@ -814,7 +812,7 @@ html += `
 </div>
 
 <div class="tag">
-🧠 Operación general
+🧠 Operación universal
 </div>
 
 <div class="tag">
@@ -831,23 +829,14 @@ document.getElementById(
 
 }
 
-/* LIMPIAR */
-
 function limpiarModo(){
 
-localStorage.removeItem(
-'regimenDia'
-);
-
-localStorage.removeItem(
-'operacionDia'
-);
+localStorage.removeItem('regimenDia');
+localStorage.removeItem('operacionDia');
 
 location.reload();
 
 }
-
-/* INICIO */
 
 window.onload = ()=>{
 
