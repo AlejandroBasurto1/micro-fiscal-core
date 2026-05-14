@@ -28,13 +28,14 @@ flex-wrap:wrap;
 
 .top-actions{
 display:flex;
-gap:10px;
+gap:16px;
 flex-wrap:wrap;
+align-items:center;
 }
 
 .mini-btn{
-width:42px;
-height:42px;
+width:38px;
+height:38px;
 border-radius:12px;
 background:#132238;
 display:flex;
@@ -43,12 +44,28 @@ justify-content:center;
 cursor:pointer;
 transition:.25s;
 border:1px solid #28415f;
-font-size:18px;
+font-size:16px;
+color:#cbd5e1;
 }
 
 .mini-btn:hover{
 transform:scale(1.08);
 background:#1b2f4a;
+}
+
+/* FECHA Y HORA */
+
+.datetime-box{
+display:flex;
+flex-direction:column;
+gap:2px;
+font-size:11px;
+color:#94a3b8;
+background:#132238;
+padding:8px 12px;
+border-radius:12px;
+border:1px solid #28415f;
+min-width:110px;
 }
 
 /* LOGO */
@@ -331,12 +348,29 @@ MR
 
 <div class="top-actions">
 
+<div class="datetime-box">
+<div id="fechaActual">📅 --/--/----</div>
+<div id="horaActual">⏰ --:--</div>
+</div>
+
 <div class="mini-btn" onclick="location.reload()">
 🏠
 </div>
 
 <div class="mini-btn">
 ⬅️
+</div>
+
+<div class="mini-btn">
+➡️
+</div>
+
+<div class="mini-btn" onclick="abrirCalculadora()">
+🧮
+</div>
+
+</div>
+
 </div>
 
 <div class="mini-btn">
@@ -905,11 +939,43 @@ location.reload();
 
 }
 
+function actualizarFechaHora(){
+
+const ahora = new Date();
+
+const fecha = ahora.toLocaleDateString('es-MX');
+
+const hora = ahora.toLocaleTimeString('es-MX',{
+hour:'2-digit',
+minute:'2-digit'
+});
+
+document.getElementById('fechaActual').innerText = '📅 ' + fecha;
+document.getElementById('horaActual').innerText = '⏰ ' + hora;
+
+}
+
+function abrirCalculadora(){
+
+const valor = prompt('Calculadora rápida');
+
+if(valor){
+try{
+alert('Resultado: ' + eval(valor));
+}catch(e){
+alert('Operación inválida');
+}
+}
+
+}
+
 window.onload = ()=>{
 
 mostrarContexto();
+actualizarFechaHora();
 
-}
+setInterval(()=>{
+actualizarFecha
 
 </script>
 
