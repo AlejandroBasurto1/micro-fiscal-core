@@ -3,16 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>MRFC - Micro Real Fiscal Core</title>
 
 <style>
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
 body{
 background:#07111f;
 color:white;
-font-family:Arial;
+font-family:Arial,sans-serif;
 padding:12px;
-margin:0;
 }
 
 /* TOPBAR */
@@ -23,30 +29,14 @@ justify-content:space-between;
 align-items:center;
 gap:10px;
 margin-bottom:10px;
+flex-wrap:wrap;
 }
 
 .top-actions{
 display:flex;
 gap:6px;
 align-items:center;
-}
-
-.mini-btn{
-width:34px;
-height:34px;
-border-radius:10px;
-background:#132238;
-display:flex;
-align-items:center;
-justify-content:center;
-border:1px solid #28415f;
-font-size:12px;
-cursor:pointer;
-transition:.2s;
-}
-
-.mini-btn:hover{
-background:#1d3557;
+flex-wrap:wrap;
 }
 
 /* FECHA */
@@ -60,6 +50,29 @@ background:#132238;
 padding:6px 10px;
 border-radius:10px;
 border:1px solid #28415f;
+min-width:110px;
+}
+
+/* BOTONES MINI */
+
+.mini-btn{
+width:34px;
+height:34px;
+border-radius:10px;
+background:#132238;
+display:flex;
+align-items:center;
+justify-content:center;
+border:1px solid #28415f;
+font-size:12px;
+cursor:pointer;
+transition:.2s;
+user-select:none;
+}
+
+.mini-btn:hover{
+background:#1d3557;
+transform:translateY(-1px);
 }
 
 /* LOGO */
@@ -87,14 +100,14 @@ font-weight:bold;
 }
 
 .logo-text h1{
-margin:0;
 font-size:20px;
+margin:0;
 }
 
 .logo-text p{
-margin:2px 0 0 0;
 font-size:10px;
 opacity:.7;
+margin-top:2px;
 }
 
 /* BUSCADOR */
@@ -103,6 +116,7 @@ opacity:.7;
 display:flex;
 gap:8px;
 margin-bottom:8px;
+align-items:center;
 }
 
 .search-box{
@@ -116,7 +130,7 @@ border:none;
 border-radius:10px;
 background:#132238;
 color:white;
-box-sizing:border-box;
+outline:none;
 }
 
 /* SEMAFORO */
@@ -128,110 +142,143 @@ gap:6px;
 background:#132238;
 padding:8px 10px;
 border-radius:12px;
+border:1px solid #28415f;
 }
 
 .luz{
 width:14px;
 height:14px;
 border-radius:50%;
-opacity:.3;
+opacity:.25;
+transition:.2s;
 }
 
 .luz.active{
 opacity:1;
+box-shadow:0 0 8px rgba(255,255,255,.4);
 }
 
-.rojo{background:#ef4444;}
-.amarillo{background:#facc15;}
-.verde{background:#22c55e;}
+.rojo{
+background:#ef4444;
+}
 
-/* GRIDS */
+.amarillo{
+background:#facc15;
+}
+
+.verde{
+background:#22c55e;
+}
+
+/* GRID */
 
 .grid{
 display:grid;
 grid-template-columns:repeat(4,minmax(70px,1fr));
-gap:6px;
+gap:8px;
 margin-bottom:8px;
 }
 
-/* MODULOS */
+/* TARJETAS */
 
 .card{
 background:#132238;
-border-radius:10px;
-padding:4px;
-height:44px;
+border-radius:12px;
+padding:8px;
+height:60px;
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
-font-size:9px;
-opacity:.45;
-transition:.2s;
+font-size:10px;
 cursor:pointer;
-overflow:hidden;
+transition:.25s;
+border:1px solid transparent;
 }
 
 .card span{
-font-size:14px;
+font-size:18px;
+margin-bottom:3px;
 }
 
 .card h3{
-margin:0;
-font-size:9px;
+font-size:10px;
+font-weight:normal;
 }
 
 .card.active{
-opacity:1;
-box-shadow:0 0 10px rgba(16,185,129,.18);
+border:1px solid #10b981;
+box-shadow:0 0 14px rgba(16,185,129,.18);
+transform:translateY(-1px);
 }
 
-.card.hidden{
-width:42px;
-min-width:42px;
-height:44px;
-padding:2px;
-opacity:.9;
-}
-
-.card.hidden h3{
-display:none;
+.card.inactive{
+opacity:.35;
+transform:scale(.96);
 }
 
 /* HERRAMIENTAS */
 
-.tool-btn{
-height:32px;
+.actions{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin-bottom:8px;
+}
+
+.tool-btn,
+.action{
+height:38px;
 display:flex;
 align-items:center;
 justify-content:center;
-background:#132238;
 border-radius:10px;
-font-size:11px;
+font-size:12px;
+background:#132238;
 border:1px solid #28415f;
-color:#cbd5e1;
+transition:.2s;
+cursor:pointer;
 }
 
-/* PANEL */
+.tool-btn:hover,
+.action:hover{
+background:#1d3557;
+}
+
+/* PANEL CENTRAL */
 
 .section{
 background:#132238;
-padding:15px;
+padding:16px;
 border-radius:16px;
-margin-bottom:8px;
-min-height:320px;
+margin-bottom:10px;
+min-height:40vh;
+border:1px solid #1d3557;
+}
+
+.section h2{
+margin-bottom:14px;
+font-size:18px;
 }
 
 /* SELECT */
 
 select{
 width:100%;
-padding:10px;
+padding:12px;
 margin-bottom:10px;
 border:none;
 border-radius:10px;
 background:#1b2f4a;
 color:white;
+outline:none;
+}
+
+/* MODULOS ACTIVOS */
+
+#modoActual,
+#modulosActivos{
+margin-top:10px;
 }
 
 /* TAGS */
@@ -245,30 +292,59 @@ margin:4px;
 font-size:12px;
 }
 
-/* BOTONES */
+/* BOTONES COLORES */
 
-.actions{
+.save{
+color:#10b981;
+border-color:#10b981;
+}
+
+.edit{
+color:#facc15;
+border-color:#facc15;
+}
+
+.clear{
+color:#ef4444;
+border-color:#ef4444;
+}
+
+.excel{
+color:#60a5fa;
+border-color:#2563eb;
+}
+
+/* RESULTADOS */
+
+.results-panel{
 display:grid;
 grid-template-columns:repeat(4,1fr);
-gap:6px;
-margin-bottom:8px;
+gap:8px;
+margin-top:10px;
 }
 
-.action{
-height:32px;
-display:flex;
-align-items:center;
-justify-content:center;
+.result-card{
 background:#132238;
-border-radius:10px;
-font-size:11px;
 border:1px solid #28415f;
+border-radius:12px;
+padding:12px;
+text-align:center;
 }
 
-.save{color:#10b981;border-color:#10b981;}
-.edit{color:#facc15;border-color:#facc15;}
-.clear{color:#ef4444;border-color:#ef4444;}
-.excel{color:#60a5fa;border-color:#2563eb;}
+.result-card h4{
+font-size:11px;
+font-weight:normal;
+opacity:.7;
+margin-bottom:6px;
+}
+
+.result-card span{
+font-size:16px;
+font-weight:bold;
+color:#22c55e;
+}
+
+/* MOBILE */
 
 @media(max-width:900px){
 
@@ -280,15 +356,15 @@ grid-template-columns:repeat(2,1fr);
 grid-template-columns:repeat(2,1fr);
 }
 
-.topbar{
-flex-wrap:wrap;
+.results-panel{
+grid-template-columns:repeat(2,1fr);
 }
 
 }
 
 </style>
-
 </head>
+
 <body>
 
 <!-- TOPBAR -->
@@ -296,12 +372,16 @@ flex-wrap:wrap;
 <div class="topbar">
 
 <div class="logo-box">
-<div class="logo-icon">MR</div>
+
+<div class="logo-icon">
+MR
+</div>
 
 <div class="logo-text">
 <h1>MRFC</h1>
 <p>MICRO REAL FISCAL CORE</p>
 </div>
+
 </div>
 
 <div class="top-actions">
@@ -314,7 +394,10 @@ flex-wrap:wrap;
 <div class="mini-btn">🏠</div>
 <div class="mini-btn">⬅️</div>
 <div class="mini-btn">➡️</div>
-<div class="mini-btn" onclick="abrirCalculadora()">🧮</div>
+
+<div class="mini-btn" onclick="abrirCalculadora()">
+🧮
+</div>
 
 </div>
 
@@ -325,13 +408,20 @@ flex-wrap:wrap;
 <div class="search-row">
 
 <div class="search-box">
-<input type="text" id="buscador" placeholder="🔍 Buscar módulo..." onkeyup="buscarModulo()">
+<input
+type="text"
+id="buscador"
+placeholder="🔍 Buscar módulo..."
+onkeyup="buscarModulo()"
+>
 </div>
 
 <div class="semaforo">
+
 <div class="luz rojo active"></div>
 <div class="luz amarillo"></div>
 <div class="luz verde"></div>
+
 </div>
 
 </div>
@@ -399,7 +489,7 @@ flex-wrap:wrap;
 
 </div>
 
-<!-- VENTANA CENTRAL -->
+<!-- PANEL CENTRAL -->
 
 <div class="section">
 
@@ -407,19 +497,37 @@ flex-wrap:wrap;
 
 <select id="actividadFiscal">
 
-<option value="">Selecciona actividad fiscal</option>
+<option value="">
+Selecciona actividad fiscal
+</option>
 
-<option value="GENERAL">GENERAL / UNIVERSAL</option>
-<option value="PFAE">PFAE</option>
-<option value="RESICO">RESICO</option>
-<option value="RIF">RIF</option>
-<option value="SUSA">SUSA</option>
+<option value="GENERAL">
+GENERAL / UNIVERSAL
+</option>
+
+<option value="PFAE">
+PFAE
+</option>
+
+<option value="RESICO">
+RESICO
+</option>
+
+<option value="RIF">
+RIF
+</option>
+
+<option value="SUSA">
+SUSA
+</option>
 
 </select>
 
 <select id="operacion">
 
-<option value="">Selecciona operación</option>
+<option value="">
+Selecciona operación
+</option>
 
 </select>
 
@@ -427,26 +535,61 @@ flex-wrap:wrap;
 
 <div id="modulosActivos"></div>
 
+<!-- RESULTADOS -->
+
+<div class="results-panel">
+
+<div class="result-card">
+<h4>Resultado</h4>
+<span>$0.00</span>
+</div>
+
+<div class="result-card">
+<h4>IVA</h4>
+<span>$0.00</span>
+</div>
+
+<div class="result-card">
+<h4>ISR</h4>
+<span>$0.00</span>
+</div>
+
+<div class="result-card">
+<h4>Ganancia Real</h4>
+<span>$0.00</span>
+</div>
+
+</div>
+
 </div>
 
 <!-- BOTONES -->
 
 <div class="actions">
 
-<div class="action save">💾 Guardar</div>
+<div class="action save">
+💾 Guardar
+</div>
 
-<div class="action edit">✏️ Editar</div>
+<div class="action edit">
+✏️ Editar
+</div>
 
-<div class="action clear">🗑️ Limpiar</div>
+<div class="action clear">
+🗑️ Limpiar
+</div>
 
-<div class="action excel">📤 Exportar</div>
+<div class="action excel">
+📤 Exportar
+</div>
 
 </div>
-<!-- AGREGA ESTO ABAJO --> <div class="results-panel"> <div class="result-card"> <h4>Resultado</h4> <span>$0.00</span> </div> <div class="result-card"> <h4>IVA</h4> <span>$0.00</span> </div> <div class="result-card"> <h4>ISR</h4> <span>$0.00</span> </div> <div class="result-card"> <h4>Ganancia Real</h4> <span>$0.00</span> </div> </div> <!-- Y EN EL CSS AGREGA ESTO --> .results-panel{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:8px; } .result-card{ background:#132238; border:1px solid #28415f; border-radius:12px; padding:10px; text-align:center; } .result-card h4{ margin:0 0 6px 0; font-size:10px; opacity:.7; font-weight:normal; } .result-card span{ font-size:15px; font-weight:bold; color:#22c55e; } @media(max-width:900px){ .results-panel{ grid-template-columns:repeat(2,1fr); } }
+
 <script>
 
-const tarjetas =
-document.querySelectorAll(
+/* TARJETAS */
+
+const tarjetas = document.querySelectorAll(
 '#grupoOperacion .card, #grupoSecundario .card'
 );
 
@@ -456,20 +599,17 @@ card.addEventListener('click',()=>{
 
 tarjetas.forEach(c=>{
 c.classList.remove('active');
-c.classList.remove('hidden');
+c.classList.add('inactive');
 });
 
+card.classList.remove('inactive');
 card.classList.add('active');
 
-tarjetas.forEach(c=>{
-if(c!==card){
-c.classList.add('hidden');
-}
 });
 
 });
 
-});
+/* OPERACIONES */
 
 const operaciones = {
 
@@ -505,6 +645,8 @@ SUSA:[
 
 };
 
+/* CAMBIO ACTIVIDAD */
+
 document
 .getElementById('actividadFiscal')
 .addEventListener('change',function(){
@@ -532,64 +674,91 @@ selectOperacion.innerHTML +=
 
 });
 
+/* FECHA Y HORA */
+
 function actualizarFechaHora(){
 
 const ahora = new Date();
 
 document.getElementById('fechaActual').innerText =
-'📅 '+ahora.toLocaleDateString('es-MX');
+'📅 ' + ahora.toLocaleDateString('es-MX');
 
 document.getElementById('horaActual').innerText =
-'⏰ '+ahora.toLocaleTimeString('es-MX',{
+'⏰ ' + ahora.toLocaleTimeString('es-MX',{
 hour:'2-digit',
 minute:'2-digit'
 });
 
 }
 
+/* CALCULADORA SEGURA */
+
 function abrirCalculadora(){
 
 const valor = prompt('Calculadora rápida');
 
-if(valor){
+if(!valor) return;
+
+const permitido = /^[0-9+\-*/().\s]+$/;
+
+if(!permitido.test(valor)){
+alert('Operación inválida');
+return;
+}
 
 try{
-alert(eval(valor));
-}catch(e){
-alert('Operación inválida');
-}
+
+const resultado = Function(
+'"use strict"; return (' + valor + ')'
+)();
+
+alert(resultado);
+
+}catch(error){
+
+alert('Error en cálculo');
 
 }
 
 }
+
+/* BUSCADOR */
 
 function buscarModulo(){
 
 const texto =
-document.getElementById('buscador')
+document
+.getElementById('buscador')
 .value
 .toLowerCase();
 
 document.querySelectorAll('.card')
 .forEach(card=>{
 
-if(card.innerText.toLowerCase().includes(texto)){
-card.style.display='flex';
-}else{
-card.style.display='none';
-}
+const nombre =
+card.innerText.toLowerCase();
+
+card.style.display =
+nombre.includes(texto)
+? 'flex'
+: 'none';
 
 });
 
 }
 
-window.onload=()=>{
+/* INICIO */
+
+window.onload = ()=>{
 
 actualizarFechaHora();
 
-setInterval(actualizarFechaHora,1000);
+setInterval(
+actualizarFechaHora,
+1000
+);
 
-}
+};
 
 </script>
 
