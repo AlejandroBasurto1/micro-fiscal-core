@@ -16,13 +16,14 @@ padding:12px;
 margin:0;
 }
 
+/* TOPBAR */
+
 .topbar{
 display:flex;
 justify-content:space-between;
 align-items:center;
 gap:10px;
 margin-bottom:10px;
-flex-wrap:nowrap;
 }
 
 .top-actions{
@@ -41,7 +42,15 @@ align-items:center;
 justify-content:center;
 border:1px solid #28415f;
 font-size:12px;
+cursor:pointer;
+transition:.2s;
 }
+
+.mini-btn:hover{
+background:#1d3557;
+}
+
+/* FECHA */
 
 .datetime-box{
 display:flex;
@@ -53,6 +62,8 @@ padding:6px 10px;
 border-radius:10px;
 border:1px solid #28415f;
 }
+
+/* LOGO */
 
 .logo-box{
 display:flex;
@@ -87,6 +98,8 @@ font-size:10px;
 opacity:.7;
 }
 
+/* BUSCADOR */
+
 .search-row{
 display:flex;
 gap:8px;
@@ -106,6 +119,8 @@ background:#132238;
 color:white;
 box-sizing:border-box;
 }
+
+/* SEMAFORO */
 
 .semaforo{
 display:flex;
@@ -131,12 +146,16 @@ opacity:1;
 .amarillo{background:#facc15;}
 .verde{background:#22c55e;}
 
+/* GRIDS */
+
 .grid{
 display:grid;
 grid-template-columns:repeat(4,minmax(70px,1fr));
 gap:6px;
 margin-bottom:8px;
 }
+
+/* MODULOS */
 
 .card{
 background:#132238;
@@ -151,6 +170,7 @@ font-size:9px;
 opacity:.45;
 transition:.2s;
 cursor:pointer;
+overflow:hidden;
 }
 
 .card span{
@@ -179,6 +199,22 @@ opacity:.9;
 display:none;
 }
 
+/* HERRAMIENTAS */
+
+.tool-btn{
+height:32px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#132238;
+border-radius:10px;
+font-size:11px;
+border:1px solid #28415f;
+color:#cbd5e1;
+}
+
+/* PANEL */
+
 .section{
 background:#132238;
 padding:15px;
@@ -186,6 +222,8 @@ border-radius:16px;
 margin-bottom:8px;
 min-height:320px;
 }
+
+/* SELECT */
 
 select{
 width:100%;
@@ -197,6 +235,8 @@ background:#1b2f4a;
 color:white;
 }
 
+/* TAGS */
+
 .tag{
 display:inline-block;
 padding:6px 10px;
@@ -205,6 +245,8 @@ border-radius:10px;
 margin:4px;
 font-size:12px;
 }
+
+/* BOTONES */
 
 .actions{
 display:grid;
@@ -230,9 +272,19 @@ border:1px solid #28415f;
 .excel{color:#60a5fa;border-color:#2563eb;}
 
 @media(max-width:900px){
-.grid{grid-template-columns:repeat(2,1fr);}
-.actions{grid-template-columns:repeat(2,1fr);}
-.topbar{flex-wrap:wrap;}
+
+.grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.actions{
+grid-template-columns:repeat(2,1fr);
+}
+
+.topbar{
+flex-wrap:wrap;
+}
+
 }
 
 </style>
@@ -240,10 +292,13 @@ border:1px solid #28415f;
 </head>
 <body>
 
+<!-- TOPBAR -->
+
 <div class="topbar">
 
 <div class="logo-box">
 <div class="logo-icon">MR</div>
+
 <div class="logo-text">
 <h1>MRFC</h1>
 <p>MICRO REAL FISCAL CORE</p>
@@ -251,49 +306,101 @@ border:1px solid #28415f;
 </div>
 
 <div class="top-actions">
+
 <div class="datetime-box">
 <div id="fechaActual">📅 --/--/----</div>
 <div id="horaActual">⏰ --:--</div>
 </div>
+
 <div class="mini-btn">🏠</div>
 <div class="mini-btn">⬅️</div>
 <div class="mini-btn">➡️</div>
 <div class="mini-btn" onclick="abrirCalculadora()">🧮</div>
+
 </div>
 
 </div>
+
+<!-- BUSCADOR -->
 
 <div class="search-row">
+
 <div class="search-box">
 <input type="text" id="buscador" placeholder="🔍 Buscar módulo..." onkeyup="buscarModulo()">
 </div>
+
 <div class="semaforo">
 <div class="luz rojo active"></div>
 <div class="luz amarillo"></div>
 <div class="luz verde"></div>
 </div>
+
 </div>
+
+<!-- OPERACION -->
 
 <div class="grid" id="grupoOperacion">
-<div class="card active" data-nombre="actividad"><span>💼</span><h3>Actividad</h3></div>
-<div class="card" data-nombre="bancos"><span>🏦</span><h3>Bancos</h3></div>
-<div class="card" data-nombre="gastos"><span>💸</span><h3>Gastos</h3></div>
-<div class="card" data-nombre="viaticos"><span>🚚</span><h3>Viáticos</h3></div>
+
+<div class="card active" data-nombre="actividad">
+<span>💼</span>
+<h3>Actividad</h3>
 </div>
+
+<div class="card" data-nombre="bancos">
+<span>🏦</span>
+<h3>Bancos</h3>
+</div>
+
+<div class="card" data-nombre="gastos">
+<span>💸</span>
+<h3>Gastos</h3>
+</div>
+
+<div class="card" data-nombre="viaticos">
+<span>🚚</span>
+<h3>Viáticos</h3>
+</div>
+
+</div>
+
+<!-- APOYO -->
 
 <div class="grid" id="grupoSecundario">
-<div class="card" data-nombre="cliente"><span>👥</span><h3>Cliente</h3></div>
-<div class="card" data-nombre="proveedor"><span>📦</span><h3>Proveedor</h3></div>
-<div class="card" data-nombre="rutas"><span>📍</span><h3>Rutas</h3></div>
-<div class="card" data-nombre="mantenimiento"><span>🛠️</span><h3>Mantenimiento</h3></div>
+
+<div class="card" data-nombre="cliente">
+<span>👥</span>
+<h3>Cliente</h3>
 </div>
 
-<div class="actions">
-<div class="action save">📷 OCR</div>
-<div class="action edit">🔳 QR</div>
-<div class="action excel">📦 Código</div>
-<div class="action clear">📍 GPS</div>
+<div class="card" data-nombre="proveedor">
+<span>📦</span>
+<h3>Proveedor</h3>
 </div>
+
+<div class="card" data-nombre="rutas">
+<span>📍</span>
+<h3>Rutas</h3>
+</div>
+
+<div class="card" data-nombre="mantenimiento">
+<span>🛠️</span>
+<h3>Mantenimiento</h3>
+</div>
+
+</div>
+
+<!-- HERRAMIENTAS -->
+
+<div class="actions">
+
+<div class="tool-btn">📷 OCR</div>
+<div class="tool-btn">🔳 QR</div>
+<div class="tool-btn">📦 Código</div>
+<div class="tool-btn">📍 GPS</div>
+
+</div>
+
+<!-- VENTANA CENTRAL -->
 
 <div class="section">
 
@@ -318,20 +425,31 @@ border:1px solid #28415f;
 </select>
 
 <div id="modoActual"></div>
+
 <div id="modulosActivos"></div>
 
 </div>
 
+<!-- BOTONES -->
+
 <div class="actions">
+
 <div class="action save">💾 Guardar</div>
+
 <div class="action edit">✏️ Editar</div>
+
 <div class="action clear">🗑️ Limpiar</div>
+
 <div class="action excel">📤 Exportar</div>
+
 </div>
 
 <script>
 
-const tarjetas = document.querySelectorAll('#grupoOperacion .card, #grupoSecundario .card');
+const tarjetas =
+document.querySelectorAll(
+'#grupoOperacion .card, #grupoSecundario .card'
+);
 
 tarjetas.forEach(card=>{
 
