@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MRFC - Micro Real Fiscal Core</title>
+<title>MRFC</title>
 
 <style>
 
@@ -29,12 +29,6 @@ align-items:center;
 gap:10px;
 margin-bottom:10px;
 flex-wrap:wrap;
-}
-
-.top-actions{
-display:flex;
-gap:6px;
-align-items:center;
 }
 
 .logo-box{
@@ -66,6 +60,12 @@ font-size:20px;
 .logo-text p{
 font-size:10px;
 opacity:.7;
+}
+
+.top-actions{
+display:flex;
+gap:6px;
+align-items:center;
 }
 
 .datetime-box{
@@ -115,6 +115,8 @@ color:white;
 outline:none;
 }
 
+/* SEMAFORO */
+
 .semaforo{
 display:flex;
 align-items:center;
@@ -136,9 +138,17 @@ opacity:.25;
 opacity:1;
 }
 
-.rojo{background:#ef4444;}
-.amarillo{background:#facc15;}
-.verde{background:#22c55e;}
+.rojo{
+background:#ef4444;
+}
+
+.amarillo{
+background:#facc15;
+}
+
+.verde{
+background:#22c55e;
+}
 
 /* GRID */
 
@@ -146,7 +156,7 @@ opacity:1;
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:8px;
-margin-bottom:8px;
+margin-bottom:10px;
 }
 
 /* TARJETAS */
@@ -166,38 +176,40 @@ border:1px solid transparent;
 }
 
 .card span{
-font-size:18px;
+font-size:20px;
 transition:.2s;
 }
 
 .card h3{
 font-size:10px;
 font-weight:normal;
-transition:.2s;
 margin-top:4px;
+transition:.2s;
 white-space:nowrap;
 }
 
+/* ACTIVA */
+
 .card.active{
 border:1px solid #10b981;
-box-shadow:0 0 14px rgba(16,185,129,.18);
+box-shadow:0 0 14px rgba(16,185,129,.2);
 transform:scale(1);
 opacity:1;
 }
 
+/* CONTRAIDAS */
+
 .card.inactive{
-transform:scale(.72);
+transform:scale(.55);
 opacity:.45;
 }
 
 .card.inactive h3{
-opacity:0;
-font-size:0;
-margin:0;
+display:none;
 }
 
 .card.inactive span{
-font-size:16px;
+font-size:18px;
 }
 
 /* HERRAMIENTAS */
@@ -206,7 +218,7 @@ font-size:16px;
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:8px;
-margin-bottom:8px;
+margin-bottom:10px;
 }
 
 .tool-btn,
@@ -229,7 +241,7 @@ background:#132238;
 padding:16px;
 border-radius:16px;
 margin-bottom:10px;
-min-height:45vh;
+min-height:40vh;
 border:1px solid #1d3557;
 }
 
@@ -317,11 +329,15 @@ grid-template-columns:repeat(2,1fr);
 
 <body>
 
+<!-- TOPBAR -->
+
 <div class="topbar">
 
 <div class="logo-box">
 
-<div class="logo-icon">MR</div>
+<div class="logo-icon">
+MR
+</div>
 
 <div class="logo-text">
 <h1>MRFC</h1>
@@ -340,20 +356,20 @@ grid-template-columns:repeat(2,1fr);
 <div class="mini-btn">🏠</div>
 <div class="mini-btn">⬅️</div>
 <div class="mini-btn">➡️</div>
-<div class="mini-btn" onclick="abrirCalculadora()">🧮</div>
+<div class="mini-btn">🧮</div>
 
 </div>
 
 </div>
+
+<!-- BUSCADOR -->
 
 <div class="search-row">
 
 <div class="search-box">
 <input
 type="text"
-id="buscador"
 placeholder="🔍 Buscar módulo..."
-onkeyup="buscarModulo()"
 >
 </div>
 
@@ -434,22 +450,17 @@ onkeyup="buscarModulo()"
 
 <h2>⚙️ Operación del Día</h2>
 
-<select id="actividadFiscal">
-
-<option value="">Selecciona actividad fiscal</option>
-
-<option value="GENERAL">GENERAL / UNIVERSAL</option>
-<option value="PFAE">PFAE</option>
-<option value="RESICO">RESICO</option>
-<option value="RIF">RIF</option>
-<option value="SUSA">SUSA</option>
-
+<select>
+<option>Selecciona actividad fiscal</option>
+<option>GENERAL</option>
+<option>PFAE</option>
+<option>RESICO</option>
+<option>RIF</option>
+<option>SUSA</option>
 </select>
 
-<select id="operacion">
-
-<option value="">Selecciona operación</option>
-
+<select>
+<option>Selecciona operación</option>
 </select>
 
 </div>
@@ -458,10 +469,21 @@ onkeyup="buscarModulo()"
 
 <div class="actions">
 
-<div class="action save">💾 Guardar</div>
-<div class="action edit">✏️ Editar</div>
-<div class="action clear">🗑️ Limpiar</div>
-<div class="action excel">📤 Exportar</div>
+<div class="action save">
+💾 Guardar
+</div>
+
+<div class="action edit">
+✏️ Editar
+</div>
+
+<div class="action clear">
+🗑️ Limpiar
+</div>
+
+<div class="action excel">
+📤 Exportar
+</div>
 
 </div>
 
@@ -493,8 +515,6 @@ onkeyup="buscarModulo()"
 
 <script>
 
-/* TARJETAS */
-
 const tarjetas = document.querySelectorAll('.card');
 
 tarjetas.forEach(card=>{
@@ -515,71 +535,6 @@ card.classList.add('active');
 
 });
 
-/* OPERACIONES */
-
-const operaciones = {
-
-GENERAL:[
-'Personal',
-'Universal'
-],
-
-PFAE:[
-'Distribución',
-'Instalación',
-'Servicio',
-'Venta'
-],
-
-RESICO:[
-'Distribución',
-'Servicio',
-'Venta'
-],
-
-RIF:[
-'General',
-'Venta'
-],
-
-SUSA:[
-'Alimentos',
-'Hotel',
-'Transporte',
-'Viáticos'
-]
-
-};
-
-document
-.getElementById('actividadFiscal')
-.addEventListener('change',function(){
-
-const valor = this.value;
-
-const selectOperacion =
-document.getElementById('operacion');
-
-selectOperacion.innerHTML =
-'<option value="">Selecciona operación</option>';
-
-if(operaciones[valor]){
-
-operaciones[valor]
-.sort()
-.forEach(op=>{
-
-selectOperacion.innerHTML +=
-`<option>${op}</option>`;
-
-});
-
-}
-
-});
-
-/* FECHA */
-
 function actualizarFechaHora(){
 
 const ahora = new Date();
@@ -595,54 +550,7 @@ minute:'2-digit'
 
 }
 
-/* CALCULADORA */
-
-function abrirCalculadora(){
-
-const valor = prompt('Calculadora rápida');
-
-if(!valor) return;
-
-try{
-
-alert(eval(valor));
-
-}catch(error){
-
-alert('Error');
-
-}
-
-}
-
-/* BUSCADOR */
-
-function buscarModulo(){
-
-const texto =
-document
-.getElementById('buscador')
-.value
-.toLowerCase();
-
-document.querySelectorAll('.card')
-.forEach(card=>{
-
-const nombre =
-card.innerText.toLowerCase();
-
-card.style.display =
-nombre.includes(texto)
-? 'flex'
-: 'none';
-
-});
-
-}
-
-/* INICIO */
-
-window.onload = ()=>{
+window.onload=()=>{
 
 actualizarFechaHora();
 
