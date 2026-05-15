@@ -7,6 +7,24 @@
 
 <style>
 
+:root{
+--bg:#07111f;
+--panel:#132238;
+--border:#28415f;
+--text:#ffffff;
+--soft:#9fb3c8;
+--green:#10b981;
+}
+
+body.light-mode{
+--bg:#eef3f9;
+--panel:#ffffff;
+--border:#d5dfeb;
+--text:#07111f;
+--soft:#5c6b7a;
+--green:#10b981;
+}
+
 *{
 margin:0;
 padding:0;
@@ -14,10 +32,11 @@ box-sizing:border-box;
 }
 
 body{
-background:#07111f;
-color:white;
+background:var(--bg);
+color:var(--text);
 font-family:Arial,sans-serif;
 padding:12px;
+transition:.25s;
 }
 
 /* TOPBAR */
@@ -35,10 +54,11 @@ flex-wrap:wrap;
 display:flex;
 align-items:center;
 gap:10px;
-background:#132238;
+background:var(--panel);
 padding:10px;
 border-radius:16px;
-border:1px solid #1d3557;
+border:1px solid var(--border);
+transition:.25s;
 }
 
 .logo-icon{
@@ -51,6 +71,7 @@ align-items:center;
 justify-content:center;
 font-size:22px;
 font-weight:bold;
+color:white;
 }
 
 .logo-text h1{
@@ -66,6 +87,7 @@ opacity:.7;
 display:flex;
 gap:6px;
 align-items:center;
+flex-wrap:wrap;
 }
 
 .datetime-box{
@@ -73,23 +95,32 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 font-size:10px;
-background:#132238;
+background:var(--panel);
 padding:6px 10px;
 border-radius:10px;
-border:1px solid #28415f;
+border:1px solid var(--border);
+min-width:95px;
+transition:.25s;
 }
 
 .mini-btn{
 width:34px;
 height:34px;
 border-radius:10px;
-background:#132238;
+background:var(--panel);
 display:flex;
 align-items:center;
 justify-content:center;
-border:1px solid #28415f;
+border:1px solid var(--border);
 font-size:12px;
 cursor:pointer;
+flex-shrink:0;
+transition:.2s;
+}
+
+.mini-btn:hover{
+border-color:var(--green);
+box-shadow:0 0 10px rgba(16,185,129,.2);
 }
 
 /* BUSCADOR */
@@ -110,9 +141,11 @@ width:100%;
 padding:10px;
 border:none;
 border-radius:10px;
-background:#132238;
-color:white;
+background:var(--panel);
+color:var(--text);
 outline:none;
+border:1px solid var(--border);
+transition:.25s;
 }
 
 /* SEMAFORO */
@@ -121,10 +154,11 @@ outline:none;
 display:flex;
 align-items:center;
 gap:6px;
-background:#132238;
+background:var(--panel);
 padding:8px 10px;
 border-radius:12px;
-border:1px solid #28415f;
+border:1px solid var(--border);
+transition:.25s;
 }
 
 .luz{
@@ -162,7 +196,7 @@ overflow:hidden;
 /* TARJETAS */
 
 .card{
-background:#132238;
+background:var(--panel);
 border-radius:12px;
 display:flex;
 flex-direction:column;
@@ -177,14 +211,10 @@ min-width:60px;
 flex:1;
 }
 
-/* ICONO */
-
 .card span{
 font-size:20px;
 transition:.2s;
 }
-
-/* TEXTO */
 
 .card h3{
 font-size:10px;
@@ -197,7 +227,7 @@ white-space:nowrap;
 /* ACTIVA */
 
 .card.active{
-border:1px solid #10b981;
+border:1px solid var(--green);
 box-shadow:0 0 14px rgba(16,185,129,.2);
 opacity:1;
 flex:2.4;
@@ -235,20 +265,28 @@ align-items:center;
 justify-content:center;
 border-radius:10px;
 font-size:12px;
-background:#132238;
-border:1px solid #28415f;
+background:var(--panel);
+border:1px solid var(--border);
 cursor:pointer;
+transition:.25s;
+}
+
+.tool-btn:hover,
+.action:hover{
+border-color:var(--green);
+box-shadow:0 0 10px rgba(16,185,129,.15);
 }
 
 /* PANEL */
 
 .section{
-background:#132238;
+background:var(--panel);
 padding:16px;
 border-radius:16px;
 margin-bottom:10px;
 min-height:40vh;
-border:1px solid #1d3557;
+border:1px solid var(--border);
+transition:.25s;
 }
 
 .section h2{
@@ -262,9 +300,10 @@ padding:12px;
 margin-bottom:10px;
 border:none;
 border-radius:10px;
-background:#1b2f4a;
-color:white;
+background:var(--bg);
+color:var(--text);
 outline:none;
+border:1px solid var(--border);
 }
 
 /* BOTONES */
@@ -298,11 +337,12 @@ gap:8px;
 }
 
 .result-card{
-background:#132238;
-border:1px solid #28415f;
+background:var(--panel);
+border:1px solid var(--border);
 border-radius:12px;
 padding:10px;
 text-align:center;
+transition:.25s;
 }
 
 .result-card h4{
@@ -361,7 +401,18 @@ MR
 <div class="mini-btn">🏠</div>
 <div class="mini-btn">⬅️</div>
 <div class="mini-btn">➡️</div>
-<div class="mini-btn">🧮</div>
+
+<div class="mini-btn" id="captureBtn">
+📸
+</div>
+
+<div class="mini-btn">
+🧮
+</div>
+
+<div class="mini-btn" id="themeToggle">
+🌙
+</div>
 
 </div>
 
@@ -540,6 +591,8 @@ card.classList.add('active');
 
 });
 
+/* FECHA Y HORA */
+
 function actualizarFechaHora(){
 
 const ahora = new Date();
@@ -555,13 +608,47 @@ minute:'2-digit'
 
 }
 
+/* THEME */
+
+const themeToggle = document.getElementById('themeToggle');
+
+themeToggle.addEventListener('click',()=>{
+
+document.body.classList.toggle('light-mode');
+
+const claro = document.body.classList.contains('light-mode');
+
+themeToggle.innerText = claro ? '☀️' : '🌙';
+
+localStorage.setItem('mrfc-theme',claro ? 'light' : 'dark');
+
+});
+
 window.onload=()=>{
 
 actualizarFechaHora();
 
 setInterval(actualizarFechaHora,1000);
 
+const temaGuardado = localStorage.getItem('mrfc-theme');
+
+if(temaGuardado==='light'){
+
+document.body.classList.add('light-mode');
+
+themeToggle.innerText='☀️';
+
+}
+
 };
+
+/* CAPTURA */
+
+document.getElementById('captureBtn').addEventListener('click',()=>{
+
+alert('📸 Captura preparada para futura integración.');
+
+});
 
 </script>
 
