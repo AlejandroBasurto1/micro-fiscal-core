@@ -71,16 +71,53 @@ margin-bottom:10px;
 flex-wrap:wrap;
 }
 
+/* LOGO */
+
 .logo-box{
+
+position:relative;
+
 display:flex;
 align-items:center;
 gap:10px;
-background:var(--panel);
+
+background:
+linear-gradient(
+180deg,
+rgba(20,35,55,.96),
+rgba(10,18,30,.98)
+);
+
 padding:10px;
+
 border-radius:16px;
-border:1px solid var(--border);
+
+border:1px solid rgba(56,189,248,.12);
+
 transition:.25s;
-box-shadow:0 3px 10px var(--shadow);
+
+overflow:hidden;
+
+box-shadow:
+0 0 18px rgba(56,189,248,.05),
+0 3px 10px var(--shadow);
+}
+
+.logo-box::before{
+content:'';
+position:absolute;
+top:0;
+left:15%;
+width:70%;
+height:1px;
+
+background:
+linear-gradient(
+90deg,
+transparent,
+rgba(56,189,248,.8),
+transparent
+);
 }
 
 .logo-icon{
@@ -112,7 +149,7 @@ align-items:center;
 flex-wrap:wrap;
 }
 
-/* NUEVO RELOJ */
+/* RELOJ HUD */
 
 .datetime-box{
 min-width:120px;
@@ -123,16 +160,20 @@ flex-direction:column;
 align-items:center;
 justify-content:center;
 gap:2px;
+
 background:
 linear-gradient(
 180deg,
 rgba(20,35,55,.95),
 rgba(8,15,28,.95)
 );
-border:1px solid #28415f;
+
+border:1px solid rgba(56,189,248,.12);
+
 box-shadow:
 0 0 12px rgba(59,130,246,.15),
 0 3px 8px var(--shadow);
+
 transition:.25s;
 }
 
@@ -142,8 +183,10 @@ font-weight:700;
 letter-spacing:2px;
 color:#7dd3fc;
 font-family:Arial,sans-serif;
+
 text-shadow:
 0 0 8px rgba(125,211,252,.45);
+
 line-height:1;
 }
 
@@ -153,27 +196,48 @@ letter-spacing:1px;
 color:#9fb3c8;
 }
 
-/* BOTONES MINI */
+/* MINI BUTTONS */
 
 .mini-btn{
+
+background:
+linear-gradient(
+180deg,
+rgba(20,35,55,.96),
+rgba(10,18,30,.98)
+);
+
 width:34px;
 height:34px;
+
 border-radius:10px;
-background:var(--panel);
+
 display:flex;
 align-items:center;
 justify-content:center;
-border:1px solid var(--border);
+
+border:1px solid rgba(56,189,248,.12);
+
 font-size:12px;
 cursor:pointer;
+
 flex-shrink:0;
+
 transition:.2s;
-box-shadow:0 2px 6px var(--shadow);
+
+box-shadow:
+0 0 10px rgba(56,189,248,.04),
+0 2px 6px var(--shadow);
 }
 
 .mini-btn:hover{
-border-color:var(--green);
-box-shadow:0 0 10px rgba(16,185,129,.2);
+
+border-color:rgba(56,189,248,.45);
+
+box-shadow:
+0 0 12px rgba(56,189,248,.12),
+0 0 24px rgba(56,189,248,.05);
+
 transform:translateY(-1px);
 }
 
@@ -191,16 +255,40 @@ flex:1;
 }
 
 .search-box input{
+
 width:100%;
 padding:10px;
+
 border:none;
-border-radius:10px;
-background:var(--panel);
+border-radius:12px;
+
+background:
+linear-gradient(
+180deg,
+rgba(20,35,55,.96),
+rgba(10,18,30,.98)
+);
+
 color:var(--text);
+
 outline:none;
-border:1px solid var(--border);
+
+border:1px solid rgba(56,189,248,.12);
+
 transition:.25s;
-box-shadow:0 3px 8px var(--shadow);
+
+box-shadow:
+0 0 10px rgba(56,189,248,.04),
+0 3px 8px var(--shadow);
+}
+
+.search-box input:focus{
+
+border-color:rgba(56,189,248,.5);
+
+box-shadow:
+0 0 12px rgba(56,189,248,.12),
+0 3px 8px var(--shadow);
 }
 
 .search-box input::placeholder{
@@ -213,12 +301,25 @@ color:var(--soft);
 display:flex;
 align-items:center;
 gap:6px;
-background:var(--panel);
+
+background:
+linear-gradient(
+180deg,
+rgba(20,35,55,.96),
+rgba(10,18,30,.98)
+);
+
 padding:8px 10px;
+
 border-radius:12px;
-border:1px solid var(--border);
+
+border:1px solid rgba(56,189,248,.12);
+
 transition:.25s;
-box-shadow:0 3px 8px var(--shadow);
+
+box-shadow:
+0 0 10px rgba(56,189,248,.04),
+0 3px 8px var(--shadow);
 }
 
 .luz{
@@ -253,23 +354,67 @@ margin-bottom:10px;
 overflow:hidden;
 }
 
-/* TARJETAS */
+/* TARJETAS HUD */
 
 .card{
-background:var(--panel);
-border-radius:14px;
+
+position:relative;
+
+background:
+linear-gradient(
+180deg,
+rgba(20,35,55,.96),
+rgba(10,18,30,.96)
+);
+
+border-radius:16px;
+
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
+
 cursor:pointer;
-transition:.25s;
+transition:.28s;
 overflow:hidden;
-border:1px solid transparent;
+
+border:1px solid rgba(56,189,248,.12);
+
 height:60px;
 min-width:60px;
 flex:1;
-box-shadow:0 3px 10px var(--shadow);
+
+box-shadow:
+0 0 12px rgba(56,189,248,.05),
+0 3px 10px var(--shadow);
+}
+
+.card::before{
+content:'';
+position:absolute;
+top:0;
+left:10%;
+width:80%;
+height:1px;
+
+background:
+linear-gradient(
+90deg,
+transparent,
+rgba(56,189,248,.8),
+transparent
+);
+}
+
+.card:hover{
+transform:translateY(-2px);
+
+border-color:rgba(56,189,248,.45);
+
+box-shadow:
+0 0 14px rgba(56,189,248,.12),
+0 0 28px rgba(56,189,248,.06),
+0 3px 10px var(--shadow);
 }
 
 .card span{
@@ -285,18 +430,27 @@ transition:.2s;
 white-space:nowrap;
 }
 
-/* ACTIVA */
+/* CARD ACTIVA */
 
 .card.active{
-border:1px solid var(--green);
+
+border:1px solid rgba(16,185,129,.65);
+
+background:
+linear-gradient(
+180deg,
+rgba(16,185,129,.12),
+rgba(20,35,55,.96)
+);
+
 box-shadow:
-0 0 14px rgba(16,185,129,.18),
+0 0 14px rgba(16,185,129,.22),
+0 0 28px rgba(16,185,129,.08),
 0 3px 10px var(--shadow);
+
 opacity:1;
 flex:2.4;
 }
-
-/* CONTRAIDAS */
 
 .card.inactive{
 opacity:.45;
@@ -322,37 +476,117 @@ margin-bottom:10px;
 
 .tool-btn,
 .action{
+
+position:relative;
+
 height:40px;
+
 display:flex;
 align-items:center;
 justify-content:center;
+
 border-radius:12px;
+
 font-size:12px;
-background:var(--panel);
-border:1px solid var(--border);
+
+background:
+linear-gradient(
+180deg,
+rgba(20,35,55,.96),
+rgba(10,18,30,.96)
+);
+
+border:1px solid rgba(56,189,248,.12);
+
 cursor:pointer;
+
 transition:.25s;
-box-shadow:0 3px 8px var(--shadow);
+
+overflow:hidden;
+
+box-shadow:
+0 0 10px rgba(56,189,248,.04),
+0 3px 8px var(--shadow);
+}
+
+.tool-btn::before,
+.action::before{
+content:'';
+
+position:absolute;
+top:0;
+left:15%;
+
+width:70%;
+height:1px;
+
+background:
+linear-gradient(
+90deg,
+transparent,
+rgba(56,189,248,.8),
+transparent
+);
 }
 
 .tool-btn:hover,
 .action:hover{
-border-color:var(--green);
-box-shadow:0 0 10px rgba(16,185,129,.15);
+
 transform:translateY(-1px);
+
+border-color:rgba(56,189,248,.45);
+
+box-shadow:
+0 0 12px rgba(56,189,248,.12),
+0 0 24px rgba(56,189,248,.05);
 }
 
 /* PANEL */
 
 .section{
-background:var(--panel);
+
+position:relative;
+
+background:
+linear-gradient(
+180deg,
+rgba(20,35,55,.96),
+rgba(10,18,30,.98)
+);
+
 padding:16px;
 border-radius:18px;
 margin-bottom:10px;
 min-height:40vh;
-border:1px solid var(--border);
+
+border:1px solid rgba(56,189,248,.12);
+
 transition:.25s;
-box-shadow:0 4px 12px var(--shadow);
+
+box-shadow:
+0 0 18px rgba(56,189,248,.05),
+0 4px 12px var(--shadow);
+
+overflow:hidden;
+}
+
+.section::before{
+content:'';
+
+position:absolute;
+top:0;
+left:15%;
+
+width:70%;
+height:1px;
+
+background:
+linear-gradient(
+90deg,
+transparent,
+rgba(56,189,248,.8),
+transparent
+);
 }
 
 .section h2{
@@ -366,14 +600,24 @@ padding:12px;
 margin-bottom:10px;
 border:none;
 border-radius:12px;
-background:var(--panel2);
+
+background:
+linear-gradient(
+180deg,
+rgba(26,45,70,.96),
+rgba(16,28,45,.98)
+);
+
 color:var(--text);
+
 outline:none;
-border:1px solid var(--border);
+
+border:1px solid rgba(56,189,248,.12);
+
 transition:.25s;
 }
 
-/* BOTONES */
+/* BOTONES COLOR */
 
 .save{
 color:#10b981;
@@ -404,13 +648,60 @@ gap:8px;
 }
 
 .result-card{
-background:var(--panel);
-border:1px solid var(--border);
-border-radius:14px;
+
+position:relative;
+
+background:
+linear-gradient(
+180deg,
+rgba(20,35,55,.96),
+rgba(10,18,30,.98)
+);
+
+border:1px solid rgba(56,189,248,.12);
+
+border-radius:16px;
+
 padding:10px;
 text-align:center;
+
 transition:.25s;
-box-shadow:0 3px 8px var(--shadow);
+
+overflow:hidden;
+
+box-shadow:
+0 0 10px rgba(56,189,248,.04),
+0 3px 8px var(--shadow);
+}
+
+.result-card::before{
+content:'';
+
+position:absolute;
+top:0;
+left:15%;
+
+width:70%;
+height:1px;
+
+background:
+linear-gradient(
+90deg,
+transparent,
+rgba(56,189,248,.8),
+transparent
+);
+}
+
+.result-card:hover{
+
+transform:translateY(-2px);
+
+border-color:rgba(56,189,248,.45);
+
+box-shadow:
+0 0 14px rgba(56,189,248,.12),
+0 0 28px rgba(56,189,248,.05);
 }
 
 .result-card h4{
@@ -439,301 +730,3 @@ grid-template-columns:repeat(2,1fr);
 
 </style>
 </head>
-
-<body>
-
-<!-- TOPBAR -->
-
-<div class="topbar">
-
-<div class="logo-box">
-
-<div class="logo-icon">
-MR
-</div>
-
-<div class="logo-text">
-<h1>MRFC</h1>
-<p>MICRO REAL FISCAL CORE</p>
-</div>
-
-</div>
-
-<div class="top-actions">
-
-<!-- RELOJ NUEVO -->
-
-<div class="datetime-box">
-
-<div id="horaActual" class="hud-clock">
-01:19
-</div>
-
-<div id="fechaActual" class="hud-date">
-28-01-2026
-</div>
-
-</div>
-
-<div class="mini-btn">🏠</div>
-<div class="mini-btn">⬅️</div>
-<div class="mini-btn">➡️</div>
-
-<div class="mini-btn" id="captureBtn">
-📸
-</div>
-
-<div class="mini-btn">
-🧮
-</div>
-
-<div class="mini-btn" id="themeToggle">
-🌙
-</div>
-
-</div>
-
-</div>
-
-<!-- BUSCADOR -->
-
-<div class="search-row">
-
-<div class="search-box">
-<input
-type="text"
-placeholder="🔍 Buscar módulo..."
->
-</div>
-
-<div class="semaforo">
-<div class="luz rojo active"></div>
-<div class="luz amarillo"></div>
-<div class="luz verde"></div>
-</div>
-
-</div>
-
-<!-- OPERACION -->
-
-<div class="grid">
-
-<div class="card active">
-<span>💼</span>
-<h3>Actividad</h3>
-</div>
-
-<div class="card inactive">
-<span>🏦</span>
-<h3>Bancos</h3>
-</div>
-
-<div class="card inactive">
-<span>💸</span>
-<h3>Gastos</h3>
-</div>
-
-<div class="card inactive">
-<span>🚚</span>
-<h3>Viáticos</h3>
-</div>
-
-</div>
-
-<!-- APOYO -->
-
-<div class="grid">
-
-<div class="card inactive">
-<span>📦</span>
-<h3>Proveedor</h3>
-</div>
-
-<div class="card inactive">
-<span>👥</span>
-<h3>Cliente</h3>
-</div>
-
-<div class="card inactive">
-<span>📍</span>
-<h3>Rutas</h3>
-</div>
-
-<div class="card inactive">
-<span>🛠️</span>
-<h3>Mantenimiento</h3>
-</div>
-
-</div>
-
-<!-- HERRAMIENTAS -->
-
-<div class="actions">
-
-<div class="tool-btn">📷 OCR</div>
-<div class="tool-btn">🔳 QR</div>
-<div class="tool-btn">📦 Código</div>
-<div class="tool-btn">📍 GPS</div>
-
-</div>
-
-<!-- PANEL -->
-
-<div class="section">
-
-<h2>⚙️ Operación del Día</h2>
-
-<select>
-<option>Selecciona actividad fiscal</option>
-<option>GENERAL</option>
-<option>PFAE</option>
-<option>RESICO</option>
-<option>RIF</option>
-<option>SUSA</option>
-</select>
-
-<select>
-<option>Selecciona operación</option>
-</select>
-
-</div>
-
-<!-- BOTONES -->
-
-<div class="actions">
-
-<div class="action save">
-💾 Guardar
-</div>
-
-<div class="action edit">
-✏️ Editar
-</div>
-
-<div class="action clear">
-🗑️ Limpiar
-</div>
-
-<div class="action excel">
-📤 Exportar
-</div>
-
-</div>
-
-<!-- RESULTADOS -->
-
-<div class="results-panel">
-
-<div class="result-card">
-<h4>RESULTADO</h4>
-<span>$0.00</span>
-</div>
-
-<div class="result-card">
-<h4>IVA</h4>
-<span>$0.00</span>
-</div>
-
-<div class="result-card">
-<h4>ISR</h4>
-<span>$0.00</span>
-</div>
-
-<div class="result-card">
-<h4>GANANCIA REAL</h4>
-<span>$0.00</span>
-</div>
-
-</div>
-
-<script>
-
-const tarjetas = document.querySelectorAll('.card');
-
-tarjetas.forEach(card=>{
-
-card.addEventListener('click',()=>{
-
-tarjetas.forEach(c=>{
-
-c.classList.remove('active');
-c.classList.add('inactive');
-
-});
-
-card.classList.remove('inactive');
-card.classList.add('active');
-
-});
-
-});
-
-/* FECHA Y HORA */
-
-function actualizarFechaHora(){
-
-const ahora = new Date();
-
-const hora = ahora.toLocaleTimeString('es-MX',{
-hour:'2-digit',
-minute:'2-digit',
-hour12:false
-});
-
-const dia = String(ahora.getDate()).padStart(2,'0');
-const mes = String(ahora.getMonth()+1).padStart(2,'0');
-const anio = ahora.getFullYear();
-
-document.getElementById('horaActual').innerText = hora;
-
-document.getElementById('fechaActual').innerText =
-`${dia}-${mes}-${anio}`;
-
-}
-
-/* THEME */
-
-const themeToggle = document.getElementById('themeToggle');
-
-themeToggle.addEventListener('click',()=>{
-
-document.body.classList.toggle('light-mode');
-
-const claro = document.body.classList.contains('light-mode');
-
-themeToggle.innerText = claro ? '☀️' : '🌙';
-
-localStorage.setItem('mrfc-theme',claro ? 'light' : 'dark');
-
-});
-
-window.onload=()=>{
-
-actualizarFechaHora();
-
-setInterval(actualizarFechaHora,1000);
-
-const temaGuardado = localStorage.getItem('mrfc-theme');
-
-if(temaGuardado==='light'){
-
-document.body.classList.add('light-mode');
-
-themeToggle.innerText='☀️';
-
-}
-
-};
-
-/* CAPTURA */
-
-document.getElementById('captureBtn').addEventListener('click',()=>{
-
-alert('📸 Captura preparada para futura integración.');
-
-});
-
-</script>
-
-</body>
-</html>
