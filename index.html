@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>MRFC - Micro Real Fiscal Core</title>
 
 <style>
@@ -38,8 +37,6 @@ gap:6px;
 align-items:center;
 }
 
-/* LOGO */
-
 .logo-box{
 display:flex;
 align-items:center;
@@ -71,8 +68,6 @@ font-size:10px;
 opacity:.7;
 }
 
-/* FECHA */
-
 .datetime-box{
 display:flex;
 flex-direction:column;
@@ -83,8 +78,6 @@ padding:6px 10px;
 border-radius:10px;
 border:1px solid #28415f;
 }
-
-/* BOTONES MINI */
 
 .mini-btn{
 width:34px;
@@ -97,11 +90,6 @@ justify-content:center;
 border:1px solid #28415f;
 font-size:12px;
 cursor:pointer;
-transition:.2s;
-}
-
-.mini-btn:hover{
-background:#1d3557;
 }
 
 /* BUSCADOR */
@@ -127,8 +115,6 @@ color:white;
 outline:none;
 }
 
-/* SEMAFORO */
-
 .semaforo{
 display:flex;
 align-items:center;
@@ -150,17 +136,9 @@ opacity:.25;
 opacity:1;
 }
 
-.rojo{
-background:#ef4444;
-}
-
-.amarillo{
-background:#facc15;
-}
-
-.verde{
-background:#22c55e;
-}
+.rojo{background:#ef4444;}
+.amarillo{background:#facc15;}
+.verde{background:#22c55e;}
 
 /* GRID */
 
@@ -174,25 +152,21 @@ margin-bottom:8px;
 /* TARJETAS */
 
 .card{
-width:100%;
 background:#132238;
 border-radius:12px;
-padding:8px;
 height:60px;
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
-font-size:10px;
 cursor:pointer;
 transition:.25s;
-border:1px solid transparent;
 overflow:hidden;
+border:1px solid transparent;
 }
 
 .card span{
 font-size:18px;
-margin-bottom:3px;
 transition:.2s;
 }
 
@@ -200,6 +174,7 @@ transition:.2s;
 font-size:10px;
 font-weight:normal;
 transition:.2s;
+margin-top:4px;
 white-space:nowrap;
 }
 
@@ -211,21 +186,18 @@ opacity:1;
 }
 
 .card.inactive{
-opacity:.55;
-transform:scale(.82);
-max-width:70px;
-margin:auto;
+transform:scale(.72);
+opacity:.45;
 }
 
 .card.inactive h3{
-font-size:0;
 opacity:0;
+font-size:0;
 margin:0;
 }
 
 .card.inactive span{
 font-size:16px;
-margin:0;
 }
 
 /* HERRAMIENTAS */
@@ -248,12 +220,6 @@ font-size:12px;
 background:#132238;
 border:1px solid #28415f;
 cursor:pointer;
-transition:.2s;
-}
-
-.tool-btn:hover,
-.action:hover{
-background:#1d3557;
 }
 
 /* PANEL */
@@ -271,8 +237,6 @@ border:1px solid #1d3557;
 margin-bottom:14px;
 font-size:18px;
 }
-
-/* SELECT */
 
 select{
 width:100%;
@@ -313,7 +277,6 @@ border-color:#2563eb;
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:8px;
-margin-top:10px;
 }
 
 .result-card{
@@ -322,10 +285,6 @@ border:1px solid #28415f;
 border-radius:12px;
 padding:10px;
 text-align:center;
-min-height:60px;
-display:flex;
-flex-direction:column;
-justify-content:center;
 }
 
 .result-card h4{
@@ -345,14 +304,8 @@ color:#22c55e;
 
 @media(max-width:900px){
 
-.grid{
-grid-template-columns:repeat(2,1fr);
-}
-
-.actions{
-grid-template-columns:repeat(2,1fr);
-}
-
+.grid,
+.actions,
 .results-panel{
 grid-template-columns:repeat(2,1fr);
 }
@@ -364,15 +317,11 @@ grid-template-columns:repeat(2,1fr);
 
 <body>
 
-<!-- TOPBAR -->
-
 <div class="topbar">
 
 <div class="logo-box">
 
-<div class="logo-icon">
-MR
-</div>
+<div class="logo-icon">MR</div>
 
 <div class="logo-text">
 <h1>MRFC</h1>
@@ -391,16 +340,11 @@ MR
 <div class="mini-btn">🏠</div>
 <div class="mini-btn">⬅️</div>
 <div class="mini-btn">➡️</div>
-
-<div class="mini-btn" onclick="abrirCalculadora()">
-🧮
-</div>
+<div class="mini-btn" onclick="abrirCalculadora()">🧮</div>
 
 </div>
 
 </div>
-
-<!-- BUSCADOR -->
 
 <div class="search-row">
 
@@ -484,7 +428,7 @@ onkeyup="buscarModulo()"
 
 </div>
 
-<!-- PANEL CENTRAL -->
+<!-- PANEL -->
 
 <div class="section">
 
@@ -492,37 +436,19 @@ onkeyup="buscarModulo()"
 
 <select id="actividadFiscal">
 
-<option value="">
-Selecciona actividad fiscal
-</option>
+<option value="">Selecciona actividad fiscal</option>
 
-<option value="GENERAL">
-GENERAL / UNIVERSAL
-</option>
-
-<option value="PFAE">
-PFAE
-</option>
-
-<option value="RESICO">
-RESICO
-</option>
-
-<option value="RIF">
-RIF
-</option>
-
-<option value="SUSA">
-SUSA
-</option>
+<option value="GENERAL">GENERAL / UNIVERSAL</option>
+<option value="PFAE">PFAE</option>
+<option value="RESICO">RESICO</option>
+<option value="RIF">RIF</option>
+<option value="SUSA">SUSA</option>
 
 </select>
 
 <select id="operacion">
 
-<option value="">
-Selecciona operación
-</option>
+<option value="">Selecciona operación</option>
 
 </select>
 
@@ -532,21 +458,10 @@ Selecciona operación
 
 <div class="actions">
 
-<div class="action save">
-💾 Guardar
-</div>
-
-<div class="action edit">
-✏️ Editar
-</div>
-
-<div class="action clear">
-🗑️ Limpiar
-</div>
-
-<div class="action excel">
-📤 Exportar
-</div>
+<div class="action save">💾 Guardar</div>
+<div class="action edit">✏️ Editar</div>
+<div class="action clear">🗑️ Limpiar</div>
+<div class="action excel">📤 Exportar</div>
 
 </div>
 
@@ -688,24 +603,13 @@ const valor = prompt('Calculadora rápida');
 
 if(!valor) return;
 
-const permitido = /^[0-9+\-*/().\s]+$/;
-
-if(!permitido.test(valor)){
-alert('Operación inválida');
-return;
-}
-
 try{
 
-const resultado = Function(
-'"use strict"; return (' + valor + ')'
-)();
-
-alert(resultado);
+alert(eval(valor));
 
 }catch(error){
 
-alert('Error en cálculo');
+alert('Error');
 
 }
 
@@ -742,11 +646,11 @@ window.onload = ()=>{
 
 actualizarFechaHora();
 
-setInterval(
-actualizarFechaHora,
-1000
-);
+setInterval(actualizarFechaHora,1000);
 
 };
 
 </script>
+
+</body>
+</html>
