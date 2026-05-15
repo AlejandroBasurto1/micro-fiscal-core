@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -19,14 +20,76 @@
 }
 
 body.light-mode{
---bg:#dde5ef;
---panel:#eef3f8;
---panel2:#f7fbff;
---border:#c7d3df;
+--bg:#dbe7f3;
+--panel:#edf4fb;
+--panel2:#e2edf8;
+--border:#b7c9dc;
 --text:#102033;
---soft:#607284;
+--soft:#5f7288;
 --green:#10b981;
---shadow:rgba(15,23,42,.05);
+--shadow:rgba(15,23,42,.06);
+}
+
+body.light-mode .logo-box,
+body.light-mode .datetime-box,
+body.light-mode .mini-btn,
+body.light-mode .search-box input,
+body.light-mode .semaforo,
+body.light-mode .card,
+body.light-mode .tool-btn,
+body.light-mode .action,
+body.light-mode .section,
+body.light-mode .result-card{
+background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(231,239,248,.97)) !important;
+color:#102033 !important;
+border:1px solid rgba(59,130,246,.16) !important;
+box-shadow:0 0 12px rgba(59,130,246,.05),0 3px 10px rgba(15,23,42,.05) !important;
+}
+
+body.light-mode .logo-box::before,
+body.light-mode .card::before,
+body.light-mode .tool-btn::before,
+body.light-mode .action::before,
+body.light-mode .section::before,
+body.light-mode .result-card::before{
+background:linear-gradient(90deg,transparent,rgba(59,130,246,.55),transparent);
+}
+
+body.light-mode .hud-clock{
+color:#2563eb;
+text-shadow:0 0 8px rgba(59,130,246,.15);
+}
+
+body.light-mode .hud-date{
+color:#64748b;
+}
+
+body.light-mode .search-box input::placeholder{
+color:#64748b;
+}
+
+body.light-mode .card.active{
+background:linear-gradient(180deg,rgba(16,185,129,.10),rgba(255,255,255,.96)) !important;
+border:1px solid rgba(16,185,129,.35) !important;
+box-shadow:0 0 12px rgba(16,185,129,.10),0 3px 10px rgba(15,23,42,.05) !important;
+}
+
+body.light-mode .card:hover,
+body.light-mode .tool-btn:hover,
+body.light-mode .action:hover,
+body.light-mode .mini-btn:hover{
+border-color:rgba(59,130,246,.35) !important;
+box-shadow:0 0 14px rgba(59,130,246,.10),0 3px 10px rgba(15,23,42,.06) !important;
+}
+
+body.light-mode .result-card span{
+color:#10b981;
+}
+
+body.light-mode select{
+background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(231,239,248,.97));
+color:#102033;
+border:1px solid rgba(59,130,246,.16);
 }
 
 *{
@@ -568,3 +631,4 @@ alert('📸 Captura preparada para futura integración.');
 
 </body>
 </html>
+```
