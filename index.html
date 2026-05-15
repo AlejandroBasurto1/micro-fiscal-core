@@ -530,6 +530,206 @@ font-weight:bold;
 color:#22c55e;
 }
 
+/* CALCULADORA */
+
+.calc-overlay{
+
+position:fixed;
+inset:0;
+
+display:none;
+align-items:center;
+justify-content:center;
+
+background:rgba(0,0,0,.35);
+
+backdrop-filter:blur(4px);
+
+z-index:9999;
+}
+
+.calc-overlay.active{
+display:flex;
+}
+
+.calc-box{
+
+width:320px;
+
+padding:16px;
+
+border-radius:22px;
+
+background:
+linear-gradient(
+180deg,
+rgba(20,35,55,.98),
+rgba(10,18,30,.99)
+);
+
+border:1px solid rgba(56,189,248,.18);
+
+box-shadow:
+0 0 18px rgba(56,189,248,.10),
+0 10px 30px rgba(0,0,0,.35);
+
+animation:calcShow .18s ease;
+}
+
+body.light-mode .calc-box{
+
+background:
+linear-gradient(
+180deg,
+rgba(255,255,255,.98),
+rgba(231,239,248,.98)
+);
+
+border:1px solid rgba(59,130,246,.16);
+}
+
+@keyframes calcShow{
+
+from{
+opacity:0;
+transform:scale(.94);
+}
+
+to{
+opacity:1;
+transform:scale(1);
+}
+
+}
+
+.calc-top{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+margin-bottom:12px;
+
+font-size:13px;
+font-weight:bold;
+}
+
+.calc-top button{
+
+width:28px;
+height:28px;
+
+border:none;
+border-radius:8px;
+
+cursor:pointer;
+
+background:rgba(239,68,68,.15);
+
+color:#ef4444;
+}
+
+.calc-display{
+
+width:100%;
+height:60px;
+
+margin-bottom:12px;
+
+border:none;
+outline:none;
+
+border-radius:14px;
+
+padding:12px;
+
+font-size:24px;
+text-align:right;
+
+background:
+rgba(255,255,255,.05);
+
+color:white;
+}
+
+body.light-mode .calc-display{
+
+background:
+rgba(15,23,42,.05);
+
+color:#102033;
+}
+
+.calc-grid{
+
+display:grid;
+grid-template-columns:repeat(4,1fr);
+
+gap:8px;
+}
+
+.calc-key{
+
+height:52px;
+
+border:none;
+border-radius:14px;
+
+cursor:pointer;
+
+font-size:16px;
+font-weight:bold;
+
+background:
+rgba(255,255,255,.06);
+
+color:white;
+
+transition:.18s;
+}
+
+.calc-key:hover{
+
+transform:translateY(-1px);
+
+background:
+rgba(56,189,248,.16);
+}
+
+body.light-mode .calc-key{
+
+background:
+rgba(15,23,42,.05);
+
+color:#102033;
+}
+
+.operator{
+color:#7dd3fc;
+}
+
+.equal{
+
+background:
+linear-gradient(
+135deg,
+#10b981,
+#059669
+);
+
+color:white;
+}
+
+.clear-btn{
+
+grid-column:span 4;
+
+background:
+rgba(239,68,68,.15);
+
+color:#ef4444;
+}
+
 /* MOBILE */
 
 @media(max-width:900px){
@@ -577,7 +777,7 @@ grid-template-columns:repeat(2,1fr);
 <div class="mini-btn" id="backBtn">⬅️</div>
 <div class="mini-btn" id="nextBtn">➡️</div>
 <div class="mini-btn" id="captureBtn">📸</div>
-<div class="mini-btn">🧮</div>
+<div class="mini-btn" id="calcBtn">🧮</div>
 <div class="mini-btn" id="themeToggle">🌙</div>
 
 </div>
@@ -712,6 +912,59 @@ Selecciona operación
 <div class="result-card">
 <h4>GANANCIA REAL</h4>
 <span>$0.00</span>
+</div>
+
+</div>
+
+<!-- CALCULADORA -->
+
+<div class="calc-overlay" id="calcOverlay">
+
+<div class="calc-box">
+
+<div class="calc-top">
+
+<span>🧮 CALCULADORA</span>
+
+<button id="closeCalc">✕</button>
+
+</div>
+
+<input
+type="text"
+id="calcDisplay"
+class="calc-display"
+readonly
+>
+
+<div class="calc-grid">
+
+<button class="calc-key">7</button>
+<button class="calc-key">8</button>
+<button class="calc-key">9</button>
+<button class="calc-key operator">÷</button>
+
+<button class="calc-key">4</button>
+<button class="calc-key">5</button>
+<button class="calc-key">6</button>
+<button class="calc-key operator">×</button>
+
+<button class="calc-key">1</button>
+<button class="calc-key">2</button>
+<button class="calc-key">3</button>
+<button class="calc-key operator">-</button>
+
+<button class="calc-key">0</button>
+<button class="calc-key">.</button>
+<button class="calc-key equal">=</button>
+<button class="calc-key operator">+</button>
+
+<button class="calc-key clear-btn">
+C
+</button>
+
+</div>
+
 </div>
 
 </div>
@@ -919,6 +1172,87 @@ option.value = op;
 option.textContent = op;
 
 operacionSelect.appendChild(option);
+
+});
+
+});
+
+/* CALCULADORA */
+
+const calcBtn =
+document.getElementById('calcBtn');
+
+const calcOverlay =
+document.getElementById('calcOverlay');
+
+const closeCalc =
+document.getElementById('closeCalc');
+
+const calcDisplay =
+document.getElementById('calcDisplay');
+
+const calcKeys =
+document.querySelectorAll('.calc-key');
+
+calcBtn.addEventListener('click',()=>{
+
+calcOverlay.classList.add('active');
+
+});
+
+closeCalc.addEventListener('click',()=>{
+
+calcOverlay.classList.remove('active');
+
+});
+
+let expression = '';
+
+calcKeys.forEach(key=>{
+
+key.addEventListener('click',()=>{
+
+const value =
+key.textContent.trim();
+
+if(value==='C'){
+
+expression='';
+calcDisplay.value='';
+
+return;
+
+}
+
+if(value==='='){
+
+try{
+
+const result = eval(
+expression
+.replace(/×/g,'*')
+.replace(/÷/g,'/')
+);
+
+calcDisplay.value = result;
+
+expression = result.toString();
+
+}catch{
+
+calcDisplay.value='ERROR';
+
+expression='';
+
+}
+
+return;
+
+}
+
+expression += value;
+
+calcDisplay.value = expression;
 
 });
 
