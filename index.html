@@ -41,124 +41,19 @@ body.light-mode .tool-btn,
 body.light-mode .action,
 body.light-mode .section,
 body.light-mode .result-card{
-background:
-linear-gradient(
+background:linear-gradient(
 180deg,
 rgba(255,255,255,.98),
 rgba(231,239,248,.97)
-) !important;
+)!important;
 
-color:#102033 !important;
+color:#102033!important;
 
-border:1px solid rgba(59,130,246,.16) !important;
+border:1px solid rgba(59,130,246,.16)!important;
 
 box-shadow:
 0 0 8px rgba(59,130,246,.05),
-0 3px 8px rgba(15,23,42,.05) !important;
-}
-
-/* LINEAS HUD */
-
-body.light-mode .logo-box::before,
-body.light-mode .card::before,
-body.light-mode .tool-btn::before,
-body.light-mode .action::before,
-body.light-mode .section::before,
-body.light-mode .result-card::before{
-background:
-linear-gradient(
-90deg,
-transparent,
-rgba(59,130,246,.55),
-transparent
-);
-}
-
-/* RELOJ */
-
-body.light-mode .hud-clock{
-color:#2563eb;
-
-text-shadow:
-0 0 8px rgba(59,130,246,.15);
-}
-
-body.light-mode .hud-date{
-color:#64748b;
-}
-
-/* PLACEHOLDER */
-
-body.light-mode .search-box input::placeholder{
-color:#64748b;
-}
-
-/* TARJETAS */
-
-body.light-mode .card{
-background:
-linear-gradient(
-180deg,
-rgba(248,252,255,.98),
-rgba(226,236,246,.96)
-) !important;
-}
-
-body.light-mode .card.inactive{
-opacity:.88;
-}
-
-body.light-mode .card.active{
-
-background:
-linear-gradient(
-180deg,
-rgba(16,185,129,.10),
-rgba(255,255,255,.96)
-) !important;
-
-border:1px solid rgba(16,185,129,.35) !important;
-
-box-shadow:
-0 0 8px rgba(16,185,129,.10),
-0 3px 8px rgba(15,23,42,.05) !important;
-}
-
-/* HOVERS */
-
-body.light-mode .card:hover,
-body.light-mode .tool-btn:hover,
-body.light-mode .action:hover,
-body.light-mode .mini-btn:hover{
-
-border-color:
-rgba(59,130,246,.35) !important;
-
-box-shadow:
-0 0 10px rgba(59,130,246,.10),
-0 3px 8px rgba(15,23,42,.06) !important;
-}
-
-/* RESULTADOS */
-
-body.light-mode .result-card span{
-color:#10b981;
-}
-
-/* SELECT */
-
-body.light-mode select{
-
-background:
-linear-gradient(
-180deg,
-rgba(255,255,255,.96),
-rgba(231,239,248,.97)
-);
-
-color:#102033;
-
-border:1px solid rgba(59,130,246,.16);
+0 3px 8px rgba(15,23,42,.05)!important;
 }
 
 /* BASE */
@@ -209,20 +104,16 @@ display:flex;
 align-items:center;
 gap:10px;
 
-background:
-linear-gradient(
+background:linear-gradient(
 180deg,
 rgba(20,35,55,.96),
 rgba(10,18,30,.98)
 );
 
 padding:10px;
-
 border-radius:16px;
 
 border:1px solid rgba(56,189,248,.12);
-
-transition:.25s;
 
 overflow:hidden;
 
@@ -247,8 +138,7 @@ left:15%;
 width:70%;
 height:1px;
 
-background:
-linear-gradient(
+background:linear-gradient(
 90deg,
 transparent,
 rgba(56,189,248,.8),
@@ -260,10 +150,17 @@ transparent
 width:52px;
 height:52px;
 border-radius:14px;
-background:linear-gradient(135deg,#10b981,#3b82f6);
+
+background:linear-gradient(
+135deg,
+#10b981,
+#3b82f6
+);
+
 display:flex;
 align-items:center;
 justify-content:center;
+
 font-size:22px;
 font-weight:bold;
 color:white;
@@ -278,7 +175,7 @@ font-size:10px;
 opacity:.7;
 }
 
-/* TOP ACTIONS */
+/* ACTIONS */
 
 .top-actions{
 display:flex;
@@ -287,20 +184,21 @@ align-items:center;
 flex-wrap:wrap;
 }
 
-/* RELOJ */
+/* CLOCK */
 
 .datetime-box{
 min-width:120px;
 padding:8px 12px;
 border-radius:12px;
+
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
+
 gap:2px;
 
-background:
-linear-gradient(
+background:linear-gradient(
 180deg,
 rgba(20,35,55,.95),
 rgba(8,15,28,.95)
@@ -311,8 +209,6 @@ border:1px solid rgba(56,189,248,.12);
 box-shadow:
 0 0 8px rgba(59,130,246,.12),
 0 3px 8px var(--shadow);
-
-transition:.25s;
 }
 
 .hud-clock{
@@ -323,8 +219,6 @@ color:#7dd3fc;
 
 text-shadow:
 0 0 8px rgba(125,211,252,.45);
-
-line-height:1;
 }
 
 .hud-date{
@@ -336,9 +230,7 @@ color:#9fb3c8;
 /* MINI BUTTONS */
 
 .mini-btn{
-
-background:
-linear-gradient(
+background:linear-gradient(
 180deg,
 rgba(20,35,55,.96),
 rgba(10,18,30,.98)
@@ -358,24 +250,11 @@ border:1px solid rgba(56,189,248,.12);
 font-size:12px;
 cursor:pointer;
 
-flex-shrink:0;
-
 transition:.2s;
 
 box-shadow:
 0 0 8px rgba(56,189,248,.08),
 0 2px 6px var(--shadow);
-}
-
-.mini-btn:hover{
-
-border-color:rgba(56,189,248,.45);
-
-box-shadow:
-0 0 10px rgba(56,189,248,.10),
-0 0 18px rgba(56,189,248,.04);
-
-transform:translateY(-1px);
 }
 
 /* SEARCH */
@@ -398,8 +277,7 @@ padding:10px;
 border:none;
 border-radius:12px;
 
-background:
-linear-gradient(
+background:linear-gradient(
 180deg,
 rgba(20,35,55,.96),
 rgba(10,18,30,.98)
@@ -410,16 +288,6 @@ color:var(--text);
 outline:none;
 
 border:1px solid rgba(56,189,248,.12);
-
-transition:.25s;
-
-box-shadow:
-0 0 8px rgba(56,189,248,.08),
-0 3px 8px var(--shadow);
-}
-
-.search-box input::placeholder{
-color:var(--soft);
 }
 
 /* SEMAFORO */
@@ -429,8 +297,7 @@ display:flex;
 align-items:center;
 gap:6px;
 
-background:
-linear-gradient(
+background:linear-gradient(
 180deg,
 rgba(20,35,55,.96),
 rgba(10,18,30,.98)
@@ -441,12 +308,6 @@ padding:8px 10px;
 border-radius:12px;
 
 border:1px solid rgba(56,189,248,.12);
-
-transition:.25s;
-
-box-shadow:
-0 0 8px rgba(56,189,248,.08),
-0 3px 8px var(--shadow);
 }
 
 .luz{
@@ -478,8 +339,7 @@ overflow:hidden;
 .card{
 position:relative;
 
-background:
-linear-gradient(
+background:linear-gradient(
 180deg,
 rgba(20,35,55,.96),
 rgba(10,18,30,.96)
@@ -509,18 +369,6 @@ box-shadow:
 0 3px 8px var(--shadow);
 }
 
-.card:hover{
-
-transform:translateY(-2px);
-
-border-color:rgba(56,189,248,.45);
-
-box-shadow:
-0 0 10px rgba(56,189,248,.10),
-0 0 18px rgba(56,189,248,.04),
-0 3px 8px var(--shadow);
-}
-
 .card span{
 font-size:20px;
 }
@@ -533,11 +381,9 @@ white-space:nowrap;
 }
 
 .card.active{
-
 border:1px solid rgba(16,185,129,.65);
 
-background:
-linear-gradient(
+background:linear-gradient(
 180deg,
 rgba(16,185,129,.12),
 rgba(20,35,55,.96)
@@ -588,8 +434,7 @@ border-radius:12px;
 
 font-size:12px;
 
-background:
-linear-gradient(
+background:linear-gradient(
 180deg,
 rgba(20,35,55,.96),
 rgba(10,18,30,.96)
@@ -599,8 +444,6 @@ border:1px solid rgba(56,189,248,.12);
 
 cursor:pointer;
 
-transition:.25s;
-
 overflow:hidden;
 
 box-shadow:
@@ -608,25 +451,12 @@ box-shadow:
 0 3px 8px var(--shadow);
 }
 
-.tool-btn:hover,
-.action:hover{
-
-transform:translateY(-1px);
-
-border-color:rgba(56,189,248,.45);
-
-box-shadow:
-0 0 10px rgba(56,189,248,.10),
-0 0 18px rgba(56,189,248,.04);
-}
-
 /* PANEL */
 
 .section{
 position:relative;
 
-background:
-linear-gradient(
+background:linear-gradient(
 180deg,
 rgba(20,35,55,.96),
 rgba(10,18,30,.98)
@@ -642,13 +472,11 @@ min-height:48vh;
 
 border:1px solid rgba(56,189,248,.12);
 
-transition:.25s;
+overflow:hidden;
 
 box-shadow:
 0 0 8px rgba(56,189,248,.08),
 0 4px 12px var(--shadow);
-
-overflow:hidden;
 }
 
 .section h2{
@@ -664,8 +492,7 @@ margin-bottom:10px;
 border:none;
 border-radius:12px;
 
-background:
-linear-gradient(
+background:linear-gradient(
 180deg,
 rgba(26,45,70,.96),
 rgba(16,28,45,.98)
@@ -678,13 +505,6 @@ outline:none;
 border:1px solid rgba(56,189,248,.12);
 }
 
-/* COLORS */
-
-.save{color:#10b981;border-color:#10b981;}
-.edit{color:#facc15;border-color:#facc15;}
-.clear{color:#ef4444;border-color:#ef4444;}
-.excel{color:#60a5fa;border-color:#2563eb;}
-
 /* RESULTS */
 
 .results-panel{
@@ -696,8 +516,7 @@ gap:8px;
 .result-card{
 position:relative;
 
-background:
-linear-gradient(
+background:linear-gradient(
 180deg,
 rgba(20,35,55,.96),
 rgba(10,18,30,.98)
@@ -711,24 +530,11 @@ padding:10px;
 
 text-align:center;
 
-transition:.25s;
-
 overflow:hidden;
 
 box-shadow:
 0 0 8px rgba(56,189,248,.08),
 0 3px 8px var(--shadow);
-}
-
-.result-card:hover{
-
-transform:translateY(-2px);
-
-border-color:rgba(56,189,248,.45);
-
-box-shadow:
-0 0 10px rgba(56,189,248,.10),
-0 0 18px rgba(56,189,248,.04);
 }
 
 .result-card h4{
@@ -743,8 +549,6 @@ font-size:15px;
 font-weight:bold;
 color:#22c55e;
 }
-
-/* MOBILE */
 
 @media(max-width:900px){
 
@@ -764,9 +568,7 @@ grid-template-columns:repeat(2,1fr);
 
 <div class="logo-box">
 
-<div class="logo-icon">
-MR
-</div>
+<div class="logo-icon">MR</div>
 
 <div class="logo-text">
 <h1>MRFC</h1>
@@ -892,21 +694,10 @@ MR
 
 <div class="actions">
 
-<div class="action save">
-💾 Guardar
-</div>
-
-<div class="action edit">
-✏️ Editar
-</div>
-
-<div class="action clear">
-🗑️ Limpiar
-</div>
-
-<div class="action excel">
-📤 Exportar
-</div>
+<div class="action save">💾 Guardar</div>
+<div class="action edit">✏️ Editar</div>
+<div class="action clear">🗑️ Limpiar</div>
+<div class="action excel">📤 Exportar</div>
 
 </div>
 
@@ -934,7 +725,13 @@ MR
 
 </div>
 
+<!-- HTML2CANVAS -->
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
 <script>
+
+/* CARDS */
 
 const tarjetas = document.querySelectorAll('.card');
 
@@ -999,6 +796,8 @@ claro ? 'light' : 'dark'
 
 });
 
+/* INIT */
+
 window.onload=()=>{
 
 actualizarFechaHora();
@@ -1018,12 +817,32 @@ themeToggle.innerText='☀️';
 
 };
 
-/* CAPTURE */
+/* CAPTURE REAL */
 
 document.getElementById('captureBtn')
 .addEventListener('click',()=>{
 
-alert('📸 Captura preparada para futura integración.');
+html2canvas(document.body,{
+
+backgroundColor:null,
+scale:2
+
+}).then(canvas=>{
+
+const link = document.createElement('a');
+
+const fecha = new Date();
+
+const nombre =
+`MRFC_${fecha.getFullYear()}-${fecha.getMonth()+1}-${fecha.getDate()}_${fecha.getHours()}-${fecha.getMinutes()}.png`;
+
+link.download = nombre;
+
+link.href = canvas.toDataURL('image/png');
+
+link.click();
+
+});
 
 });
 
