@@ -429,13 +429,15 @@ padding:16px;
 border-radius:18px;
 margin-bottom:10px;
 min-height:48vh;
-overflow:hidden;
+overflow:visible;
 }
 
 .section h2{
 margin-bottom:14px;
 font-size:18px;
 }
+
+/* SELECT */
 
 select{
 width:100%;
@@ -467,6 +469,16 @@ rgba(255,255,255,.96),
 rgba(231,239,248,.97)
 );
 
+color:#102033;
+}
+
+select option{
+background:#132238;
+color:white;
+}
+
+body.light-mode select option{
+background:#edf4fb;
 color:#102033;
 }
 
@@ -647,16 +659,26 @@ grid-template-columns:repeat(2,1fr);
 
 <h2>⚙️ Operación del Día</h2>
 
-<select>
+<select id="actividadSelect">
+
+<option value="" selected disabled>
+Selecciona actividad fiscal
+</option>
+
 <option>GENERAL</option>
 <option>PFAE</option>
 <option>RESICO</option>
 <option>RIF</option>
 <option>SUSA</option>
+
 </select>
 
-<select>
-<option>Selecciona operación</option>
+<select id="operacionSelect">
+
+<option value="" selected disabled>
+Selecciona operación
+</option>
+
 </select>
 
 </div>
@@ -836,6 +858,67 @@ link.href =
 canvas.toDataURL('image/png');
 
 link.click();
+
+});
+
+});
+
+/* OPERACIONES DINAMICAS */
+
+const actividadSelect =
+document.getElementById('actividadSelect');
+
+const operacionSelect =
+document.getElementById('operacionSelect');
+
+const operaciones = {
+
+GENERAL:[
+'Compra',
+'Venta',
+'Servicio',
+'Honorarios'
+],
+
+PFAE:[
+'Actividad Empresarial',
+'Factura',
+'Gasto Deducible'
+],
+
+RESICO:[
+'Ingreso Simplificado',
+'Factura Simplificada'
+],
+
+RIF:[
+'Venta Público General',
+'Factura RIF'
+],
+
+SUSA:[
+'Operación Especial'
+]
+
+};
+
+actividadSelect.addEventListener('change',()=>{
+
+const actividad =
+actividadSelect.value;
+
+operacionSelect.innerHTML =
+'<option selected disabled>Selecciona operación</option>';
+
+operaciones[actividad].forEach(op=>{
+
+const option =
+document.createElement('option');
+
+option.value = op;
+option.textContent = op;
+
+operacionSelect.appendChild(option);
 
 });
 
