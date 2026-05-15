@@ -112,19 +112,48 @@ align-items:center;
 flex-wrap:wrap;
 }
 
+/* NUEVO RELOJ */
+
 .datetime-box{
+min-width:120px;
+padding:8px 12px;
+border-radius:12px;
 display:flex;
 flex-direction:column;
+align-items:center;
 justify-content:center;
-font-size:10px;
-background:var(--panel);
-padding:6px 10px;
-border-radius:10px;
-border:1px solid var(--border);
-min-width:95px;
+gap:2px;
+background:
+linear-gradient(
+180deg,
+rgba(20,35,55,.95),
+rgba(8,15,28,.95)
+);
+border:1px solid #28415f;
+box-shadow:
+0 0 12px rgba(59,130,246,.15),
+0 3px 8px var(--shadow);
 transition:.25s;
-box-shadow:0 3px 8px var(--shadow);
 }
+
+.hud-clock{
+font-size:24px;
+font-weight:700;
+letter-spacing:2px;
+color:#7dd3fc;
+font-family:Arial,sans-serif;
+text-shadow:
+0 0 8px rgba(125,211,252,.45);
+line-height:1;
+}
+
+.hud-date{
+font-size:10px;
+letter-spacing:1px;
+color:#9fb3c8;
+}
+
+/* BOTONES MINI */
 
 .mini-btn{
 width:34px;
@@ -432,9 +461,18 @@ MR
 
 <div class="top-actions">
 
+<!-- RELOJ NUEVO -->
+
 <div class="datetime-box">
-<div id="fechaActual">📅 --/--/----</div>
-<div id="horaActual">⏰ --:--</div>
+
+<div id="horaActual" class="hud-clock">
+01:19
+</div>
+
+<div id="fechaActual" class="hud-date">
+28-01-2026
+</div>
+
 </div>
 
 <div class="mini-btn">🏠</div>
@@ -636,14 +674,20 @@ function actualizarFechaHora(){
 
 const ahora = new Date();
 
-document.getElementById('fechaActual').innerText =
-'📅 ' + ahora.toLocaleDateString('es-MX');
-
-document.getElementById('horaActual').innerText =
-'⏰ ' + ahora.toLocaleTimeString('es-MX',{
+const hora = ahora.toLocaleTimeString('es-MX',{
 hour:'2-digit',
-minute:'2-digit'
+minute:'2-digit',
+hour12:false
 });
+
+const dia = String(ahora.getDate()).padStart(2,'0');
+const mes = String(ahora.getMonth()+1).padStart(2,'0');
+const anio = ahora.getFullYear();
+
+document.getElementById('horaActual').innerText = hora;
+
+document.getElementById('fechaActual').innerText =
+`${dia}-${mes}-${anio}`;
 
 }
 
