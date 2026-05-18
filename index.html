@@ -530,6 +530,96 @@ font-weight:bold;
 color:#22c55e;
 }
 
+
+/* CAMPOS DINAMICOS */
+
+const campos = {
+
+cliente:document.getElementById('clienteNombre')?.parentElement,
+telefono:document.getElementById('clienteTelefono'),
+direccion:document.getElementById('clienteDireccion'),
+metodoPago:document.getElementById('metodoPago'),
+lineas:document.getElementById('lineasPedido'),
+distancia:document.getElementById('distanciaPedido'),
+banco:document.getElementById('bancoActivo'),
+clabe:document.getElementById('clabeCuenta'),
+tipoEntrega:document.getElementById('tipoEntrega')
+
+};
+
+function mostrarCampo(el){
+if(!el) return;
+el.style.display='block';
+}
+
+function ocultarCampo(el){
+if(!el) return;
+el.style.display='none';
+}
+
+function resetCampos(){
+
+mostrarCampo(document.getElementById('clienteNombre'));
+mostrarCampo(document.getElementById('clienteTelefono'));
+mostrarCampo(document.getElementById('clienteDireccion'));
+mostrarCampo(document.getElementById('metodoPago'));
+mostrarCampo(document.getElementById('lineasPedido'));
+mostrarCampo(document.getElementById('distanciaPedido'));
+mostrarCampo(document.getElementById('bancoActivo'));
+mostrarCampo(document.getElementById('clabeCuenta'));
+mostrarCampo(document.getElementById('tipoEntrega'));
+
+}
+
+operacionSelect.addEventListener('change',()=>{
+
+resetCampos();
+
+const op = operacionSelect.value;
+
+/* FACTURAS */
+
+if(
+op==='Factura' ||
+op==='Factura RIF' ||
+op==='Factura Simplificada'
+){
+
+ocultarCampo(document.getElementById('lineasPedido'));
+ocultarCampo(document.getElementById('distanciaPedido'));
+ocultarCampo(document.getElementById('tipoEntrega'));
+ocultarCampo(document.getElementById('clienteDireccion'));
+
+}
+
+/* GASTOS */
+
+if(
+op==='Gasto Deducible'
+){
+
+ocultarCampo(document.getElementById('clienteTelefono'));
+ocultarCampo(document.getElementById('lineasPedido'));
+ocultarCampo(document.getElementById('distanciaPedido'));
+ocultarCampo(document.getElementById('tipoEntrega'));
+
+}
+
+/* ACTIVIDAD EMPRESARIAL */
+
+if(
+op==='Actividad Empresarial'
+){
+
+mostrarCampo(document.getElementById('lineasPedido'));
+mostrarCampo(document.getElementById('distanciaPedido'));
+mostrarCampo(document.getElementById('tipoEntrega'));
+
+}
+
+});
+
+
 /* CALCULADORA */
 
 .calc-overlay{
@@ -806,6 +896,12 @@ color:#7dd3fc;
 }
 
 
+
+.dynamic-hidden{
+display:none!important;
+}
+
+
 /* MOBILE */
 
 
@@ -1031,6 +1127,14 @@ Selecciona operación
 
 </div>
 
+
+<div class="quick-status" id="estructuraBase">
+
+🧠 Plantilla MRFC activa.<br>
+Los campos cambian según SAT y operación seleccionada.
+
+</div>
+
 <div class="quick-status" id="quickStatus">
 
 📊 Estado operativo listo.<br>
@@ -1173,6 +1277,17 @@ C
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
+
+
+/* BOTON GUARDAR PRINCIPAL */
+
+document.querySelector('.action.save')
+.addEventListener('click',()=>{
+
+document.getElementById('guardarRegistro').click();
+
+});
+
 
 /* HISTORIAL */
 
@@ -1522,6 +1637,96 @@ operacionSelect.appendChild(option);
 });
 
 });
+
+
+/* CAMPOS DINAMICOS */
+
+const campos = {
+
+cliente:document.getElementById('clienteNombre')?.parentElement,
+telefono:document.getElementById('clienteTelefono'),
+direccion:document.getElementById('clienteDireccion'),
+metodoPago:document.getElementById('metodoPago'),
+lineas:document.getElementById('lineasPedido'),
+distancia:document.getElementById('distanciaPedido'),
+banco:document.getElementById('bancoActivo'),
+clabe:document.getElementById('clabeCuenta'),
+tipoEntrega:document.getElementById('tipoEntrega')
+
+};
+
+function mostrarCampo(el){
+if(!el) return;
+el.style.display='block';
+}
+
+function ocultarCampo(el){
+if(!el) return;
+el.style.display='none';
+}
+
+function resetCampos(){
+
+mostrarCampo(document.getElementById('clienteNombre'));
+mostrarCampo(document.getElementById('clienteTelefono'));
+mostrarCampo(document.getElementById('clienteDireccion'));
+mostrarCampo(document.getElementById('metodoPago'));
+mostrarCampo(document.getElementById('lineasPedido'));
+mostrarCampo(document.getElementById('distanciaPedido'));
+mostrarCampo(document.getElementById('bancoActivo'));
+mostrarCampo(document.getElementById('clabeCuenta'));
+mostrarCampo(document.getElementById('tipoEntrega'));
+
+}
+
+operacionSelect.addEventListener('change',()=>{
+
+resetCampos();
+
+const op = operacionSelect.value;
+
+/* FACTURAS */
+
+if(
+op==='Factura' ||
+op==='Factura RIF' ||
+op==='Factura Simplificada'
+){
+
+ocultarCampo(document.getElementById('lineasPedido'));
+ocultarCampo(document.getElementById('distanciaPedido'));
+ocultarCampo(document.getElementById('tipoEntrega'));
+ocultarCampo(document.getElementById('clienteDireccion'));
+
+}
+
+/* GASTOS */
+
+if(
+op==='Gasto Deducible'
+){
+
+ocultarCampo(document.getElementById('clienteTelefono'));
+ocultarCampo(document.getElementById('lineasPedido'));
+ocultarCampo(document.getElementById('distanciaPedido'));
+ocultarCampo(document.getElementById('tipoEntrega'));
+
+}
+
+/* ACTIVIDAD EMPRESARIAL */
+
+if(
+op==='Actividad Empresarial'
+){
+
+mostrarCampo(document.getElementById('lineasPedido'));
+mostrarCampo(document.getElementById('distanciaPedido'));
+mostrarCampo(document.getElementById('tipoEntrega'));
+
+}
+
+});
+
 
 /* CALCULADORA */
 
