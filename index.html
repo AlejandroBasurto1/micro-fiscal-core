@@ -768,6 +768,35 @@ font-size:14px;
 
 /* MOBILE */
 
+
+.client-panel{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+margin-top:10px;
+}
+
+.client-panel input,
+.client-panel select{
+width:100%;
+padding:12px;
+border-radius:12px;
+border:none;
+outline:none;
+background:rgba(255,255,255,.05);
+color:var(--text);
+}
+
+.secondary-actions{
+opacity:.88;
+}
+
+.secondary-actions .tool-btn{
+height:36px;
+font-size:11px;
+}
+
+
 @media(max-width:900px){
 
 .actions,
@@ -892,15 +921,6 @@ grid-template-columns:repeat(2,1fr);
 </div>
 
 
-<div class="actions">
-
-<div class="tool-btn" id="historialBtn">📊 Historial</div>
-<div class="tool-btn" id="qrBtn">🔳 Generar QR</div>
-<div class="tool-btn" id="clienteBtn">👤 Cliente</div>
-<div class="tool-btn" id="graficaBtn">📈 Gráfica</div>
-
-</div>
-
 <div class="section" id="mainSection">
 
 <h2>⚙️ Operación del Día</h2>
@@ -927,6 +947,25 @@ Selecciona operación
 
 </select>
 
+<div class="client-panel">
+
+<input type="text" id="clienteNombre" placeholder="👤 Cliente">
+<input type="text" id="clienteTelefono" placeholder="📞 Teléfono">
+<input type="text" id="clienteDireccion" placeholder="📍 Dirección / Referencia">
+
+<select id="metodoPago">
+<option selected disabled>💳 Método de pago</option>
+<option>Efectivo</option>
+<option>Tarjeta</option>
+<option>Transferencia</option>
+<option>Pago en línea</option>
+</select>
+
+<input type="number" id="lineasPedido" placeholder="📦 Líneas del pedido">
+<input type="number" id="distanciaPedido" placeholder="🚚 Distancia KM">
+
+</div>
+
 </div>
 
 <div class="actions">
@@ -935,6 +974,15 @@ Selecciona operación
 <div class="action edit">✏️ Editar</div>
 <div class="action clear">🗑️ Limpiar</div>
 <div class="action excel">📤 Exportar</div>
+
+</div>
+
+<div class="actions secondary-actions">
+
+<div class="tool-btn" id="historialBtn">📊 Historial</div>
+<div class="tool-btn" id="qrBtn">🔳 QR</div>
+<div class="tool-btn" id="codigoBtn">📦 Código</div>
+<div class="tool-btn" id="graficaBtn">📈 Gráfica</div>
 
 </div>
 
@@ -1092,6 +1140,11 @@ div.style.background='rgba(255,255,255,.05)';
 
 div.innerHTML = `
 <b>${reg.resultado}</b><br>
+👤 ${reg.cliente}<br>
+📞 ${reg.telefono}<br>
+📦 ${reg.lineas} líneas<br>
+🚚 ${reg.distancia} km<br>
+💳 ${reg.metodoPago}<br>
 ${reg.fecha} ${reg.hora}<br>
 ${reg.actividad}<br>
 ${reg.operacion}
@@ -1522,7 +1575,25 @@ actividad:
 actividadSelect.value || 'GENERAL',
 
 operacion:
-operacionSelect.value || 'SIN DEFINIR'
+operacionSelect.value || 'SIN DEFINIR',
+
+cliente:
+document.getElementById('clienteNombre').value || 'SIN CLIENTE',
+
+telefono:
+document.getElementById('clienteTelefono').value || 'SIN TEL',
+
+direccion:
+document.getElementById('clienteDireccion').value || 'SIN DIRECCION',
+
+metodoPago:
+document.getElementById('metodoPago').value || 'SIN PAGO',
+
+lineas:
+document.getElementById('lineasPedido').value || 0,
+
+distancia:
+document.getElementById('distanciaPedido').value || 0
 
 };
 
@@ -1640,6 +1711,11 @@ div.style.background='rgba(255,255,255,.05)';
 
 div.innerHTML = `
 <b>${reg.resultado}</b><br>
+👤 ${reg.cliente}<br>
+📞 ${reg.telefono}<br>
+📦 ${reg.lineas} líneas<br>
+🚚 ${reg.distancia} km<br>
+💳 ${reg.metodoPago}<br>
 ${reg.fecha} ${reg.hora}<br>
 ${reg.actividad}<br>
 ${reg.operacion}
