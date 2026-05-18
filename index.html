@@ -1948,6 +1948,30 @@ alert('GPS no disponible');
 });
 
 
+
+/* FIX CALCULADORA */
+
+calcOverlay.addEventListener('click',(e)=>{
+
+if(e.target===calcOverlay){
+
+calcOverlay.classList.remove('active');
+
+}
+
+});
+
+document.addEventListener('keydown',(e)=>{
+
+if(e.key==='Escape'){
+
+calcOverlay.classList.remove('active');
+
+}
+
+});
+
+
 calcKeys.forEach(key=>{
 
 key.addEventListener('click',()=>{
