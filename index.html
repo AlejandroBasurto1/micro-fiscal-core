@@ -730,6 +730,28 @@ rgba(239,68,68,.15);
 color:#ef4444;
 }
 
+
+.iva-btn{
+
+background:
+rgba(16,185,129,.12);
+
+color:#10b981;
+}
+
+.save-record{
+
+grid-column:span 4;
+
+background:
+rgba(59,130,246,.15);
+
+color:#7dd3fc;
+
+font-size:14px;
+}
+
+
 /* MOBILE */
 
 @media(max-width:900px){
@@ -958,6 +980,18 @@ readonly
 <button class="calc-key">.</button>
 <button class="calc-key equal">=</button>
 <button class="calc-key operator">+</button>
+
+<button class="calc-key iva-btn" id="masIVA">
++ IVA
+</button>
+
+<button class="calc-key iva-btn" id="menosIVA">
+- IVA
+</button>
+
+<button class="calc-key save-record" id="guardarRegistro">
+💾 Guardar Registro
+</button>
 
 <button class="calc-key clear-btn">
 C
@@ -1207,6 +1241,120 @@ calcOverlay.classList.remove('active');
 });
 
 let expression = '';
+
+
+const masIVA =
+document.getElementById('masIVA');
+
+const menosIVA =
+document.getElementById('menosIVA');
+
+const guardarRegistro =
+document.getElementById('guardarRegistro');
+
+const luces =
+document.querySelectorAll('.luz');
+
+/* + IVA */
+
+masIVA.addEventListener('click',()=>{
+
+const numero =
+parseFloat(calcDisplay.value || 0);
+
+const total =
+numero * 1.16;
+
+calcDisplay.value =
+total.toFixed(2);
+
+expression =
+total.toFixed(2);
+
+});
+
+/* - IVA */
+
+menosIVA.addEventListener('click',()=>{
+
+const numero =
+parseFloat(calcDisplay.value || 0);
+
+const subtotal =
+numero / 1.16;
+
+calcDisplay.value =
+subtotal.toFixed(2);
+
+expression =
+subtotal.toFixed(2);
+
+});
+
+/* GUARDAR REGISTRO */
+
+guardarRegistro.addEventListener('click',()=>{
+
+if(!calcDisplay.value) return;
+
+navigator.geolocation.getCurrentPosition(pos=>{
+
+const registros =
+JSON.parse(
+localStorage.getItem('mrfc-registros')
+) || [];
+
+const ahora =
+new Date();
+
+const nuevoRegistro = {
+
+resultado:
+calcDisplay.value,
+
+fecha:
+ahora.toLocaleDateString('es-MX'),
+
+hora:
+ahora.toLocaleTimeString('es-MX'),
+
+latitud:
+pos.coords.latitude,
+
+longitud:
+pos.coords.longitude,
+
+actividad:
+actividadSelect.value || 'GENERAL',
+
+operacion:
+operacionSelect.value || 'SIN DEFINIR'
+
+};
+
+registros.push(nuevoRegistro);
+
+localStorage.setItem(
+'mrfc-registros',
+JSON.stringify(registros)
+);
+
+luces.forEach(l=>{
+l.classList.add('active');
+});
+
+alert('Registro guardado correctamente');
+
+console.log(registros);
+
+},()=>{
+
+alert('GPS no disponible');
+
+});
+
+});
+
 
 calcKeys.forEach(key=>{
 
