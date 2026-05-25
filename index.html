@@ -1,85 +1,78 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
->
-
-<title>MRFC HUD CORE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MRFC</title>
 
 <style>
 
 :root{
-
 --bg:#07111f;
 --panel:#132238;
 --panel2:#1a2d46;
 --border:#28415f;
-
 --text:#ffffff;
 --soft:#9fb3c8;
-
 --green:#10b981;
---blue:#38bdf8;
---yellow:#facc15;
---red:#ef4444;
-
+--shadow:rgba(0,0,0,.25);
 }
 
-*{
+/* LIGHT MODE */
 
+body.light-mode{
+--bg:#dbe7f3;
+--panel:#edf4fb;
+--panel2:#e2edf8;
+--border:#b7c9dc;
+--text:#102033;
+--soft:#5f7288;
+--green:#10b981;
+--shadow:rgba(15,23,42,.06);
+}
+
+/* BASE */
+
+*{
 margin:0;
 padding:0;
 box-sizing:border-box;
-
 }
 
 body{
-
 background:var(--bg);
-
 color:var(--text);
-
 font-family:Arial,sans-serif;
-
-padding:14px;
-
-min-height:100vh;
-
+padding:12px;
+transition:.25s;
 overflow-x:hidden;
-
 }
 
 /* TOPBAR */
 
 .topbar{
-
 display:flex;
 justify-content:space-between;
 align-items:center;
-
 gap:10px;
-
-margin-bottom:14px;
-
+margin-bottom:10px;
 flex-wrap:wrap;
-
 }
 
-.logo-box{
+/* COMMON PANEL */
 
-display:flex;
-align-items:center;
-gap:10px;
+.logo-box,
+.datetime-box,
+.mini-btn,
+.search-box input,
+.semaforo,
+.card,
+.tool-btn,
+.action,
+.section,
+.result-card{
 
-padding:12px;
-
-border-radius:18px;
+position:relative;
 
 background:
 linear-gradient(
@@ -90,21 +83,104 @@ rgba(10,18,30,.98)
 
 border:1px solid rgba(56,189,248,.12);
 
+box-shadow:
+0 0 8px rgba(56,189,248,.08),
+0 3px 8px var(--shadow);
+
+backdrop-filter:blur(6px);
+
+transition:.25s;
+}
+
+/* LIGHT PANELS */
+
+body.light-mode .logo-box,
+body.light-mode .datetime-box,
+body.light-mode .mini-btn,
+body.light-mode .search-box input,
+body.light-mode .semaforo,
+body.light-mode .card,
+body.light-mode .tool-btn,
+body.light-mode .action,
+body.light-mode .section,
+body.light-mode .result-card{
+
+background:
+linear-gradient(
+180deg,
+rgba(255,255,255,.98),
+rgba(231,239,248,.97)
+);
+
+border:1px solid rgba(59,130,246,.16);
+
+color:#102033;
+
+box-shadow:
+0 0 8px rgba(59,130,246,.05),
+0 3px 8px rgba(15,23,42,.05);
+}
+
+/* HUD LINE */
+
+.logo-box::before,
+.card::before,
+.tool-btn::before,
+.action::before,
+.section::before,
+.result-card::before{
+
+content:'';
+
+position:absolute;
+
+top:0;
+left:15%;
+
+width:70%;
+height:1px;
+
+background:
+linear-gradient(
+90deg,
+transparent,
+rgba(56,189,248,.65),
+transparent
+);
+}
+
+/* HOVERS */
+
+.card:hover,
+.tool-btn:hover,
+.action:hover,
+.mini-btn:hover{
+
+transform:translateY(-2px);
+
+border-color:rgba(56,189,248,.35);
+
+box-shadow:
+0 0 10px rgba(56,189,248,.10),
+0 0 18px rgba(56,189,248,.04),
+0 3px 8px var(--shadow);
+}
+
+/* LOGO */
+
+.logo-box{
+display:flex;
+align-items:center;
+gap:10px;
+padding:10px;
+border-radius:16px;
+overflow:hidden;
 }
 
 .logo-icon{
-
-width:54px;
-height:54px;
-
-border-radius:16px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-font-size:22px;
-font-weight:bold;
+width:52px;
+height:52px;
+border-radius:14px;
 
 background:
 linear-gradient(
@@ -113,265 +189,530 @@ linear-gradient(
 #3b82f6
 );
 
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:22px;
+font-weight:bold;
+color:white;
 }
 
 .logo-text h1{
-
-font-size:22px;
-
+font-size:20px;
 }
 
 .logo-text p{
-
 font-size:10px;
 opacity:.7;
-
 }
+
+/* ACTIONS */
 
 .top-actions{
-
 display:flex;
 gap:8px;
-
+align-items:center;
+flex-wrap:wrap;
 }
 
-.mini-btn{
+/* CLOCK */
 
-width:38px;
-height:38px;
-
+.datetime-box{
+min-width:120px;
+padding:8px 12px;
 border-radius:12px;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+}
+
+.hud-clock{
+font-size:24px;
+font-weight:700;
+letter-spacing:2px;
+color:#7dd3fc;
+
+text-shadow:
+0 0 8px rgba(125,211,252,.45);
+}
+
+body.light-mode .hud-clock{
+color:#2563eb;
+}
+
+.hud-date{
+font-size:10px;
+letter-spacing:1px;
+color:#9fb3c8;
+}
+
+body.light-mode .hud-date{
+color:#64748b;
+}
+
+/* MINI BUTTON */
+
+.mini-btn{
+width:34px;
+height:34px;
+border-radius:10px;
 
 display:flex;
 align-items:center;
 justify-content:center;
 
-background:var(--panel);
-
-border:1px solid rgba(56,189,248,.12);
-
+font-size:12px;
 cursor:pointer;
-
 }
 
 /* SEARCH */
 
 .search-row{
-
 display:flex;
 gap:8px;
-
 margin-bottom:10px;
-
+align-items:center;
 }
 
 .search-box{
-
 flex:1;
-
 }
 
 .search-box input{
-
 width:100%;
-
-padding:12px;
-
+padding:10px;
 border:none;
-outline:none;
-
 border-radius:12px;
-
-background:var(--panel);
-
-color:white;
-
+outline:none;
+color:var(--text);
 }
 
-.semaforo{
+body.light-mode .search-box input{
+color:#102033;
+}
 
+.search-box input::placeholder{
+color:var(--soft);
+}
+
+/* SEMAFORO */
+
+.semaforo{
 display:flex;
 gap:6px;
-
-padding:10px;
-
+padding:8px 10px;
 border-radius:12px;
-
-background:var(--panel);
-
 }
 
 .luz{
-
 width:14px;
 height:14px;
-
 border-radius:50%;
-
-opacity:.3;
-
+opacity:.25;
 }
 
-.active{
-
+.luz.active{
 opacity:1;
-
 }
 
-.rojo{
-background:#ef4444;
-}
+.rojo{background:#ef4444;}
+.amarillo{background:#facc15;}
+.verde{background:#22c55e;}
 
-.amarillo{
-background:#facc15;
-}
-
-.verde{
-background:#22c55e;
-}
-
-/* CARDS */
+/* GRID */
 
 .grid{
-
 display:flex;
-gap:10px;
-
-margin-bottom:12px;
-
+gap:8px;
+margin-bottom:10px;
+overflow:hidden;
 }
 
-.card{
+/* CARD */
 
+.card{
+height:60px;
+min-width:60px;
 flex:1;
 
-height:70px;
-
-border-radius:18px;
+border-radius:16px;
 
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
 
-background:
-linear-gradient(
-180deg,
-rgba(20,35,55,.96),
-rgba(10,18,30,.98)
-);
-
-border:1px solid rgba(56,189,248,.12);
-
+overflow:hidden;
 cursor:pointer;
-
-transition:.2s;
-
-}
-
-.card:hover{
-
-transform:translateY(-2px);
-
 }
 
 .card span{
-
-font-size:22px;
-
+font-size:20px;
 }
 
 .card h3{
-
-font-size:11px;
-margin-top:6px;
-
+font-size:10px;
 font-weight:normal;
-
+margin-top:4px;
+white-space:nowrap;
 }
 
 .card.active{
+flex:2.4;
 
-border-color:#10b981;
+border-color:rgba(16,185,129,.65);
 
-box-shadow:
-0 0 10px rgba(16,185,129,.15);
+background:
+linear-gradient(
+180deg,
+rgba(16,185,129,.12),
+rgba(20,35,55,.96)
+);
+}
 
+body.light-mode .card.active{
+background:
+linear-gradient(
+180deg,
+rgba(16,185,129,.08),
+rgba(255,255,255,.96)
+);
+}
+
+.card.inactive{
+opacity:.55;
+flex:.8;
+}
+
+body.light-mode .card.inactive{
+opacity:.92;
+}
+
+.card.inactive h3{
+display:none;
+}
+
+.card.inactive span{
+font-size:16px;
+}
+
+/* BUTTONS */
+
+.actions{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin-bottom:10px;
+}
+
+.tool-btn,
+.action{
+height:40px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+border-radius:12px;
+
+font-size:12px;
+cursor:pointer;
 }
 
 /* PANEL */
 
 .section{
+padding:16px;
+border-radius:18px;
+margin-bottom:10px;
+min-height:48vh;
+overflow:visible;
+}
 
-padding:18px;
+.section h2{
+margin-bottom:14px;
+font-size:18px;
+}
+
+/* SELECT */
+
+select{
+width:100%;
+padding:12px;
+margin-bottom:10px;
+
+border:none;
+border-radius:12px;
+
+background:
+linear-gradient(
+180deg,
+rgba(26,45,70,.96),
+rgba(16,28,45,.98)
+);
+
+color:var(--text);
+
+outline:none;
+
+border:1px solid rgba(56,189,248,.12);
+}
+
+body.light-mode select{
+background:
+linear-gradient(
+180deg,
+rgba(255,255,255,.96),
+rgba(231,239,248,.97)
+);
+
+color:#102033;
+}
+
+select option{
+background:#132238;
+color:white;
+}
+
+body.light-mode select option{
+background:#edf4fb;
+color:#102033;
+}
+
+/* COLORS */
+
+.save{
+color:#10b981;
+border-color:#10b981;
+}
+
+.edit{
+color:#facc15;
+border-color:#facc15;
+}
+
+.clear{
+color:#ef4444;
+border-color:#ef4444;
+}
+
+.excel{
+color:#60a5fa;
+border-color:#2563eb;
+}
+
+/* RESULTS */
+
+.results-panel{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+}
+
+.result-card{
+padding:10px;
+border-radius:16px;
+text-align:center;
+}
+
+.result-card h4{
+font-size:10px;
+opacity:.7;
+margin-bottom:5px;
+}
+
+.result-card span{
+font-size:15px;
+font-weight:bold;
+color:#22c55e;
+}
+
+
+/* CALCULADORA */
+
+.calc-overlay{
+
+position:fixed;
+padding:20px;
+inset:0;
+
+display:none;
+align-items:center;
+justify-content:center;
+
+background:rgba(0,0,0,.35);
+
+backdrop-filter:blur(4px);
+
+z-index:9999;
+}
+
+.calc-overlay.active{
+display:flex;
+}
+
+.calc-box{
+
+width:320px;
+max-width:100%;
+
+padding:16px;
 
 border-radius:22px;
 
 background:
 linear-gradient(
 180deg,
-rgba(20,35,55,.96),
-rgba(10,18,30,.98)
+rgba(20,35,55,.98),
+rgba(10,18,30,.99)
 );
 
-border:1px solid rgba(56,189,248,.12);
+border:1px solid rgba(56,189,248,.18);
 
-margin-bottom:14px;
+box-shadow:
+0 0 18px rgba(56,189,248,.10),
+0 10px 30px rgba(0,0,0,.35);
+
+animation:calcShow .18s ease;
+overflow:hidden;
+}
+
+body.light-mode .calc-box{
+
+background:
+linear-gradient(
+180deg,
+rgba(255,255,255,.98),
+rgba(231,239,248,.98)
+);
+
+border:1px solid rgba(59,130,246,.16);
+}
+
+@keyframes calcShow{
+
+from{
+opacity:0;
+transform:scale(.94);
+}
+
+to{
+opacity:1;
+transform:scale(1);
+}
 
 }
 
-.section h2{
+.calc-top{
 
-margin-bottom:16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 
+margin-bottom:12px;
+
+font-size:13px;
+font-weight:bold;
 }
 
-/* FORM */
+.calc-top button{
 
-.form-grid{
+width:28px;
+height:28px;
 
-display:grid;
-grid-template-columns:repeat(2,1fr);
+border:none;
+border-radius:8px;
 
-gap:10px;
+cursor:pointer;
 
+background:rgba(239,68,68,.15);
+
+color:#ef4444;
 }
 
-input,
-select,
-button{
+.calc-display{
 
 width:100%;
+height:60px;
 
-padding:12px;
+margin-bottom:12px;
 
 border:none;
 outline:none;
 
 border-radius:14px;
 
-font-size:14px;
+padding:12px;
 
-}
+font-size:24px;
+text-align:right;
 
-input,
-select{
-
-background:rgba(255,255,255,.05);
+background:
+rgba(255,255,255,.05);
 
 color:white;
-
 }
 
-button{
+body.light-mode .calc-display{
+
+background:
+rgba(15,23,42,.05);
+
+color:#102033;
+}
+
+.calc-grid{
+
+display:grid;
+grid-template-columns:repeat(4,1fr);
+
+gap:8px;
+}
+
+.calc-key{
+
+height:52px;
+
+border:none;
+border-radius:14px;
 
 cursor:pointer;
 
+font-size:16px;
 font-weight:bold;
 
+background:
+rgba(255,255,255,.06);
+
+color:white;
+
+transition:.18s;
 }
 
-.primary-btn{
+.calc-key:hover{
+
+transform:translateY(-1px);
+
+background:
+rgba(56,189,248,.16);
+}
+
+body.light-mode .calc-key{
+
+background:
+rgba(15,23,42,.05);
+
+color:#102033;
+}
+
+.operator{
+color:#7dd3fc;
+}
+
+.equal{
 
 background:
 linear-gradient(
@@ -381,51 +722,152 @@ linear-gradient(
 );
 
 color:white;
-
 }
 
-/* RESULTS */
+.clear-btn{
 
-.results{
+grid-column:span 4;
 
+background:
+rgba(239,68,68,.15);
+
+color:#ef4444;
+}
+
+.iva-btn{
+
+background:
+rgba(16,185,129,.12);
+
+color:#10b981;
+}
+
+.percent-btn{
+
+background:
+rgba(250,204,21,.12);
+
+color:#facc15;
+}
+
+.tip-btn{
+
+background:
+rgba(168,85,247,.12);
+
+color:#c084fc;
+}
+
+.save-record{
+
+grid-column:span 4;
+
+background:
+rgba(59,130,246,.15);
+
+color:#7dd3fc;
+
+font-size:14px;
+}
+
+
+.bank-panel{
 display:grid;
-grid-template-columns:repeat(4,1fr);
-
+grid-template-columns:repeat(2,1fr);
 gap:10px;
-
-margin-top:18px;
-
+margin-top:12px;
 }
 
-.result-card{
-
-padding:14px;
-
-border-radius:18px;
-
-text-align:center;
-
-background:rgba(255,255,255,.04);
-
+.bank-panel input,
+.bank-panel select{
+width:100%;
+padding:12px;
+border-radius:12px;
+border:none;
+outline:none;
+background:rgba(255,255,255,.05);
+color:var(--text);
 }
 
-.result-card h4{
+.quick-status{
+margin-top:10px;
+padding:12px;
+border-radius:14px;
+background:rgba(16,185,129,.08);
+border:1px solid rgba(16,185,129,.18);
+font-size:12px;
+line-height:1.6;
+}
 
+.route-tag{
+display:inline-block;
+padding:4px 8px;
+border-radius:10px;
+font-size:10px;
+margin-top:6px;
+background:rgba(59,130,246,.12);
+color:#7dd3fc;
+}
+
+
+
+.dynamic-hidden{
+display:none!important;
+}
+
+
+/* MOBILE */
+
+
+.client-panel{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+margin-top:10px;
+}
+
+.client-panel input,
+.client-panel select{
+width:100%;
+padding:12px;
+border-radius:12px;
+border:none;
+outline:none;
+background:rgba(255,255,255,.05);
+color:var(--text);
+}
+
+.secondary-actions{
+opacity:.88;
+}
+
+.secondary-actions .tool-btn{
+height:36px;
 font-size:11px;
+}
 
-opacity:.7;
 
-margin-bottom:6px;
+@media(max-width:900px){
 
+.actions,
+.results-panel{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+
+
+body{
+min-height:100vh;
+}
+
+.section{
+position:relative;
 }
 
 .result-card span{
-
-font-size:18px;
-font-weight:bold;
-
-color:#22c55e;
-
+word-break:break-word;
 }
 
 </style>
@@ -437,39 +879,35 @@ color:#22c55e;
 
 <div class="logo-box">
 
-<div class="logo-icon">
-MR
-</div>
+<div class="logo-icon">MR</div>
 
 <div class="logo-text">
-
 <h1>MRFC</h1>
-
-<p>
-MICRO REAL FISCAL CORE
-</p>
-
+<p>MICRO REAL FISCAL CORE</p>
 </div>
 
 </div>
 
 <div class="top-actions">
 
-<div class="mini-btn">
-🏠
+<div class="datetime-box">
+
+<div id="horaActual" class="hud-clock">
+01:19
 </div>
 
-<div class="mini-btn">
-📊
+<div id="fechaActual" class="hud-date">
+28-01-2026
 </div>
 
-<div class="mini-btn">
-🧮
 </div>
 
-<div class="mini-btn">
-⚙️
-</div>
+<div class="mini-btn" id="homeBtn">🏠</div>
+<div class="mini-btn" id="backBtn">⬅️</div>
+<div class="mini-btn" id="nextBtn">➡️</div>
+<div class="mini-btn" id="captureBtn">📸</div>
+<div class="mini-btn" id="calcBtn">🧮</div>
+<div class="mini-btn" id="themeToggle">🌙</div>
 
 </div>
 
@@ -478,22 +916,13 @@ MICRO REAL FISCAL CORE
 <div class="search-row">
 
 <div class="search-box">
-
-<input
-type="text"
-placeholder="🔍 Buscar módulo..."
->
-
+<input type="text" placeholder="🔍 Buscar módulo...">
 </div>
 
 <div class="semaforo">
-
 <div class="luz rojo active"></div>
-
 <div class="luz amarillo"></div>
-
 <div class="luz verde"></div>
-
 </div>
 
 </div>
@@ -501,183 +930,273 @@ placeholder="🔍 Buscar módulo..."
 <div class="grid">
 
 <div class="card active">
-
-<span>
-💼
-</span>
-
-<h3>
-Actividad
-</h3>
-
+<span>💼</span>
+<h3>Actividad</h3>
 </div>
 
-<div class="card">
-
-<span>
-🏦
-</span>
-
-<h3>
-Bancos
-</h3>
-
+<div class="card inactive">
+<span>🏦</span>
+<h3>Bancos</h3>
 </div>
 
-<div class="card">
-
-<span>
-💸
-</span>
-
-<h3>
-Gastos
-</h3>
-
+<div class="card inactive">
+<span>💸</span>
+<h3>Gastos</h3>
 </div>
 
-<div class="card">
-
-<span>
-🚚
-</span>
-
-<h3>
-Viáticos
-</h3>
-
+<div class="card inactive">
+<span>🚚</span>
+<h3>Viáticos</h3>
 </div>
 
 </div>
 
-<div class="section">
+<div class="grid">
 
-<h2>
-⚙️ Operación Fiscal
-</h2>
+<div class="card inactive">
+<span>📦</span>
+<h3>Proveedor</h3>
+</div>
 
-<div class="form-grid">
+<div class="card inactive">
+<span>👥</span>
+<h3>Cliente</h3>
+</div>
 
-<select>
+<div class="card inactive">
+<span>📍</span>
+<h3>Rutas</h3>
+</div>
 
-<option>
-GENERAL
+<div class="card inactive">
+<span>🛠️</span>
+<h3>Mantenimiento</h3>
+</div>
+
+</div>
+
+<div class="actions">
+
+<div class="tool-btn">📷 OCR</div>
+<div class="tool-btn">🔳 QR</div>
+<div class="tool-btn">📦 Código</div>
+<div class="tool-btn">📍 GPS</div>
+
+</div>
+
+
+<div class="section" id="mainSection">
+
+<h2>⚙️ Operación del Día</h2>
+
+<select id="actividadSelect">
+
+<option value="" selected disabled>
+Selecciona actividad fiscal
 </option>
 
-<option>
-RESICO
-</option>
+<option>GENERAL</option>
+<option>PFAE</option>
+<option>RESICO</option>
+<option>RIF</option>
+<option>SUSA</option>
 
-<option>
-RIF
+</select>
+
+<select id="operacionSelect">
+
+<option value="" selected disabled>
+Selecciona operación
 </option>
 
 </select>
 
-<select>
+<div class="client-panel">
 
-<option>
-Venta
-</option>
+<input type="text" id="clienteNombre" placeholder="👤 Cliente">
+<input type="text" id="clienteTelefono" placeholder="📞 Teléfono">
+<input type="text" id="clienteDireccion" placeholder="📍 Dirección / Referencia">
 
-<option>
-Servicio
-</option>
-
-<option>
-Factura
-</option>
-
+<select id="metodoPago">
+<option selected disabled>💳 Método de pago</option>
+<option>Efectivo</option>
+<option>Tarjeta</option>
+<option>Transferencia</option>
+<option>Pago en línea</option>
 </select>
+
+<input type="number" id="lineasPedido" placeholder="📦 Líneas del pedido">
+<input type="number" id="distanciaPedido" placeholder="🚚 Distancia KM">
+
+</div>
+
+<div class="bank-panel">
+
+<select id="bancoActivo">
+<option selected disabled>🏦 Banco activo</option>
+<option>BBVA</option>
+<option>Mercado Pago</option>
+<option>Nu</option>
+<option>Santander</option>
+<option>Banamex</option>
+</select>
+
+<input type="text" id="titularCuenta" placeholder="👤 Titular cuenta">
+
+<input type="text" id="clabeCuenta" placeholder="🔢 CLABE / Cuenta">
+
+<select id="tipoEntrega">
+<option selected disabled>🚚 Tipo entrega</option>
+<option>Corta rentable</option>
+<option>Media</option>
+<option>Larga</option>
+<option>Alto esfuerzo</option>
+</select>
+
+</div>
+
+
+<div class="quick-status" id="estructuraBase">
+
+🧠 Plantilla MRFC activa.<br>
+Los campos cambian según SAT y operación seleccionada.
+
+</div>
+
+<div class="quick-status" id="quickStatus">
+
+📊 Estado operativo listo.<br>
+Sin registros analizados.
+
+</div>
+
+</div>
+
+<div class="actions">
+
+<div class="action save">💾 Guardar</div>
+<div class="action edit">✏️ Editar</div>
+<div class="action clear">🗑️ Limpiar</div>
+<div class="action excel">📤 Exportar</div>
+
+</div>
+
+<div class="actions secondary-actions">
+
+<div class="tool-btn" id="historialBtn">📊 Historial</div>
+<div class="tool-btn" id="qrBtn">🔳 QR</div>
+<div class="tool-btn" id="codigoBtn">📦 Código</div>
+<div class="tool-btn" id="graficaBtn">📈 Gráfica</div>
+
+</div>
+
+<div class="results-panel">
+
+<div class="result-card">
+<h4>RESULTADO</h4>
+<span>$0.00</span>
+</div>
+
+<div class="result-card">
+<h4>IVA</h4>
+<span>$0.00</span>
+</div>
+
+<div class="result-card">
+<h4>ISR</h4>
+<span>$0.00</span>
+</div>
+
+<div class="result-card">
+<h4>GANANCIA REAL</h4>
+<span>$0.00</span>
+</div>
+
+</div>
+
+
+<!-- PANEL HISTORIAL -->
+
+<div class="section" id="historialPanel">
+
+<h2>📊 Historial de Registros</h2>
+
+<div id="historialContenido">
+
+<p style="opacity:.7;">
+Aquí aparecerán los registros guardados.
+</p>
+
+</div>
+
+</div>
+
+<!-- CALCULADORA -->
+
+<div class="calc-overlay" id="calcOverlay">
+
+<div class="calc-box">
+
+<div class="calc-top">
+
+<span>🧮 CALCULADORA</span>
+
+<button id="closeCalc">✕</button>
+
+</div>
 
 <input
 type="text"
-placeholder="👤 Cliente"
+id="calcDisplay"
+class="calc-display"
+readonly
 >
 
-<input
-type="number"
-placeholder="💰 Monto"
->
+<div class="calc-grid">
 
-<input
-type="number"
-placeholder="🚚 Distancia KM"
->
+<button class="calc-key">7</button>
+<button class="calc-key">8</button>
+<button class="calc-key">9</button>
+<button class="calc-key operator">÷</button>
 
-<select>
+<button class="calc-key">4</button>
+<button class="calc-key">5</button>
+<button class="calc-key">6</button>
+<button class="calc-key operator">×</button>
 
-<option>
-Efectivo
-</option>
+<button class="calc-key">1</button>
+<button class="calc-key">2</button>
+<button class="calc-key">3</button>
+<button class="calc-key operator">-</button>
 
-<option>
-Transferencia
-</option>
+<button class="calc-key">0</button>
+<button class="calc-key">.</button>
+<button class="calc-key equal">=</button>
+<button class="calc-key operator">+</button>
 
-<option>
-Tarjeta
-</option>
-
-</select>
-
-</div>
-
-<br>
-
-<button class="primary-btn">
-
-💾 Guardar Operación
-
+<button class="calc-key iva-btn" id="masIVA">
++ IVA
 </button>
 
-<div class="results">
+<button class="calc-key iva-btn" id="menosIVA">
+- IVA
+</button>
 
-<div class="result-card">
+<button class="calc-key percent-btn" id="porcentajeBtn">
+%
+</button>
 
-<h4>
-IVA
-</h4>
+<button class="calc-key tip-btn" id="propinaBtn">
+💰 Propina
+</button>
 
-<span>
-$0.00
-</span>
+<button class="calc-key save-record" id="guardarRegistro">
+💾 Guardar Registro
+</button>
 
-</div>
-
-<div class="result-card">
-
-<h4>
-ISR
-</h4>
-
-<span>
-$0.00
-</span>
-
-</div>
-
-<div class="result-card">
-
-<h4>
-NETO
-</h4>
-
-<span>
-$0.00
-</span>
-
-</div>
-
-<div class="result-card">
-
-<h4>
-UTILIDAD
-</h4>
-
-<span>
--
-</span>
+<button class="calc-key clear-btn">
+C
+</button>
 
 </div>
 
@@ -685,5 +1204,767 @@ UTILIDAD
 
 </div>
 
-</body>
-</html>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+
+/* BOTON GUARDAR PRINCIPAL */
+
+document.querySelector('.action.save')
+.addEventListener('click',()=>{
+
+document.getElementById('guardarRegistro').click();
+
+});
+
+
+/* HISTORIAL */
+
+const historialBtn =
+document.getElementById('historialBtn');
+
+const historialContenido =
+document.getElementById('historialContenido');
+
+historialBtn.addEventListener('click',()=>{
+
+const registros =
+JSON.parse(
+localStorage.getItem('mrfc-registros')
+) || [];
+
+if(registros.length===0){
+
+historialContenido.innerHTML =
+'<p>No existen registros guardados.</p>';
+
+return;
+
+}
+
+historialContenido.innerHTML='';
+
+registros.reverse().forEach(reg=>{
+
+const div =
+document.createElement('div');
+
+div.style.padding='10px';
+div.style.marginBottom='8px';
+div.style.borderRadius='12px';
+div.style.background='rgba(255,255,255,.05)';
+
+
+
+const tipoRuta =
+parseFloat(reg.distancia) <= 1
+? '🟢 Ruta corta'
+: parseFloat(reg.distancia) <= 5
+? '🟡 Ruta media'
+: '🔴 Ruta larga';
+
+div.innerHTML = `
+<b>${reg.resultado}</b><br>
+👤 ${reg.cliente}<br>
+📞 ${reg.telefono}<br>
+📦 ${reg.lineas} líneas<br>
+🚚 ${reg.distancia} km<br>
+💳 ${reg.metodoPago}<br>
+🏦 ${reg.banco}<br>
+${reg.fecha} ${reg.hora}<br>
+${reg.actividad}<br>
+${reg.operacion}<br>
+<div class="route-tag">${tipoRuta}</div>
+`;
+
+
+historialContenido.appendChild(div);
+
+});
+
+});
+
+/* QR */
+
+document.getElementById('qrBtn')
+.addEventListener('click',()=>{
+
+
+
+const banco =
+document.getElementById('bancoActivo')?.value;
+
+const cliente =
+document.getElementById('clienteNombre')?.value;
+
+const cardActiva =
+document.querySelector('.card.active h3')?.innerText;
+
+if(cardActiva==='Bancos'){
+
+alert(
+'QR bancario preparado para: ' + banco
+);
+
+return;
+
+}
+
+if(cardActiva==='Cliente'){
+
+alert(
+'QR cliente preparado para: ' + cliente
+);
+
+return;
+
+}
+
+alert(
+'QR contextual preparado para módulo activo'
+);
+
+
+});
+
+/* CLIENTE */
+
+const clienteBtn = document.getElementById('clienteBtn');
+
+if(clienteBtn){
+clienteBtn.addEventListener('click',()=>{
+
+const nombre =
+prompt('Nombre del cliente');
+
+if(!nombre) return;
+
+localStorage.setItem(
+'mrfc-cliente-activo',
+nombre
+);
+
+alert(
+'Cliente activo: ' + nombre
+);
+
+});
+}
+
+/* GRAFICA */
+
+document.getElementById('graficaBtn')
+.addEventListener('click',()=>{
+
+alert(
+'Próxima mejora: dashboard gráfico'
+);
+
+});
+
+</script>
+
+<script>
+
+/* CLOCK */
+
+function actualizarFechaHora(){
+
+const ahora = new Date();
+
+const hora = ahora.toLocaleTimeString('es-MX',{
+hour:'2-digit',
+minute:'2-digit',
+hour12:false
+});
+
+const dia = String(ahora.getDate()).padStart(2,'0');
+const mes = String(ahora.getMonth()+1).padStart(2,'0');
+const anio = ahora.getFullYear();
+
+document.getElementById('horaActual').innerText = hora;
+
+document.getElementById('fechaActual').innerText =
+`${dia}-${mes}-${anio}`;
+
+}
+
+actualizarFechaHora();
+
+setInterval(actualizarFechaHora,1000);
+
+/* CARDS */
+
+const tarjetas =
+document.querySelectorAll('.card');
+
+tarjetas.forEach(card=>{
+
+card.addEventListener('click',()=>{
+
+tarjetas.forEach(c=>{
+
+c.classList.remove('active');
+c.classList.add('inactive');
+
+});
+
+card.classList.remove('inactive');
+card.classList.add('active');
+
+});
+
+});
+
+/* THEME */
+
+const themeToggle =
+document.getElementById('themeToggle');
+
+themeToggle.addEventListener('click',()=>{
+
+document.body.classList.toggle('light-mode');
+
+const claro =
+document.body.classList.contains('light-mode');
+
+themeToggle.innerText =
+claro ? '☀️' : '🌙';
+
+localStorage.setItem(
+'mrfc-theme',
+claro ? 'light' : 'dark'
+);
+
+});
+
+const temaGuardado =
+localStorage.getItem('mrfc-theme');
+
+if(temaGuardado==='light'){
+
+document.body.classList.add('light-mode');
+
+themeToggle.innerText='☀️';
+
+}
+
+/* HOME */
+
+document.getElementById('homeBtn')
+.addEventListener('click',()=>{
+
+window.scrollTo({
+top:0,
+behavior:'smooth'
+});
+
+});
+
+/* BACK */
+
+document.getElementById('backBtn')
+.addEventListener('click',()=>{
+
+history.back();
+
+});
+
+/* NEXT */
+
+document.getElementById('nextBtn')
+.addEventListener('click',()=>{
+
+history.forward();
+
+});
+
+/* CAPTURE */
+
+document.getElementById('captureBtn')
+.addEventListener('click',()=>{
+
+html2canvas(document.body,{
+backgroundColor:null,
+scale:2
+}).then(canvas=>{
+
+const link =
+document.createElement('a');
+
+const fecha =
+new Date();
+
+const nombre =
+`MRFC_${fecha.getFullYear()}-${fecha.getMonth()+1}-${fecha.getDate()}_${fecha.getHours()}-${fecha.getMinutes()}.png`;
+
+link.download = nombre;
+
+link.href =
+canvas.toDataURL('image/png');
+
+link.click();
+
+});
+
+});
+
+/* OPERACIONES DINAMICAS */
+
+const actividadSelect =
+document.getElementById('actividadSelect');
+
+const operacionSelect =
+document.getElementById('operacionSelect');
+
+const operaciones = {
+
+GENERAL:[
+'Compra',
+'Venta',
+'Servicio',
+'Honorarios'
+],
+
+PFAE:[
+'Actividad Empresarial',
+'Factura',
+'Gasto Deducible'
+],
+
+RESICO:[
+'Ingreso Simplificado',
+'Factura Simplificada'
+],
+
+RIF:[
+'Venta Público General',
+'Factura RIF'
+],
+
+SUSA:[
+'Operación Especial'
+]
+
+};
+
+actividadSelect.addEventListener('change',()=>{
+
+const actividad =
+actividadSelect.value;
+
+operacionSelect.innerHTML =
+'<option selected disabled>Selecciona operación</option>';
+
+operaciones[actividad].forEach(op=>{
+
+const option =
+document.createElement('option');
+
+option.value = op;
+option.textContent = op;
+
+operacionSelect.appendChild(option);
+
+});
+
+});
+
+
+/* CAMPOS DINAMICOS */
+
+const campos = {
+
+cliente:document.getElementById('clienteNombre')?.parentElement,
+telefono:document.getElementById('clienteTelefono'),
+direccion:document.getElementById('clienteDireccion'),
+metodoPago:document.getElementById('metodoPago'),
+lineas:document.getElementById('lineasPedido'),
+distancia:document.getElementById('distanciaPedido'),
+banco:document.getElementById('bancoActivo'),
+clabe:document.getElementById('clabeCuenta'),
+tipoEntrega:document.getElementById('tipoEntrega')
+
+};
+
+function mostrarCampo(el){
+if(!el) return;
+el.style.display='block';
+}
+
+function ocultarCampo(el){
+if(!el) return;
+el.style.display='none';
+}
+
+function resetCampos(){
+
+mostrarCampo(document.getElementById('clienteNombre'));
+mostrarCampo(document.getElementById('clienteTelefono'));
+mostrarCampo(document.getElementById('clienteDireccion'));
+mostrarCampo(document.getElementById('metodoPago'));
+mostrarCampo(document.getElementById('lineasPedido'));
+mostrarCampo(document.getElementById('distanciaPedido'));
+mostrarCampo(document.getElementById('bancoActivo'));
+mostrarCampo(document.getElementById('clabeCuenta'));
+mostrarCampo(document.getElementById('tipoEntrega'));
+
+}
+
+operacionSelect.addEventListener('change',()=>{
+
+resetCampos();
+
+const op = operacionSelect.value;
+
+/* FACTURAS */
+
+if(
+op==='Factura' ||
+op==='Factura RIF' ||
+op==='Factura Simplificada'
+){
+
+ocultarCampo(document.getElementById('lineasPedido'));
+ocultarCampo(document.getElementById('distanciaPedido'));
+ocultarCampo(document.getElementById('tipoEntrega'));
+ocultarCampo(document.getElementById('clienteDireccion'));
+
+}
+
+/* GASTOS */
+
+if(
+op==='Gasto Deducible'
+){
+
+ocultarCampo(document.getElementById('clienteTelefono'));
+ocultarCampo(document.getElementById('lineasPedido'));
+ocultarCampo(document.getElementById('distanciaPedido'));
+ocultarCampo(document.getElementById('tipoEntrega'));
+
+}
+
+/* ACTIVIDAD EMPRESARIAL */
+
+if(
+op==='Actividad Empresarial'
+){
+
+mostrarCampo(document.getElementById('lineasPedido'));
+mostrarCampo(document.getElementById('distanciaPedido'));
+mostrarCampo(document.getElementById('tipoEntrega'));
+
+}
+
+});
+
+
+/* CALCULADORA */
+
+const calcBtn =
+document.getElementById('calcBtn');
+
+const calcOverlay =
+document.getElementById('calcOverlay');
+
+const closeCalc =
+document.getElementById('closeCalc');
+
+const calcDisplay =
+document.getElementById('calcDisplay');
+
+const calcKeys =
+document.querySelectorAll('.calc-key');
+
+calcBtn.addEventListener('click',()=>{
+
+calcOverlay.classList.add('active');
+
+});
+
+closeCalc.addEventListener('click',()=>{
+
+calcOverlay.classList.remove('active');
+
+});
+
+let expression = '';
+
+const masIVA =
+document.getElementById('masIVA');
+
+const menosIVA =
+document.getElementById('menosIVA');
+
+const porcentajeBtn =
+document.getElementById('porcentajeBtn');
+
+const propinaBtn =
+document.getElementById('propinaBtn');
+
+const guardarRegistro =
+document.getElementById('guardarRegistro');
+
+const luces =
+document.querySelectorAll('.luz');
+
+/* PORCENTAJE */
+
+porcentajeBtn.addEventListener('click',()=>{
+
+const numero =
+parseFloat(calcDisplay.value || 0);
+
+const porcentaje =
+prompt('¿Qué porcentaje deseas calcular?');
+
+if(!porcentaje) return;
+
+const resultado =
+(numero * parseFloat(porcentaje))/100;
+
+calcDisplay.value =
+resultado.toFixed(2);
+
+expression =
+resultado.toFixed(2);
+
+});
+
+/* PROPINA */
+
+propinaBtn.addEventListener('click',()=>{
+
+const numero =
+parseFloat(calcDisplay.value || 0);
+
+const propina =
+prompt('Porcentaje de propina');
+
+if(!propina) return;
+
+const total =
+numero + ((numero * parseFloat(propina))/100);
+
+calcDisplay.value =
+total.toFixed(2);
+
+expression =
+total.toFixed(2);
+
+});
+
+/* + IVA */
+
+masIVA.addEventListener('click',()=>{
+
+const numero =
+parseFloat(calcDisplay.value || 0);
+
+const total =
+numero * 1.16;
+
+calcDisplay.value =
+total.toFixed(2);
+
+expression =
+total.toFixed(2);
+
+});
+
+/* - IVA */
+
+menosIVA.addEventListener('click',()=>{
+
+const numero =
+parseFloat(calcDisplay.value || 0);
+
+const subtotal =
+numero / 1.16;
+
+calcDisplay.value =
+subtotal.toFixed(2);
+
+expression =
+subtotal.toFixed(2);
+
+});
+
+/* GUARDAR REGISTRO */
+
+guardarRegistro.addEventListener('click',()=>{
+
+if(!calcDisplay.value) return;
+
+navigator.geolocation.getCurrentPosition(pos=>{
+
+const registros =
+JSON.parse(
+localStorage.getItem('mrfc-registros')
+) || [];
+
+const ahora =
+new Date();
+
+const nuevoRegistro = {
+
+resultado:
+calcDisplay.value,
+
+fecha:
+ahora.toLocaleDateString('es-MX'),
+
+hora:
+ahora.toLocaleTimeString('es-MX'),
+
+latitud:
+pos.coords.latitude,
+
+longitud:
+pos.coords.longitude,
+
+actividad:
+actividadSelect.value || 'GENERAL',
+
+operacion:
+operacionSelect.value || 'SIN DEFINIR',
+
+cliente:
+document.getElementById('clienteNombre').value || 'SIN CLIENTE',
+
+telefono:
+document.getElementById('clienteTelefono').value || 'SIN TEL',
+
+direccion:
+document.getElementById('clienteDireccion').value || 'SIN DIRECCION',
+
+metodoPago:
+document.getElementById('metodoPago').value || 'SIN PAGO',
+
+lineas:
+document.getElementById('lineasPedido').value || 0,
+
+distancia:
+document.getElementById('distanciaPedido').value || 0,
+
+banco:
+document.getElementById('bancoActivo').value || 'SIN BANCO',
+
+tipoEntrega:
+document.getElementById('tipoEntrega').value || 'NORMAL'
+
+};
+
+registros.push(nuevoRegistro);
+
+localStorage.setItem(
+'mrfc-registros',
+JSON.stringify(registros)
+);
+
+luces.forEach(l=>{
+l.classList.add('active');
+});
+
+alert('Registro guardado correctamente');
+
+console.log(registros);
+
+},()=>{
+
+alert('GPS no disponible');
+
+});
+
+});
+
+
+
+/* FIX CALCULADORA */
+
+calcOverlay.addEventListener('click',(e)=>{
+
+if(e.target===calcOverlay){
+
+calcOverlay.classList.remove('active');
+
+}
+
+});
+
+document.addEventListener('keydown',(e)=>{
+
+if(e.key==='Escape'){
+
+calcOverlay.classList.remove('active');
+
+}
+
+});
+
+
+calcKeys.forEach(key=>{
+
+key.addEventListener('click',()=>{
+
+const value =
+key.textContent.trim();
+
+if(
+value==='+ IVA' ||
+value==='- IVA' ||
+value==='%' ||
+value==='💰 Propina' ||
+value==='💾 Guardar Registro'
+){
+return;
+}
+
+if(value==='C'){
+
+expression='';
+calcDisplay.value='';
+
+return;
+
+}
+
+if(value==='='){
+
+try{
+
+const result = eval(
+expression
+.replace(/×/g,'*')
+.replace(/÷/g,'/')
+);
+
+calcDisplay.value = result;
+
+expression = result.toString();
+
+}catch{
+
+calcDisplay.value='ERROR';
+
+expression='';
+
+}
+
+return;
+
+}
+
+expression += value;
+
+calcDisplay.value = expression;
+
+});
+
+});
+
+
+
+
+
+</script>
