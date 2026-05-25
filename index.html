@@ -1,4 +1,3 @@
-```html id="8e9f4m"
 <!DOCTYPE html>
 <html lang="es">
 
@@ -11,7 +10,7 @@ name="viewport"
 content="width=device-width, initial-scale=1.0"
 >
 
-<title>MRFC CORE</title>
+<title>MRFC HUD CORE</title>
 
 <style>
 
@@ -20,7 +19,11 @@ content="width=device-width, initial-scale=1.0"
 --bg:#07111f;
 --panel:#132238;
 --panel2:#1a2d46;
+--border:#28415f;
+
 --text:#ffffff;
+--soft:#9fb3c8;
+
 --green:#10b981;
 --blue:#38bdf8;
 --yellow:#facc15;
@@ -39,10 +42,16 @@ box-sizing:border-box;
 body{
 
 background:var(--bg);
+
 color:var(--text);
+
 font-family:Arial,sans-serif;
-padding:16px;
+
+padding:14px;
+
 min-height:100vh;
+
+overflow-x:hidden;
 
 }
 
@@ -53,9 +62,12 @@ min-height:100vh;
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:20px;
-flex-wrap:wrap;
+
 gap:10px;
+
+margin-bottom:14px;
+
+flex-wrap:wrap;
 
 }
 
@@ -65,23 +77,34 @@ display:flex;
 align-items:center;
 gap:10px;
 
-padding:14px;
+padding:12px;
+
 border-radius:18px;
 
-background:var(--panel);
+background:
+linear-gradient(
+180deg,
+rgba(20,35,55,.96),
+rgba(10,18,30,.98)
+);
+
+border:1px solid rgba(56,189,248,.12);
 
 }
 
 .logo-icon{
 
-width:50px;
-height:50px;
+width:54px;
+height:54px;
 
-border-radius:14px;
+border-radius:16px;
 
 display:flex;
 align-items:center;
 justify-content:center;
+
+font-size:22px;
+font-weight:bold;
 
 background:
 linear-gradient(
@@ -89,9 +112,6 @@ linear-gradient(
 #10b981,
 #3b82f6
 );
-
-font-weight:bold;
-font-size:22px;
 
 }
 
@@ -103,22 +123,22 @@ font-size:22px;
 
 .logo-text p{
 
-font-size:11px;
+font-size:10px;
 opacity:.7;
 
 }
 
-.actions-top{
+.top-actions{
 
 display:flex;
 gap:8px;
 
 }
 
-.icon-btn{
+.mini-btn{
 
-width:40px;
-height:40px;
+width:38px;
+height:38px;
 
 border-radius:12px;
 
@@ -128,25 +148,179 @@ justify-content:center;
 
 background:var(--panel);
 
+border:1px solid rgba(56,189,248,.12);
+
 cursor:pointer;
+
+}
+
+/* SEARCH */
+
+.search-row{
+
+display:flex;
+gap:8px;
+
+margin-bottom:10px;
+
+}
+
+.search-box{
+
+flex:1;
+
+}
+
+.search-box input{
+
+width:100%;
+
+padding:12px;
+
+border:none;
+outline:none;
+
+border-radius:12px;
+
+background:var(--panel);
+
+color:white;
+
+}
+
+.semaforo{
+
+display:flex;
+gap:6px;
+
+padding:10px;
+
+border-radius:12px;
+
+background:var(--panel);
+
+}
+
+.luz{
+
+width:14px;
+height:14px;
+
+border-radius:50%;
+
+opacity:.3;
+
+}
+
+.active{
+
+opacity:1;
+
+}
+
+.rojo{
+background:#ef4444;
+}
+
+.amarillo{
+background:#facc15;
+}
+
+.verde{
+background:#22c55e;
+}
+
+/* CARDS */
+
+.grid{
+
+display:flex;
+gap:10px;
+
+margin-bottom:12px;
+
+}
+
+.card{
+
+flex:1;
+
+height:70px;
+
+border-radius:18px;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+
+background:
+linear-gradient(
+180deg,
+rgba(20,35,55,.96),
+rgba(10,18,30,.98)
+);
+
+border:1px solid rgba(56,189,248,.12);
+
+cursor:pointer;
+
+transition:.2s;
+
+}
+
+.card:hover{
+
+transform:translateY(-2px);
+
+}
+
+.card span{
+
+font-size:22px;
+
+}
+
+.card h3{
+
+font-size:11px;
+margin-top:6px;
+
+font-weight:normal;
+
+}
+
+.card.active{
+
+border-color:#10b981;
+
+box-shadow:
+0 0 10px rgba(16,185,129,.15);
 
 }
 
 /* PANEL */
 
-.panel{
+.section{
 
-background:var(--panel);
-
-padding:20px;
+padding:18px;
 
 border-radius:22px;
 
-margin-bottom:16px;
+background:
+linear-gradient(
+180deg,
+rgba(20,35,55,.96),
+rgba(10,18,30,.98)
+);
+
+border:1px solid rgba(56,189,248,.12);
+
+margin-bottom:14px;
 
 }
 
-.panel h2{
+.section h2{
 
 margin-bottom:16px;
 
@@ -158,7 +332,8 @@ margin-bottom:16px;
 
 display:grid;
 grid-template-columns:repeat(2,1fr);
-gap:12px;
+
+gap:10px;
 
 }
 
@@ -182,7 +357,7 @@ font-size:14px;
 input,
 select{
 
-background:var(--panel2);
+background:rgba(255,255,255,.05);
 
 color:white;
 
@@ -191,6 +366,7 @@ color:white;
 button{
 
 cursor:pointer;
+
 font-weight:bold;
 
 }
@@ -214,109 +390,48 @@ color:white;
 
 display:grid;
 grid-template-columns:repeat(4,1fr);
-gap:12px;
 
-margin-top:20px;
+gap:10px;
+
+margin-top:18px;
 
 }
 
-.card{
+.result-card{
 
-background:var(--panel2);
-
-padding:16px;
+padding:14px;
 
 border-radius:18px;
 
 text-align:center;
 
+background:rgba(255,255,255,.04);
+
 }
 
-.card h4{
+.result-card h4{
 
 font-size:11px;
+
 opacity:.7;
-margin-bottom:8px;
+
+margin-bottom:6px;
 
 }
 
-.card span{
+.result-card span{
 
 font-size:18px;
 font-weight:bold;
 
-}
-
-/* HISTORIAL */
-
-.historial-item{
-
-background:var(--panel2);
-
-padding:16px;
-
-border-radius:16px;
-
-margin-top:10px;
-
-line-height:1.7;
-
-}
-
-/* TOAST */
-
-#toastContainer{
-
-position:fixed;
-
-top:20px;
-right:20px;
-
-display:flex;
-flex-direction:column;
-gap:10px;
-
-z-index:99999;
-
-}
-
-.toast{
-
-background:var(--panel);
-
-padding:12px 16px;
-
-border-radius:12px;
-
-}
-
-/* MOBILE */
-
-@media(max-width:800px){
-
-.form-grid{
-
-grid-template-columns:1fr;
-
-}
-
-.results{
-
-grid-template-columns:1fr;
-
-}
+color:#22c55e;
 
 }
 
 </style>
-
 </head>
 
 <body>
-
-<div id="toastContainer"></div>
-
-<!-- TOPBAR -->
 
 <div class="topbar">
 
@@ -338,21 +453,21 @@ MICRO REAL FISCAL CORE
 
 </div>
 
-<div class="actions-top">
+<div class="top-actions">
 
-<div class="icon-btn">
+<div class="mini-btn">
 🏠
 </div>
 
-<div class="icon-btn">
+<div class="mini-btn">
 📊
 </div>
 
-<div class="icon-btn">
+<div class="mini-btn">
 🧮
 </div>
 
-<div class="icon-btn">
+<div class="mini-btn">
 ⚙️
 </div>
 
@@ -360,9 +475,82 @@ MICRO REAL FISCAL CORE
 
 </div>
 
-<!-- PANEL PRINCIPAL -->
+<div class="search-row">
 
-<div class="panel">
+<div class="search-box">
+
+<input
+type="text"
+placeholder="🔍 Buscar módulo..."
+>
+
+</div>
+
+<div class="semaforo">
+
+<div class="luz rojo active"></div>
+
+<div class="luz amarillo"></div>
+
+<div class="luz verde"></div>
+
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="card active">
+
+<span>
+💼
+</span>
+
+<h3>
+Actividad
+</h3>
+
+</div>
+
+<div class="card">
+
+<span>
+🏦
+</span>
+
+<h3>
+Bancos
+</h3>
+
+</div>
+
+<div class="card">
+
+<span>
+💸
+</span>
+
+<h3>
+Gastos
+</h3>
+
+</div>
+
+<div class="card">
+
+<span>
+🚚
+</span>
+
+<h3>
+Viáticos
+</h3>
+
+</div>
+
+</div>
+
+<div class="section">
 
 <h2>
 ⚙️ Operación Fiscal
@@ -370,11 +558,7 @@ MICRO REAL FISCAL CORE
 
 <div class="form-grid">
 
-<select id="regimen">
-
-<option selected disabled>
-Selecciona régimen
-</option>
+<select>
 
 <option>
 GENERAL
@@ -390,11 +574,7 @@ RIF
 
 </select>
 
-<select id="operacion">
-
-<option selected disabled>
-Tipo operación
-</option>
+<select>
 
 <option>
 Venta
@@ -412,27 +592,20 @@ Factura
 
 <input
 type="text"
-id="cliente"
 placeholder="👤 Cliente"
 >
 
 <input
 type="number"
-id="monto"
 placeholder="💰 Monto"
 >
 
 <input
 type="number"
-id="distancia"
 placeholder="🚚 Distancia KM"
 >
 
-<select id="metodoPago">
-
-<option selected disabled>
-💳 Método pago
-</option>
+<select>
 
 <option>
 Efectivo
@@ -452,10 +625,7 @@ Tarjeta
 
 <br>
 
-<button
-class="primary-btn"
-id="calcularBtn"
->
+<button class="primary-btn">
 
 💾 Guardar Operación
 
@@ -463,49 +633,49 @@ id="calcularBtn"
 
 <div class="results">
 
-<div class="card">
+<div class="result-card">
 
 <h4>
 IVA
 </h4>
 
-<span id="ivaResultado">
+<span>
 $0.00
 </span>
 
 </div>
 
-<div class="card">
+<div class="result-card">
 
 <h4>
 ISR
 </h4>
 
-<span id="isrResultado">
+<span>
 $0.00
 </span>
 
 </div>
 
-<div class="card">
+<div class="result-card">
 
 <h4>
 NETO
 </h4>
 
-<span id="netoResultado">
+<span>
 $0.00
 </span>
 
 </div>
 
-<div class="card">
+<div class="result-card">
 
 <h4>
-RENTABILIDAD
+UTILIDAD
 </h4>
 
-<span id="rentabilidadResultado">
+<span>
 -
 </span>
 
@@ -515,328 +685,5 @@ RENTABILIDAD
 
 </div>
 
-<!-- HISTORIAL -->
-
-<div class="panel">
-
-<h2>
-📊 Historial
-</h2>
-
-<div id="historial">
-
-<p style="opacity:.7;">
-No existen registros.
-</p>
-
-</div>
-
-</div>
-
-<script>
-
-/* TOAST */
-
-function showToast(message){
-
-const container =
-document.getElementById(
-'toastContainer'
-);
-
-const toast =
-document.createElement('div');
-
-toast.className='toast';
-
-toast.innerText=message;
-
-container.appendChild(toast);
-
-setTimeout(()=>{
-
-toast.remove();
-
-},3000);
-
-}
-
-/* SAT */
-
-const SAT_RULES = {
-
-GENERAL:{
-iva:.16,
-isr:.30
-},
-
-RESICO:{
-iva:.16,
-isr:.025
-},
-
-RIF:{
-iva:.16,
-isr:.02
-}
-
-};
-
-/* RENTABILIDAD */
-
-function analizarRuta(
-distancia,
-monto
-){
-
-if(
-distancia <= 2 &&
-monto >= 200
-){
-
-return '🟢 Alta';
-
-}
-
-if(
-distancia <= 5 &&
-monto >= 150
-){
-
-return '🟡 Media';
-
-}
-
-return '🔴 Riesgo';
-
-}
-
-/* STORAGE */
-
-function guardarRegistro(data){
-
-const registros =
-JSON.parse(
-localStorage.getItem(
-'mrfc-registros'
-)
-) || [];
-
-registros.push(data);
-
-localStorage.setItem(
-'mrfc-registros',
-JSON.stringify(registros)
-);
-
-}
-
-/* HISTORIAL */
-
-function renderHistorial(){
-
-const historial =
-document.getElementById(
-'historial'
-);
-
-const registros =
-JSON.parse(
-localStorage.getItem(
-'mrfc-registros'
-)
-) || [];
-
-if(registros.length===0){
-
-historial.innerHTML=
-`
-<p style="opacity:.7;">
-No existen registros.
-</p>
-`;
-
-return;
-
-}
-
-historial.innerHTML='';
-
-registros.reverse().forEach(reg=>{
-
-const div =
-document.createElement('div');
-
-div.className=
-'historial-item';
-
-div.innerHTML = `
-
-<b>${reg.cliente}</b><br>
-
-💰 ${reg.monto}<br>
-
-🚚 ${reg.distancia} KM<br>
-
-📊 ${reg.regimen}<br>
-
-💳 ${reg.metodoPago}<br>
-
-📈 ${reg.rentabilidad}<br>
-
-📅 ${reg.fecha}
-
-`;
-
-historial.appendChild(div);
-
-});
-
-}
-
-/* CALCULAR */
-
-document
-.getElementById(
-'calcularBtn'
-)
-.addEventListener(
-'click',
-()=>{
-
-const regimen =
-document
-.getElementById(
-'regimen'
-).value;
-
-const cliente =
-document
-.getElementById(
-'cliente'
-).value;
-
-const monto =
-parseFloat(
-
-document
-.getElementById(
-'monto'
-).value || 0
-
-);
-
-const distancia =
-parseFloat(
-
-document
-.getElementById(
-'distancia'
-).value || 0
-
-);
-
-const metodoPago =
-document
-.getElementById(
-'metodoPago'
-).value;
-
-if(
-!regimen ||
-!monto
-){
-
-showToast(
-'Completa los campos'
-);
-
-return;
-
-}
-
-const reglas =
-SAT_RULES[regimen];
-
-const iva =
-monto * reglas.iva;
-
-const isr =
-monto * reglas.isr;
-
-const neto =
-monto - isr;
-
-const rentabilidad =
-analizarRuta(
-distancia,
-monto
-);
-
-document
-.getElementById(
-'ivaResultado'
-)
-.innerText =
-'$' + iva.toFixed(2);
-
-document
-.getElementById(
-'isrResultado'
-)
-.innerText =
-'$' + isr.toFixed(2);
-
-document
-.getElementById(
-'netoResultado'
-)
-.innerText =
-'$' + neto.toFixed(2);
-
-document
-.getElementById(
-'rentabilidadResultado'
-)
-.innerText =
-rentabilidad;
-
-const registro = {
-
-cliente,
-monto,
-distancia,
-regimen,
-metodoPago,
-rentabilidad,
-
-fecha:
-new Date()
-.toLocaleString(
-'es-MX'
-)
-
-};
-
-guardarRegistro(
-registro
-);
-
-renderHistorial();
-
-showToast(
-'Operación guardada'
-);
-
-}
-);
-
-/* INIT */
-
-renderHistorial();
-
-</script>
-
 </body>
 </html>
-```
