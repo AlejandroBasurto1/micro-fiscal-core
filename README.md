@@ -1,72 +1,40 @@
-# MRFC — Micro Real Fiscal Core
+# MRFC V2 — Micro Fiscal Core
 
-Aplicación web estática para control operativo local. Funciona con HTML, CSS y JavaScript nativo y puede desplegarse directamente en Vercel.
+Aplicación estática modular para expedientes operativos. Conserva el dashboard original y funciona con HTML, CSS y JavaScript nativo.
 
-## Uso local
-
-Por utilizar módulos ES, abre el proyecto mediante un servidor local:
+## Ejecución
 
 ```bash
 python -m http.server 8080
 ```
 
-Después visita `http://localhost:8080`.
-
-## Despliegue en Vercel
-
-1. Importa la carpeta `MRFC` como nuevo proyecto.
-2. Selecciona **Other** como framework.
-3. No configures comando de compilación.
-4. Usa `.` como directorio de salida.
-5. Despliega.
-
-También puede ejecutarse `vercel` desde esta carpeta.
+Abre `http://localhost:8080`. En Vercel selecciona **Other**, sin comando de compilación y con `.` como salida.
 
 ## Arquitectura
 
-- `index.html`: interfaz accesible que conserva el diseño original.
-- `css/main.css`: estilos originales y ajustes de accesibilidad/responsive.
-- `js/app.js`: controlador de interfaz y flujos operativos.
-- `js/storage.js`: adaptador central de almacenamiento.
-- `js/calculator.js`: calculadora segura sin `eval()`.
-- `js/config.js`: actividades, operaciones y parámetros fiscales.
-- `index-original-backup.html`: copia exacta del archivo recibido.
+- `index.html`: dashboard y expediente.
+- `css/main.css`: diseño oscuro/claro y responsive.
+- `js/app.js`: flujos existentes.
+- `js/storage.js`: almacenamiento y migración V1→V2.
+- `js/calculator.js`: cálculo seguro.
+- `js/config.js`: configuración fiscal/operativa.
+- `js/operations.js`: expediente, mapa, fotos, OCR, QR, códigos y consulta.
+- `js/media.js`: IndexedDB y optimización de imágenes.
 
-## Almacenamiento
+## Persistencia
 
-Los registros se guardan en `localStorage` bajo la única clave `mrfc-records`:
+Los expedientes usan `localStorage` (`mrfc-records`, `schemaVersion: 2`). Las fotografías usan IndexedDB (`mrfc-media/photos`) con archivo original y JPEG optimizado.
 
-```json
-{"schemaVersion":1,"records":[]}
-```
+## Variables de entorno
 
-La interfaz `storageAdapter` expone `list`, `find`, `create`, `update`, `delete` y `clearAll`. Para migrar a Supabase, PostgreSQL, Firebase o una API REST, reemplaza este adaptador conservando sus métodos.
+No hay claves obligatorias. OpenStreetMap/Nominatim no requieren token. Para servicios privados futuros se reservan `MRFC_MAP_PROVIDER_KEY`, `MRFC_OCR_API_URL` y `MRFC_API_BASE_URL`; los secretos deben usarse únicamente en servidor.
 
-## Funciones implementadas
+## Seguridad
 
-- reloj y fecha en tiempo real;
-- tema claro/oscuro persistente;
-- tarjetas activas y búsqueda de módulos;
-- actividades y operaciones centralizadas;
-- campos dinámicos declarativos;
-- calculadora segura, IVA parametrizado, porcentaje y propina;
-- guardado central con GPS opcional;
-- edición sin duplicados, limpieza e historial filtrable;
-- eliminación confirmada y CSV UTF-8 compatible con Excel;
-- captura mediante `html2canvas` con manejo de errores;
-- OCR con selector y vista previa preparada para integración;
-- semáforo y estado operativo centralizados;
-- navegación por teclado, Escape y foco visible.
+Cámara y GPS se solicitan por acción del usuario. El almacenamiento local no ofrece autenticación ni permisos multiusuario reales. Roles, sincronización y protección centralizada requieren backend; no se simulan como seguridad efectiva.
 
 ## Aviso fiscal
 
-Los cálculos actuales son operativos y demostrativos. Las reglas fiscales oficiales requieren configuración y validación profesional. El IVA preliminar está parametrizado en 16%. ISR permanece sin tasa y muestra `$0.00`; no se inventan tablas o reglas SAT.
+Los cálculos son operativos y demostrativos. Las reglas fiscales oficiales requieren validación profesional.
 
-## Pendientes
-
-- fórmulas fiscales oficiales validadas profesionalmente;
-- OCR real mediante carga diferida de Tesseract.js o API autorizada;
-- generación/lectura QR y código de barras con dependencia aprobada;
-- conexión a base de datos y autenticación;
-- exportación XLSX/PDF;
-- módulos especializados completos de gastos, viáticos, proveedores y mantenimiento.
+Consulta `DELIVERY-REPORT.md` para archivos, pruebas, migraciones y limitaciones.

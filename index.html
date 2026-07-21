@@ -10,7 +10,7 @@
 </head>
 <body>
 <header class="topbar">
-  <div class="logo-box"><div class="logo-icon">MR</div><div class="logo-text"><h1>MRFC</h1><p>MICRO REAL FISCAL CORE</p></div></div>
+  <div class="logo-box brand-lockup"><picture><source media="(prefers-color-scheme:light)" srcset="assets/assetsmrfc-logo-light.png"><img id="mrfcLogo" src="assets/assetsmrfc-logo-dark.png" width="1536" height="1024" alt="MRFC Micro Fiscal Core — AB Studio"></picture></div>
   <div class="top-actions">
     <div class="datetime-box" aria-live="off"><time id="horaActual" class="hud-clock">00:00</time><time id="fechaActual" class="hud-date">--</time></div>
     <button class="mini-btn" id="homeBtn" type="button" aria-label="Inicio">🏠</button>
@@ -19,6 +19,7 @@
     <button class="mini-btn" id="captureBtn" type="button" aria-label="Capturar pantalla">📸</button>
     <button class="mini-btn" id="calcBtn" type="button" aria-label="Abrir calculadora">🧮</button>
     <button class="mini-btn" id="themeToggle" type="button" aria-label="Cambiar tema">🌙</button>
+    <button class="mini-btn" id="languageToggle" type="button" aria-label="Switch language">ES</button>
   </div>
 </header>
 
@@ -62,6 +63,31 @@
       <label><span class="sr-only">CLABE o cuenta</span><input type="text" id="clabeCuenta" placeholder="🔢 CLABE / Cuenta" inputmode="numeric" maxlength="20"></label>
       <label data-field="entrega"><span class="sr-only">Tipo de entrega</span><select id="tipoEntrega"><option value="">🚚 Tipo entrega</option><option>Corta rentable</option><option>Media</option><option>Larga</option><option>Alto esfuerzo</option></select></label>
     </div>
+    <section class="dossier" id="operationDossier" aria-labelledby="dossierTitle">
+      <div class="dossier-head"><div><p class="dossier-kicker">EXPEDIENTE DIGITAL</p><h3 id="dossierTitle">Expediente por operación</h3></div><span id="dossierState" class="status-badge">Borrador</span></div>
+      <div class="dossier-grid">
+        <label>Número de operación<input id="operationNumber" type="text" readonly></label>
+        <label>Activo o descripción<input id="assetName" type="text" maxlength="180" placeholder="Nombre del activo"></label>
+        <label>Identificador del activo<input id="assetId" type="text" maxlength="80"></label>
+        <label>Número de serie<input id="serialNumber" type="text" maxlength="100"></label>
+        <label>Usuario responsable<input id="responsibleUser" type="text" maxlength="120" autocomplete="name"></label>
+        <label>Estado<select id="operationStatus"><option>Borrador</option><option>En proceso</option><option>En revisión</option><option>Completado</option><option>Cancelado</option></select></label>
+      </div>
+      <div class="location-panel">
+        <div class="dossier-head"><h3>📍 Ubicación y mapa</h3><div class="inline-actions"><button id="getLocationBtn" type="button">Obtener ubicación</button><a id="openMapsBtn" href="#" target="_blank" rel="noopener noreferrer">Abrir en Google Maps</a></div></div>
+        <div class="location-grid"><label>Latitud<input id="operationLatitude" type="number" step="any" placeholder="19.4326"></label><label>Longitud<input id="operationLongitude" type="number" step="any" placeholder="-99.1332"></label><label class="wide">Dirección aproximada<input id="operationAddress" type="text" maxlength="260" placeholder="Captura manual o dirección obtenida"></label></div>
+        <iframe id="operationMap" class="operation-map" title="Mapa de la operación" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <div class="photo-section"><div class="dossier-head"><h3>📷 Fotografías principales</h3><small>Exactamente tres espacios de evidencia</small></div><div class="photo-grid" id="photoGrid">
+        <article class="photo-card" data-photo-slot="1"><h4>Fotografía 1 — Extracción</h4><input type="file" accept="image/*" capture="environment"><img alt="Vista previa fotografía 1"><textarea data-detected placeholder="Datos detectados y editables"></textarea><div class="photo-meta"></div><div class="photo-actions"><button type="button" data-action="analyze">Analizar</button><button type="button" data-action="expand">Ampliar</button><button type="button" data-action="replace">Reemplazar</button><button type="button" data-action="remove">Eliminar</button></div></article>
+        <article class="photo-card" data-photo-slot="2"><h4>Fotografía 2 — Evidencia general</h4><input type="file" accept="image/*" capture="environment"><img alt="Vista previa fotografía 2"><textarea data-detected placeholder="Descripción de la evidencia"></textarea><div class="photo-meta"></div><div class="photo-actions"><button type="button" data-action="expand">Ampliar</button><button type="button" data-action="replace">Reemplazar</button><button type="button" data-action="remove">Eliminar</button></div></article>
+        <article class="photo-card" data-photo-slot="3"><h4>Fotografía 3 — Evidencia adicional</h4><input type="file" accept="image/*" capture="environment"><img alt="Vista previa fotografía 3"><textarea data-detected placeholder="Descripción del detalle, daño o etiqueta"></textarea><div class="photo-meta"></div><div class="photo-actions"><button type="button" data-action="expand">Ampliar</button><button type="button" data-action="replace">Reemplazar</button><button type="button" data-action="remove">Eliminar</button></div></article>
+      </div></div>
+      <div class="codes-grid"><section class="code-panel"><h3>🔳 Código QR</h3><div class="check-grid"><label><input type="checkbox" value="operationNumber" checked> Operación</label><label><input type="checkbox" value="assetId" checked> Activo</label><label><input type="checkbox" value="serialNumber"> Serie</label><label><input type="checkbox" value="location"> Ubicación</label><label><input type="checkbox" value="url"> URL</label><label><input type="checkbox" value="custom"> Personalizado</label></div><input id="qrCustom" type="text" placeholder="Información personalizada"><div id="qrOutput" class="code-output"></div><div class="inline-actions"><button id="generateQrBtn" type="button">Generar QR</button><button id="downloadQrBtn" type="button">Descargar</button><button id="printQrBtn" type="button">Imprimir</button><button id="scanQrBtn" type="button">Escanear</button></div></section>
+      <section class="code-panel"><h3>▥ Código de barras</h3><label>Formato<select id="barcodeFormat"><option>CODE128</option><option>CODE39</option><option>EAN13</option></select></label><label>Código<input id="barcodeValue" type="text" maxlength="40"></label><svg id="barcodeOutput" class="code-output" aria-label="Código de barras generado"></svg><div class="inline-actions"><button id="generateBarcodeBtn" type="button">Generar</button><button id="downloadBarcodeBtn" type="button">Descargar</button><button id="printBarcodeBtn" type="button">Imprimir</button><button id="scanBarcodeBtn" type="button">Escanear</button></div></section></div>
+      <label class="observations">Observaciones<textarea id="operationNotes" rows="4" maxlength="2000"></textarea></label>
+      <div class="change-history"><h3>Historial de cambios</h3><ol id="changeHistoryList"><li>Expediente nuevo.</li></ol></div>
+    </section>
   </div>
   <div id="modulePlaceholder" class="quick-status dynamic-hidden"></div>
   <div class="quick-status" id="estructuraBase">🧠 Plantilla MRFC activa.<br>Los campos cambian según actividad y operación seleccionada.</div>
@@ -75,6 +101,8 @@
 
 <section class="section dynamic-hidden" id="historialPanel" aria-labelledby="historyTitle"><h2 id="historyTitle">📊 Historial de Registros</h2><div class="history-filters"><input id="historySearch" type="search" placeholder="Buscar registro"><select id="historyActivity"><option value="">Todas las actividades</option></select><select id="historyOperation"><option value="">Todas las operaciones</option></select></div><div id="historialContenido"></div></section>
 
+<section class="section" id="operationsQuery" aria-labelledby="queryTitle"><h2 id="queryTitle">🔎 Consulta de expedientes</h2><div class="query-grid"><input id="queryText" type="search" placeholder="Operación, activo, serie, QR, código, usuario o ubicación"><input id="queryDate" type="date"><select id="queryStatus"><option value="">Todos los estados</option><option>Borrador</option><option>En proceso</option><option>En revisión</option><option>Completado</option><option>Cancelado</option></select><button id="queryBtn" type="button">Buscar</button></div><div id="queryResults" class="query-results"></div></section>
+
 <div class="calc-overlay" id="calcOverlay" role="dialog" aria-modal="true" aria-labelledby="calcTitle"><div class="calc-box"><div class="calc-top"><span id="calcTitle">🧮 CALCULADORA</span><button id="closeCalc" type="button" aria-label="Cerrar calculadora">✕</button></div><input type="text" id="calcDisplay" class="calc-display" readonly aria-label="Resultado de calculadora"><div class="calc-grid" id="calcGrid">
   <button class="calc-key" type="button">7</button><button class="calc-key" type="button">8</button><button class="calc-key" type="button">9</button><button class="calc-key operator" type="button">÷</button>
   <button class="calc-key" type="button">4</button><button class="calc-key" type="button">5</button><button class="calc-key" type="button">6</button><button class="calc-key operator" type="button">×</button>
@@ -84,6 +112,9 @@
 </div></div></div>
 
 <input id="ocrFile" type="file" accept="image/*" hidden>
+<input id="codeScannerFile" type="file" accept="image/*" capture="environment" hidden>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js" defer></script>
 <script type="module" src="js/app.js"></script>
 </body></html>

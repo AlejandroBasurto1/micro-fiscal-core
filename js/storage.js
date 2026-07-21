@@ -1,11 +1,26 @@
 const STORAGE_KEY = 'mrfc-records';
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
+
+function migrateRecords(records) {
+  return records.map(record => ({
+    estadoOperacion: 'Borrador',
+    fotografias: [],
+    historialCambios: [],
+    ...record,
+    schemaVersion: 2
+  }));
+}
 
 function readStore() {
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-    if (Array.isArray(parsed)) return { schemaVersion: SCHEMA_VERSION, records: parsed };
-    if (parsed && parsed.schemaVersion === SCHEMA_VERSION && Array.isArray(parsed.records)) return parsed;
+    if (Array.isArray(parsed)) return { schemaVersion: SCHEMA_VERSION, records: migrateRecords(parsed) };
+    if (parsed && Array.isArray(parsed.records)) {
+      if (parsed.schemaVersion === SCHEMA_VERSION) return parsed;
+      const migrated = { schemaVersion: SCHEMA_VERSION, records: migrateRecords(parsed.records) };
+      writeStore(migrated);
+      return migrated;
+    }
   } catch (error) {
     console.warn('MRFC: almacenamiento local corrupto; se inició una colección segura.', error);
   }

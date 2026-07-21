@@ -1,30 +1,18 @@
 # Changelog
 
+## 2.0.0 — 2026-07-21
+
+- Logotipos oficiales oscuro/claro con firma AB Studio.
+- Expediente digital por operación y esquema 2.
+- GPS opcional, mapa, coordenadas y dirección.
+- Tres fotografías con original y versión optimizada.
+- OCR bajo demanda con datos editables.
+- QR configurable y códigos CODE128, CODE39 y EAN13.
+- Escaneo compatible y vinculación con expediente.
+- Consulta avanzada e historial de cambios.
+- Migración automática de registros V1.
+- Corrección de carga de banco durante edición.
+
 ## 1.0.0 — 2026-07-21
 
-### Corregido
-
-- cierre `</script>` sobrante;
-- caracteres y etiquetas del documento;
-- calculadora insegura basada en `eval()`;
-- guardado bloqueado cuando GPS era rechazado;
-- claves de almacenamiento duplicadas;
-- semáforo con múltiples luces activas;
-- controles clicables no semánticos;
-- historial y botones principales incompletos;
-- falta de búsqueda, edición y exportación;
-- inserción insegura de datos de usuario.
-
-### Añadido
-
-- arquitectura modular sin framework;
-- adaptador de almacenamiento versionado;
-- guardado y actualización con identificador estable;
-- filtros y acciones seguras del historial;
-- calculadora con parser controlado;
-- resultados parametrizados y aviso fiscal;
-- GPS opcional con timeout y caché;
-- exportación CSV UTF-8;
-- búsqueda de módulos;
-- estados accesibles y responsive ampliado;
-- documentación y configuración Vercel.
+- Arquitectura modular, guardado, edición, historial, calculadora segura, CSV y responsive.
