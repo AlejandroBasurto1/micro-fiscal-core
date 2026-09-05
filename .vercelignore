@@ -1,0 +1,9 @@
+.github
+api
+config
+database
+docs
+tests
+*.md
+.env*
+*.sql

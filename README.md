@@ -1,49 +1,48 @@
-# MRFC V2 — Micro Fiscal Core
+# MRFC V2.1 — Micro Fiscal Core
 
-Aplicación estática modular para expedientes operativos. Conserva el dashboard original y funciona con HTML, CSS y JavaScript nativo.
+MVP estático y modular para capturar, consultar y respaldar expedientes operativos con GPS, tres fotografías, OCR, QR y códigos de barras. Funciona con HTML, CSS y JavaScript nativo; no incluye cálculo oficial de ISR.
 
-## Ejecución
+Versión de entrega: **2.1.0 — 2026-09-04**
 
-```bash
-python -m http.server 8080
-```
+Base validada: `fix/mrfc-functional-core` en `8b8ce0f66a533bad7545f15d7712fd2a422f83fa`.
 
-Abre `http://localhost:8080`. En Vercel selecciona **Other**, sin comando de compilación y con `.` como salida.
+## Ejecución local
 
-## Pruebas
-
-Con Node.js 20 o posterior:
+Requiere Node.js 20 o posterior para pruebas y cualquier servidor HTTP estático para la interfaz.
 
 ```bash
 npm test
 npm run check
+python -m http.server 8080
 ```
+
+Abrir `http://localhost:8080`. No abrir `index.html` directamente mediante `file://`, porque los módulos ES y permisos del navegador requieren un origen HTTP/HTTPS.
 
 ## Arquitectura
 
 - `index.html`: dashboard y expediente.
-- `css/main.css`: diseño oscuro/claro y responsive.
-- `js/app.js`: flujos existentes.
-- `js/storage.js`: almacenamiento y migración V1→V2.
-- `js/calculator.js`: cálculo seguro.
-- `js/config.js`: configuración fiscal/operativa.
-- `js/operations.js`: expediente, mapa, fotos, OCR, QR, códigos y consulta.
-- `js/media.js`: IndexedDB y optimización de imágenes.
+- `css/main.css`: tema claro/oscuro y responsive.
+- `js/app.js`: CRUD, navegación, exportaciones y respaldo/restauración.
+- `js/storage.js`: `localStorage`, migración y recuperación.
+- `js/media.js`: IndexedDB, optimización y respaldo fotográfico.
+- `js/operations.js`: GPS, mapa, fotografías, OCR, QR, barcode y búsqueda.
+- `js/calculator.js`: calculadora segura sin `eval`.
+- `js/export.js`: CSV UTF-8 protegido frente a fórmulas.
+- `.github/workflows/mrfc-ci.yml`: CI automático.
 
-## Persistencia
+## Persistencia y respaldo
 
-Los expedientes usan `localStorage` (`mrfc-records`, `schemaVersion: 2`). Las fotografías usan IndexedDB (`mrfc-media/photos`) con JPEG optimizado y metadatos; el archivo original no se duplica para evitar agotar la cuota del navegador. El respaldo JSON conserva los metadatos, pero no incluye los binarios de las fotografías.
+Los expedientes usan `localStorage` (`mrfc-records`, esquema 2) y las fotografías optimizadas usan IndexedDB (`mrfc-media/photos`). Desde la versión 2.1, el respaldo JSON incluye registros, metadatos y blobs fotográficos codificados; consulta `BACKUP-RESTORE.md` antes de migrar datos entre navegadores.
 
-## Variables de entorno
+## Despliegue y operación
 
-No hay claves obligatorias. OpenStreetMap/Nominatim no requieren token. Para servicios privados futuros se reservan `MRFC_MAP_PROVIDER_KEY`, `MRFC_OCR_API_URL` y `MRFC_API_BASE_URL`; los secretos deben usarse únicamente en servidor.
+- `DEPLOYMENT.md`: configuración exacta de Vercel, HTTPS, cámara/GPS, CDN y rollback.
+- `TESTING.md`: suite automática y matriz manual de aceptación.
+- `BACKUP-RESTORE.md`: creación, restauración y recuperación de respaldos.
+- `DELIVERY-REPORT.md`: alcance final, resultados y limitaciones.
 
 ## Seguridad
 
-Cámara y GPS se solicitan por acción del usuario. El almacenamiento local no ofrece autenticación ni permisos multiusuario reales. Roles, sincronización y protección centralizada requieren backend; no se simulan como seguridad efectiva.
+El despliegue incorpora CSP, HSTS, protección contra framing, permisos limitados a cámara/GPS del propio origen, enlaces externos aislados y defensa frente a XSS/CSV injection. Los archivos PHP, SQL, pruebas y configuración de servidor se excluyen del artefacto estático de Vercel.
 
-## Aviso fiscal
-
-Los cálculos son operativos y demostrativos. Las reglas fiscales oficiales requieren validación profesional.
-
-Consulta `DELIVERY-REPORT.md` para archivos, pruebas, migraciones y limitaciones.
+La persistencia continúa siendo local: autenticación, permisos multiusuario y sincronización centralizada requieren backend. Las reglas fiscales oficiales deben ser configuradas y validadas profesionalmente.

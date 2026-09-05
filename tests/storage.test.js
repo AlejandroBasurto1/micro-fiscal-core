@@ -51,6 +51,7 @@ test('rechaza respaldos inválidos sin modificar los datos actuales', () => {
   const before = localStorage.getItem('mrfc-records');
 
   assert.throws(() => storageAdapter.importBackup('{"foo":true}'), /colección de registros válida/);
+  assert.throws(() => storageAdapter.importBackup('{"app":"OTRA","records":[]}'), /no pertenece a MRFC/);
   assert.equal(localStorage.getItem('mrfc-records'), before);
 });
 
@@ -69,4 +70,18 @@ test('un fallo de cuota conserva el último contenido persistido', () => {
 
   assert.throws(() => storageAdapter.update('persisted', { cliente: 'Después' }), error => error.code === 'MRFC_STORAGE_WRITE_FAILED');
   assert.equal(localStorage.getItem('mrfc-records'), before);
+});
+
+test('localStorage bloqueado produce un error controlado sin datos parciales', () => {
+  globalThis.localStorage = {
+    getItem() { throw new DOMException('Access denied', 'SecurityError'); },
+    setItem() { throw new DOMException('Access denied', 'SecurityError'); }
+  };
+
+  assert.deepEqual(storageAdapter.list(), []);
+  assert.throws(
+    () => storageAdapter.create({ id: 'blocked', cliente: 'No persistir' }),
+    error => error.code === 'MRFC_STORAGE_WRITE_FAILED'
+  );
+  assert.equal(storageAdapter.getDiagnostics().storageAvailable, false);
 });

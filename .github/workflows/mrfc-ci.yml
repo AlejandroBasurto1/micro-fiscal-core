@@ -1,0 +1,47 @@
+name: MRFC CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - fix/mrfc-functional-core
+      - fix/mrfc-production-ready
+      - "fix/mrfc-*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mrfc-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Tests, syntax and whitespace
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run automated tests
+        run: npm test -- --test-reporter=spec
+
+      - name: Check JavaScript syntax
+        run: npm run check
+
+      - name: Check patch whitespace
+        shell: bash
+        run: |
+          if git rev-parse HEAD^ >/dev/null 2>&1; then
+            git diff --check HEAD^ HEAD
+          else
+            git diff --check --cached
+          fi

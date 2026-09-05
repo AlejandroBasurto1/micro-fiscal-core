@@ -1,0 +1,30 @@
+{
+  "app": "MRFC",
+  "schemaVersion": 2,
+  "exportedAt": "2026-09-04T00:00:00.000Z",
+  "records": [
+    {
+      "id": "fixture-full-backup",
+      "schemaVersion": 2,
+      "numeroOperacion": "MRFC-BACKUP-FIXTURE",
+      "actividad": "GENERAL",
+      "operacion": "Venta",
+      "nombreActivo": "Activo restaurado con evidencia",
+      "identificadorActivo": "ACT-BACKUP-3",
+      "usuarioResponsable": "Prueba automática",
+      "estadoOperacion": "Borrador",
+      "ubicacion": { "latitud": null, "longitud": null, "direccion": "" },
+      "fotografias": [
+        { "slot": 1, "storageKey": "fixture-photo-1", "detected": "OCR 1" },
+        { "slot": 2, "storageKey": "fixture-photo-2", "detected": "Evidencia 2" },
+        { "slot": 3, "storageKey": "fixture-photo-3", "detected": "Evidencia 3" }
+      ],
+      "historialCambios": []
+    }
+  ],
+  "media": [
+    { "slot": 1, "storageKey": "fixture-photo-1", "detected": "OCR 1", "mediaType": "image/png", "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=" },
+    { "slot": 2, "storageKey": "fixture-photo-2", "detected": "Evidencia 2", "mediaType": "image/png", "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=" },
+    { "slot": 3, "storageKey": "fixture-photo-3", "detected": "Evidencia 3", "mediaType": "image/png", "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=" }
+  ]
+}

@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.1.0 — 2026-09-04
+
+- Respaldo JSON integral con expedientes, metadatos y fotografías optimizadas.
+- Restauración controlada de evidencia con límites por archivo y por respaldo.
+- Pruebas para almacenamiento bloqueado, cuota, imágenes excesivas y cierre/recarga.
+- CI de GitHub Actions para pruebas, sintaxis y whitespace en PR y ramas MRFC.
+- Despliegue Vercel endurecido con CSP, HSTS y exclusión de fuentes PHP/SQL/configuración.
+- Dependencias CDN fijadas y documentación de despliegue, pruebas y recuperación.
+
 ## 2.0.1 — 2026-09-04
 
 - Guardado y edición idempotentes para evitar expedientes duplicados.

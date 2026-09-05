@@ -96,6 +96,20 @@ export function serializePhotoMetadata(items) {
   return [...items].map(({ key, ...metadata }) => ({ ...metadata, storageKey: key }));
 }
 
+export function stagePhotoReplacement(state, deletions, slot, metadata) {
+  const previous = state.get(slot);
+  if (previous?.key && previous.key !== metadata.key) deletions.add(previous.key);
+  state.set(slot, metadata);
+}
+
+export function stagePhotoRemoval(state, deletions, slot) {
+  const current = state.get(slot);
+  if (!current) return false;
+  deletions.add(current.key);
+  state.delete(slot);
+  return true;
+}
+
 function setPhotoPreview(card, blob) {
   const image = card.querySelector('img');
   if (image.dataset.objectUrl) URL.revokeObjectURL(image.dataset.objectUrl);
@@ -120,25 +134,31 @@ async function handlePhoto(card, file) {
   const slot = card.dataset.photoSlot;
   try {
     const blob = await optimizeImage(file);
-    const previous = photoState.get(Number(slot));
     const key = uniquePhotoKey(slot);
     const metadata = { key, slot: Number(slot), type: card.querySelector('h4').textContent, date: new Date().toISOString(), user: value('responsibleUser') || 'Usuario local', latitude: value('operationLatitude'), longitude: value('operationLongitude'), detected: card.querySelector('[data-detected]').value };
     await mediaStore.put({ ...metadata, blob });
-    if (previous?.key && previous.key !== key) pendingPhotoDeletes.add(previous.key);
-    photoState.set(Number(slot), metadata);
+    stagePhotoReplacement(photoState, pendingPhotoDeletes, Number(slot), metadata);
     setPhotoPreview(card, blob); card.classList.add('has-image'); renderPhotoMeta(card, metadata); markDirty(); notify(`Fotografía ${slot} guardada y optimizada.`, 'green');
   } catch (error) { card.querySelector('input[type=file]').value = ''; notify(error?.message || 'No fue posible procesar la fotografía.', 'red'); }
 }
 
+export function formatPhotoMetadata(metadata = {}) {
+  const timestamp = Date.parse(metadata.date);
+  const date = Number.isFinite(timestamp) ? new Date(timestamp).toLocaleString('es-MX') : 'fecha no disponible';
+  const user = String(metadata.user || 'usuario no disponible');
+  const latitude = metadata.latitude === 0 || metadata.latitude ? metadata.latitude : 'sin GPS';
+  const longitude = metadata.longitude === 0 || metadata.longitude ? metadata.longitude : 'sin GPS';
+  return `${date} · ${user} · ${latitude}, ${longitude}`;
+}
+
 function renderPhotoMeta(card, metadata) {
-  card.querySelector('.photo-meta').textContent = `${new Date(metadata.date).toLocaleString('es-MX')} · ${metadata.user} · ${metadata.latitude || 'sin GPS'}, ${metadata.longitude || 'sin GPS'}`;
+  card.querySelector('.photo-meta').textContent = formatPhotoMetadata(metadata);
 }
 
 async function removePhoto(card) {
   const slot = Number(card.dataset.photoSlot);
   if (!photoState.has(slot) || !confirm(`¿Eliminar la fotografía ${slot}?`)) return;
-  pendingPhotoDeletes.add(photoState.get(slot).key);
-  photoState.delete(slot); clearPhotoCard(card); markDirty();
+  stagePhotoRemoval(photoState, pendingPhotoDeletes, slot); clearPhotoCard(card); markDirty();
   notify(`Fotografía ${slot} marcada para eliminar. Guarda el expediente para confirmar.`, 'yellow');
 }
 
@@ -155,7 +175,7 @@ async function loadTesseract() {
   if (!tesseractPromise) {
     tesseractPromise = new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+      script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
       script.onload = () => window.Tesseract ? resolve(window.Tesseract) : reject(new Error('Tesseract no se inicializó.'));
       script.onerror = () => reject(new Error('No se pudo cargar Tesseract.'));
       document.head.append(script);

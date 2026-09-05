@@ -2,6 +2,8 @@ import { storageAdapter } from './storage.js';
 import { activityOperations, dynamicRules, fiscalConfig } from './config.js';
 import { bindCalculator } from './calculator.js';
 import { initOperations, collectOperationData, loadOperationData, resetOperationData, commitOperationMedia, deleteOperationMedia } from './operations.js';
+import { buildMediaBackup, restoreMediaBackup } from './media.js';
+import { buildCsv } from './export.js';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -270,40 +272,47 @@ function exportCsv() {
   if(!records.length){toast('No hay registros para exportar.');return;}
   const headers=['ID','Fecha','Hora','Actividad','Operación','Cliente','Teléfono','Dirección','Método de pago','Banco','Titular','Cuenta','Distancia','Resultado','IVA','ISR','Ganancia','Latitud','Longitud'];
   const rows=records.map(r=>[r.id,r.fechaLegible,r.hora,r.actividad,r.operacion,r.cliente,r.telefono,r.direccion,r.metodoPago,r.banco,r.titularCuenta,r.clabeCuenta,r.distancia,r.resultadoCalculadora,r.iva,r.isr,r.gananciaReal,r.ubicacion?.latitud??'',r.ubicacion?.longitud??'']);
-  const escape=cell=>{
-    let safe=String(cell??'').replace(/[\r\n]+/g,' ');
-    if(/^[=+\-@]/.test(safe)) safe=`'${safe}`;
-    return `"${safe.replaceAll('"','""')}"`;
-  };
-  const csv='\ufeff'+[headers,...rows].map(row=>row.map(escape).join(',')).join('\r\n');
+  const csv=buildCsv(headers,rows);
   downloadBlob(csv,`MRFC_registros_${fileStamp()}.csv`,'text/csv;charset=utf-8');
   setStatus('Exportación CSV compatible con Excel completada.','green');
 }
 
-function exportJsonBackup() {
+async function exportJsonBackup() {
   const records=storageAdapter.list();
   if(!records.length){toast('No hay registros para respaldar.');return;}
-  downloadBlob(storageAdapter.exportBackup(),`MRFC_respaldo_${fileStamp()}.json`,'application/json;charset=utf-8');
-  setStatus(`Respaldo JSON generado con ${records.length} registro(s).`,'green');
+  try {
+    const backup=JSON.parse(storageAdapter.exportBackup());
+    const media=await buildMediaBackup(records);
+    backup.media=media.items;
+    backup.mediaSummary={included:media.items.length,missing:media.missing.length,totalBytes:media.totalBytes};
+    downloadBlob(JSON.stringify(backup,null,2),`MRFC_respaldo_${fileStamp()}.json`,'application/json;charset=utf-8');
+    const warning=media.missing.length?` ${media.missing.length} fotografía(s) referenciada(s) no estaban disponibles.`:'';
+    setStatus(`Respaldo generado con ${records.length} registro(s) y ${media.items.length} fotografía(s).${warning}`,media.missing.length?'yellow':'green');
+  } catch {
+    setStatus('No fue posible crear el respaldo. Verifica el almacenamiento de fotografías.','red');
+    toast('No se generó ningún archivo de respaldo.');
+  }
 }
 
-function importJsonBackup(file) {
+async function importJsonBackup(file) {
   if(!file) return;
-  const reader=new FileReader();
-  reader.onload=()=>{
-    try {
-      const imported=storageAdapter.importBackup(String(reader.result||''));
-      renderHistory();
-      window.dispatchEvent(new CustomEvent('mrfc:records-changed'));
-      setStatus(`Respaldo restaurado. MRFC contiene ${imported.length} registro(s).`,'green');
-      toast('Respaldo restaurado correctamente.');
-    } catch(error) {
-      setStatus('El archivo seleccionado no es un respaldo MRFC válido.','red');
-      toast('No se pudo restaurar el respaldo.');
-    }
-  };
-  reader.onerror=()=>setStatus('No fue posible leer el archivo de respaldo.','red');
-  reader.readAsText(file);
+  if(file.size>90*1024*1024){setStatus('El respaldo excede el límite seguro de 90 MB.','red');return;}
+  try {
+    const raw=await file.text();
+    const parsed=JSON.parse(raw);
+    if(!Array.isArray(parsed)&&parsed?.app&&parsed.app!=='MRFC') throw new Error('Aplicación inválida.');
+    const records=Array.isArray(parsed)?parsed:parsed?.records;
+    if(!Array.isArray(records)) throw new Error('Colección inválida.');
+    const restoredPhotos=await restoreMediaBackup(Array.isArray(parsed)?null:parsed.media);
+    const imported=storageAdapter.importBackup(parsed);
+    renderHistory();
+    window.dispatchEvent(new CustomEvent('mrfc:records-changed'));
+    setStatus(`Respaldo restaurado. MRFC contiene ${imported.length} registro(s) y recuperó ${restoredPhotos} fotografía(s).`,'green');
+    toast('Respaldo restaurado correctamente.');
+  } catch {
+    setStatus('El archivo seleccionado no es un respaldo MRFC válido o no pudo restaurarse de forma segura.','red');
+    toast('No se pudo restaurar el respaldo.');
+  }
 }
 
 function installBackupControls() {
@@ -314,7 +323,7 @@ function installBackupControls() {
   backup.id='backupJsonBtn';
   backup.type='button';
   backup.textContent='💾 Respaldo JSON';
-  backup.addEventListener('click',exportJsonBackup);
+  backup.addEventListener('click',()=>{void exportJsonBackup();});
 
   const restore=document.createElement('button');
   restore.className='tool-btn';
@@ -329,7 +338,7 @@ function installBackupControls() {
   input.id='restoreJsonFile';
   restore.addEventListener('click',()=>input.click());
   input.addEventListener('change',event=>{
-    importJsonBackup(event.target.files?.[0]);
+    void importJsonBackup(event.target.files?.[0]);
     event.target.value='';
   });
   host.append(backup,restore,input);
