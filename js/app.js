@@ -1,13 +1,23 @@
 import { storageAdapter } from './storage.js';
 import { activityOperations, dynamicRules, fiscalConfig } from './config.js';
 import { bindCalculator } from './calculator.js';
-import { initOperations, collectOperationData, loadOperationData, resetOperationData } from './operations.js';
+import { initOperations, collectOperationData, loadOperationData, resetOperationData, deleteOperationMedia } from './operations.js';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
 const fields = ['actividadSelect','operacionSelect','clienteNombre','clienteTelefono','clienteDireccion','metodoPago','lineasPedido','distanciaPedido','bancoActivo','titularCuenta','clabeCuenta','tipoEntrega'];
 const state = { activeModule: 'Actividad', currentEditingId: null, total: 0, dirty: false };
 const money = new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'});
+
+function readPreference(key, fallback='') {
+  try { return localStorage.getItem(key) ?? fallback; }
+  catch { return fallback; }
+}
+
+function writePreference(key, data) {
+  try { localStorage.setItem(key, data); return true; }
+  catch { setStatus('La preferencia se aplicó, pero el navegador no permitió guardarla.','yellow'); return false; }
+}
 
 function setStatus(message, type='yellow') {
   $('#quickStatus').textContent = message;
@@ -27,7 +37,8 @@ function value(id) { return document.getElementById(id)?.value?.trim?.() || ''; 
 function setValue(id, data='') { const element=document.getElementById(id); if(element) element.value=data ?? ''; }
 
 function updateResults(total=state.total) {
-  state.total = Number(total) || 0;
+  const parsed = Number(total);
+  state.total = Number.isFinite(parsed) ? parsed : 0;
   const iva = state.total > 0 ? state.total - (state.total / (1 + fiscalConfig.ivaRate)) : 0;
   $('#resultTotal').textContent=money.format(state.total);
   $('#resultIVA').textContent=money.format(iva);
@@ -106,7 +117,8 @@ async function saveRecord() {
 
   try {
     let saved;
-    if(state.currentEditingId) {
+    const wasEditing=Boolean(state.currentEditingId);
+    if(wasEditing) {
       const old=storageAdapter.find(state.currentEditingId);
       if(!old) {
         state.currentEditingId=null;
@@ -117,19 +129,20 @@ async function saveRecord() {
       }
       data.historialCambios=[...(old.historialCambios||[]),{date:new Date().toISOString(),action:`Expediente actualizado por ${data.usuarioResponsable||'usuario local'}.`}];
       saved=storageAdapter.update(state.currentEditingId,{...data,fechaCreacion:old.fechaCreacion||data.fechaCreacion});
-      state.currentEditingId=null;
-      $('#mainSection').classList.remove('editing');
     } else {
       data.historialCambios=[{date:new Date().toISOString(),action:`Expediente creado por ${data.usuarioResponsable||'usuario local'}.`}];
       saved=storageAdapter.create(data);
     }
 
     if(!saved) throw new Error('El adaptador no devolvió el registro guardado.');
+    state.currentEditingId=saved.id;
+    $('#mainSection').classList.add('editing');
     state.dirty=false;
     const hasLocation=Number.isFinite(saved.ubicacion?.latitud) && Number.isFinite(saved.ubicacion?.longitud);
-    setStatus(`Registro ${saved.id.slice(0,8)} guardado${hasLocation?' con ubicación':' sin ubicación'}.`,'green');
+    setStatus(`Registro ${saved.id.slice(0,8)} ${wasEditing?'actualizado':'guardado'}${hasLocation?' con ubicación':' sin ubicación'}.`,'green');
     updateResults(data.resultadoCalculadora);
     renderHistory();
+    window.dispatchEvent(new CustomEvent('mrfc:records-changed'));
     toast('Registro guardado correctamente.');
     return saved;
   } catch(error) {
@@ -159,21 +172,19 @@ async function loadRecord(id, editing=false) {
   updateDynamicFields();
   await loadOperationData(record);
   state.dirty=false;
+  state.currentEditingId=id;
   if(editing) {
-    state.currentEditingId=id;
     $('#mainSection').classList.add('editing');
     setStatus(`Editando registro ${id.slice(0,8)}. Guarda para actualizar.`,'yellow');
   } else {
-    state.currentEditingId=null;
     $('#mainSection').classList.remove('editing');
-    setStatus(`Registro ${id.slice(0,8)} cargado.`,'yellow');
+    setStatus(`Registro ${id.slice(0,8)} cargado. Los cambios se guardarán sobre este expediente.`,'yellow');
   }
   window.scrollTo({top:$('#mainSection').offsetTop-12,behavior:'smooth'});
 }
 
 function clearForm(force=false) {
-  const hasData=state.dirty || fields.some(id=>value(id));
-  if(!force&&hasData&&!confirm('Hay datos sin guardar. ¿Deseas limpiar el formulario?')) return;
+  if(!force&&state.dirty&&!confirm('Hay datos sin guardar. ¿Deseas limpiar el formulario?')) return;
   fields.forEach(id=>setValue(id,''));
   populateOperations();
   calculator.clear();
@@ -258,7 +269,11 @@ function exportCsv() {
   if(!records.length){toast('No hay registros para exportar.');return;}
   const headers=['ID','Fecha','Hora','Actividad','Operación','Cliente','Teléfono','Dirección','Método de pago','Banco','Titular','Cuenta','Distancia','Resultado','IVA','ISR','Ganancia','Latitud','Longitud'];
   const rows=records.map(r=>[r.id,r.fechaLegible,r.hora,r.actividad,r.operacion,r.cliente,r.telefono,r.direccion,r.metodoPago,r.banco,r.titularCuenta,r.clabeCuenta,r.distancia,r.resultadoCalculadora,r.iva,r.isr,r.gananciaReal,r.ubicacion?.latitud??'',r.ubicacion?.longitud??'']);
-  const escape=cell=>`"${String(cell??'').replaceAll('"','""').replaceAll('\n',' ')}"`;
+  const escape=cell=>{
+    let safe=String(cell??'').replace(/[\r\n]+/g,' ');
+    if(/^[=+\-@]/.test(safe)) safe=`'${safe}`;
+    return `"${safe.replaceAll('"','""')}"`;
+  };
   const csv='\ufeff'+[headers,...rows].map(row=>row.map(escape).join(',')).join('\r\n');
   downloadBlob(csv,`MRFC_registros_${fileStamp()}.csv`,'text/csv;charset=utf-8');
   setStatus('Exportación CSV compatible con Excel completada.','green');
@@ -278,10 +293,10 @@ function importJsonBackup(file) {
     try {
       const imported=storageAdapter.importBackup(String(reader.result||''));
       renderHistory();
+      window.dispatchEvent(new CustomEvent('mrfc:records-changed'));
       setStatus(`Respaldo restaurado. MRFC contiene ${imported.length} registro(s).`,'green');
       toast('Respaldo restaurado correctamente.');
     } catch(error) {
-      console.error(error);
       setStatus('El archivo seleccionado no es un respaldo MRFC válido.','red');
       toast('No se pudo restaurar el respaldo.');
     }
@@ -402,10 +417,10 @@ function applyLanguage(lang) {
   document.documentElement.lang=english?'en':'es';
   $('#languageToggle').textContent=english?'EN':'ES';
   const labels=english
-    ? {saveBtn:'💾 Save',editBtn:'✏️ Edit',clearBtn:'🗑️ Clear',exportBtn:'📤 Export CSV',historialBtn:'📊 History',queryTitle:'🔎 Operation files'}
-    : {saveBtn:'💾 Guardar',editBtn:'✏️ Editar',clearBtn:'🗑️ Limpiar',exportBtn:'📤 Exportar CSV',historialBtn:'📊 Historial',queryTitle:'🔎 Consulta de expedientes'};
+    ? {saveBtn:'💾 Save',editBtn:'✏️ Edit',clearBtn:'🗑️ Clear',exportBtn:'📤 Export CSV',historialBtn:'📊 History',queryTitle:'🔎 Operation files',getLocationBtn:'Get location',generateQrBtn:'Generate QR',downloadQrBtn:'Download',printQrBtn:'Print',scanQrBtn:'Scan',generateBarcodeBtn:'Generate',downloadBarcodeBtn:'Download',printBarcodeBtn:'Print',scanBarcodeBtn:'Scan',queryBtn:'Search',backupJsonBtn:'💾 JSON backup',restoreJsonBtn:'♻️ Restore'}
+    : {saveBtn:'💾 Guardar',editBtn:'✏️ Editar',clearBtn:'🗑️ Limpiar',exportBtn:'📤 Exportar CSV',historialBtn:'📊 Historial',queryTitle:'🔎 Consulta de expedientes',getLocationBtn:'Obtener ubicación',generateQrBtn:'Generar QR',downloadQrBtn:'Descargar',printQrBtn:'Imprimir',scanQrBtn:'Escanear',generateBarcodeBtn:'Generar',downloadBarcodeBtn:'Descargar',printBarcodeBtn:'Imprimir',scanBarcodeBtn:'Escanear',queryBtn:'Buscar',backupJsonBtn:'💾 Respaldo JSON',restoreJsonBtn:'♻️ Restaurar'};
   Object.entries(labels).forEach(([id,text])=>{const node=document.getElementById(id);if(node)node.textContent=text;});
-  localStorage.setItem('mrfc-language',document.documentElement.lang);
+  writePreference('mrfc-language',document.documentElement.lang);
 }
 
 const calculator=bindCalculator({overlay:$('#calcOverlay'),display:$('#calcDisplay'),onSave:async()=>{if(await saveRecord())closeCalculator();},onResult:updateResults,ivaRate:fiscalConfig.ivaRate});
@@ -422,11 +437,11 @@ $('#themeToggle').addEventListener('click',()=>{
   document.body.classList.toggle('light-mode');
   document.documentElement.classList.toggle('theme-light',document.body.classList.contains('light-mode'));
   const light=document.body.classList.contains('light-mode');
-  localStorage.setItem('mrfc-theme',light?'light':'dark');
+  writePreference('mrfc-theme',light?'light':'dark');
   $('#themeToggle').textContent=light?'☀️':'🌙';
   $('#mrfcLogo').src=light?'assets/assetsmrfc-logo-light.png':'assets/assetsmrfc-logo-dark.png';
 });
-if(localStorage.getItem('mrfc-theme')==='light') {
+if(readPreference('mrfc-theme')==='light') {
   document.body.classList.add('light-mode');
   document.documentElement.classList.add('theme-light');
   $('#themeToggle').textContent='☀️';
@@ -434,7 +449,7 @@ if(localStorage.getItem('mrfc-theme')==='light') {
 }
 
 $('#languageToggle').addEventListener('click',()=>applyLanguage(document.documentElement.lang==='es'?'en':'es'));
-applyLanguage(localStorage.getItem('mrfc-language')==='en'?'en':'es');
+applyLanguage(readPreference('mrfc-language')==='en'?'en':'es');
 
 $('#homeBtn').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 $('#backBtn').addEventListener('click',()=>history.back());
@@ -444,9 +459,11 @@ $('#closeCalc').addEventListener('click',closeCalculator);
 $('#calcOverlay').addEventListener('click',e=>{if(e.target===$('#calcOverlay'))closeCalculator();});
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&$('#calcOverlay').classList.contains('active')) closeCalculator();
+  else if(e.key==='Escape') document.querySelector('.media-lightbox')?.remove();
   if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s') {e.preventDefault();saveRecord();}
 });
 window.addEventListener('beforeunload',event=>{if(!state.dirty)return;event.preventDefault();event.returnValue='';});
+window.addEventListener('mrfc:dirty',()=>{state.dirty=true;setStatus('Formulario modificado. Datos sin guardar.','yellow');});
 
 $('#saveBtn').addEventListener('click',saveRecord);
 $('#editBtn').addEventListener('click',()=>{if(state.currentEditingId){setStatus('Ya existe un registro en edición.','yellow');return;}$('#historialPanel').classList.remove('dynamic-hidden');renderHistory();setStatus('Selecciona Editar en el historial.','yellow');});
@@ -462,9 +479,13 @@ $('#historialContenido').addEventListener('click',event=>{
   if(action==='edit')loadRecord(id,true);
   if(action==='delete'&&confirm('¿Eliminar este registro?')) {
     try {
-      storageAdapter.delete(id);
-      if(state.currentEditingId===id){state.currentEditingId=null;$('#mainSection').classList.remove('editing');}
+      const record=storageAdapter.find(id);
+      const deleted=storageAdapter.delete(id);
+      if(!deleted) throw new Error('El registro ya no existe.');
+      if(record) deleteOperationMedia(record);
+      if(state.currentEditingId===id) clearForm(true);
       renderHistory();
+      window.dispatchEvent(new CustomEvent('mrfc:records-changed'));
       setStatus('Registro eliminado.','red');
     } catch(error) {
       console.error(error);
@@ -486,9 +507,10 @@ $('#graficaBtn').addEventListener('click',renderQuickSummary);
 
 initOperations({storageAdapter,setStatus});
 installBackupControls();
+applyLanguage(document.documentElement.lang);
 populateOperations();
 updateDynamicFields();
 updateResults();
 renderHistory();
 const diagnostics=storageAdapter.getDiagnostics();
-setStatus(`Estado operativo listo. ${diagnostics.records} registro(s) disponibles.`,'red');
+setStatus(diagnostics.storageAvailable ? `Estado operativo listo. ${diagnostics.records} registro(s) disponibles.` : 'La app inició, pero el almacenamiento local no está disponible.',diagnostics.storageAvailable?'green':'red');

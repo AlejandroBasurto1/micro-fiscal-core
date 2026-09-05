@@ -10,6 +10,15 @@ python -m http.server 8080
 
 Abre `http://localhost:8080`. En Vercel selecciona **Other**, sin comando de compilación y con `.` como salida.
 
+## Pruebas
+
+Con Node.js 20 o posterior:
+
+```bash
+npm test
+npm run check
+```
+
 ## Arquitectura
 
 - `index.html`: dashboard y expediente.
@@ -23,7 +32,7 @@ Abre `http://localhost:8080`. En Vercel selecciona **Other**, sin comando de com
 
 ## Persistencia
 
-Los expedientes usan `localStorage` (`mrfc-records`, `schemaVersion: 2`). Las fotografías usan IndexedDB (`mrfc-media/photos`) con archivo original y JPEG optimizado.
+Los expedientes usan `localStorage` (`mrfc-records`, `schemaVersion: 2`). Las fotografías usan IndexedDB (`mrfc-media/photos`) con JPEG optimizado y metadatos; el archivo original no se duplica para evitar agotar la cuota del navegador. El respaldo JSON conserva los metadatos, pero no incluye los binarios de las fotografías.
 
 ## Variables de entorno
 

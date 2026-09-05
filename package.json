@@ -1,0 +1,13 @@
+{
+  "name": "mrfc-micro-fiscal-core",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check js/app.js && node --check js/calculator.js && node --check js/config.js && node --check js/media.js && node --check js/operations.js && node --check js/storage.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

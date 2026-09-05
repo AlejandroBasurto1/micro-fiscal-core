@@ -22,6 +22,22 @@ export function evaluateExpression(input) {
   return Number(values[0].toFixed(8));
 }
 
+export function applyCalculatorModifier(input, modifier, ivaRate = 0.16) {
+  const value = evaluateExpression(input);
+  const rate = Number(ivaRate);
+  if (!Number.isFinite(rate) || rate < 0) throw new Error('Tasa inválida');
+  const operations = {
+    addIva: () => value * (1 + rate),
+    removeIva: () => value / (1 + rate),
+    percent: () => value / 100,
+    tip: () => value * 1.10
+  };
+  if (!operations[modifier]) throw new Error('Modificador inválido');
+  const result = operations[modifier]();
+  if (!Number.isFinite(result)) throw new Error('Resultado inválido');
+  return Number(result.toFixed(modifier === 'percent' ? 4 : 2));
+}
+
 export function bindCalculator({ overlay, display, onSave, onResult, ivaRate }) {
   let expression = '';
   const render = value => { expression = String(value ?? ''); display.value = expression; };
@@ -32,13 +48,14 @@ export function bindCalculator({ overlay, display, onSave, onResult, ivaRate }) 
     try {
       if (value === 'C') render('');
       else if (value === '=') calculate();
-      else if (value === '+ IVA') render((evaluateExpression(expression) * (1 + ivaRate)).toFixed(2));
-      else if (value === '- IVA') render((evaluateExpression(expression) / (1 + ivaRate)).toFixed(2));
-      else if (value === '%') render((evaluateExpression(expression) / 100).toFixed(4));
-      else if (value.includes('Propina')) render((evaluateExpression(expression) * 1.10).toFixed(2));
+      else if (value === '+ IVA') render(applyCalculatorModifier(expression, 'addIva', ivaRate));
+      else if (value === '- IVA') render(applyCalculatorModifier(expression, 'removeIva', ivaRate));
+      else if (value === '%') render(applyCalculatorModifier(expression, 'percent', ivaRate));
+      else if (value.includes('Propina')) render(applyCalculatorModifier(expression, 'tip', ivaRate));
       else if (value.includes('Guardar')) onSave();
       else if (!(value === '.' && /(?:^|[+\-×÷])\d*\.\d*$/.test(expression))) render(expression + value);
-      onResult(Number(display.value) || 0);
+      const displayed = Number(display.value);
+      if (Number.isFinite(displayed)) onResult(displayed);
     } catch (error) { display.value = 'ERROR'; expression = ''; }
   });
   document.addEventListener('keydown', event => {
@@ -47,5 +64,5 @@ export function bindCalculator({ overlay, display, onSave, onResult, ivaRate }) 
     else if (event.key === 'Enter') { event.preventDefault(); try { calculate(); } catch { display.value='ERROR'; expression=''; } }
     else if (event.key === 'Backspace') { event.preventDefault(); render(expression.slice(0,-1)); }
   });
-  return { clear: () => render(''), value: () => Number(display.value) || 0 };
+  return { clear: () => render(''), value: () => { const result = Number(display.value); return Number.isFinite(result) ? result : 0; } };
 }
