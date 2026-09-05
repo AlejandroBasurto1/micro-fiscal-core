@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { inferBarcodeFormat, resolvePhotoStorageKey, serializePhotoMetadata } from '../js/operations.js';
+import { formatPhotoMetadata, inferBarcodeFormat, resolvePhotoStorageKey, serializePhotoMetadata } from '../js/operations.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -39,4 +39,11 @@ test('la carga de expediente vuelve a renderizar QR y código de barras', () => 
   assert.match(loadBlock, /restoreCodeVisuals\(currentQrPayload, value\('barcodeValue'\), barcodeFormat\)/);
   assert.match(operations, /renderQrVisual\(qrPayloadValue\)/);
   assert.match(operations, /renderBarcodeVisual\(barcodeValue, barcodeFormat\)/);
+});
+
+test('metadatos fotográficos incompletos no muestran Invalid Date ni undefined', () => {
+  const incomplete = formatPhotoMetadata({ slot: 1 });
+  assert.equal(incomplete, 'fecha no disponible · usuario no disponible · sin GPS, sin GPS');
+  assert.doesNotMatch(incomplete, /Invalid Date|undefined/);
+  assert.match(formatPhotoMetadata({ date: '2026-09-05T12:00:00Z', user: 'Ana', latitude: 0, longitude: 0 }), /Ana · 0, 0$/);
 });

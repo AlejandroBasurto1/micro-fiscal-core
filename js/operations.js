@@ -130,8 +130,16 @@ async function handlePhoto(card, file) {
   } catch (error) { card.querySelector('input[type=file]').value = ''; notify(error?.message || 'No fue posible procesar la fotografía.', 'red'); }
 }
 
+export function formatPhotoMetadata(metadata = {}) {
+  const parsedDate = new Date(metadata.date);
+  const date = Number.isNaN(parsedDate.getTime()) ? 'fecha no disponible' : parsedDate.toLocaleString('es-MX');
+  const user = String(metadata.user ?? '').trim() || 'usuario no disponible';
+  const coordinate = value => value === 0 || String(value ?? '').trim() ? String(value) : 'sin GPS';
+  return `${date} · ${user} · ${coordinate(metadata.latitude)}, ${coordinate(metadata.longitude)}`;
+}
+
 function renderPhotoMeta(card, metadata) {
-  card.querySelector('.photo-meta').textContent = `${new Date(metadata.date).toLocaleString('es-MX')} · ${metadata.user} · ${metadata.latitude || 'sin GPS'}, ${metadata.longitude || 'sin GPS'}`;
+  card.querySelector('.photo-meta').textContent = formatPhotoMetadata(metadata);
 }
 
 async function removePhoto(card) {
@@ -155,7 +163,7 @@ async function loadTesseract() {
   if (!tesseractPromise) {
     tesseractPromise = new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+      script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
       script.onload = () => window.Tesseract ? resolve(window.Tesseract) : reject(new Error('Tesseract no se inicializó.'));
       script.onerror = () => reject(new Error('No se pudo cargar Tesseract.'));
       document.head.append(script);
@@ -426,7 +434,11 @@ export function initOperations({ storageAdapter, setStatus }) {
 
 function renderQuery() {
   const query = value('queryText').toLowerCase(); const date = value('queryDate'); const status = value('queryStatus'); const container = $('#queryResults');
-  const records = storage.list().filter(record => (!status || record.estadoOperacion === status) && (!date || String(record.fechaISO || record.fechaCreacion).startsWith(date)) && (!query || [record.numeroOperacion,record.actividad,record.operacion,record.nombreActivo,record.identificadorActivo,record.numeroSerie,record.usuarioResponsable,record.cliente,record.codigoBarras,record.ubicacion?.direccion,record.estadoOperacion].some(item => String(item || '').toLowerCase().includes(query))));
+  const records = storage.list().filter(record => {
+    const moduleValues = Object.values(record.datosModulo || {});
+    const matchesQuery = !query || [record.numeroOperacion,record.actividad,record.operacion,record.nombreActivo,record.identificadorActivo,record.numeroSerie,record.usuarioResponsable,record.cliente,record.codigoBarras,record.ubicacion?.direccion,record.estadoOperacion,...moduleValues].some(item => String(item || '').toLowerCase().includes(query));
+    return (!status || record.estadoOperacion === status) && (!date || String(record.fechaISO || record.fechaCreacion).startsWith(date)) && matchesQuery;
+  });
   container.replaceChildren(); if (!records.length) { const empty = document.createElement('p'); empty.textContent = 'No se encontraron expedientes.'; container.append(empty); return; }
-  records.forEach(record => { const card = document.createElement('article'); card.className = 'query-card'; const title = document.createElement('h3'); title.textContent = record.numeroOperacion || record.id; const details = document.createElement('p'); details.textContent = `${record.nombreActivo || 'Sin activo'} · ${record.estadoOperacion || 'Borrador'} · ${record.usuarioResponsable || 'Sin usuario'}`; const actions = document.createElement('div'); actions.className = 'inline-actions'; const open = document.createElement('button'); open.type = 'button'; open.textContent = 'Abrir expediente'; open.addEventListener('click', () => window.dispatchEvent(new CustomEvent('mrfc:open-record', { detail: { id: record.id } }))); actions.append(open); if (Number.isFinite(record.ubicacion?.latitud) && Number.isFinite(record.ubicacion?.longitud)) { const map = document.createElement('a'); map.href = `https://www.google.com/maps?q=${record.ubicacion.latitud},${record.ubicacion.longitud}`; map.target = '_blank'; map.rel = 'noopener noreferrer'; map.textContent = 'Mapa'; actions.append(map); } card.append(title, details, actions); container.append(card); });
+  records.forEach(record => { const card = document.createElement('article'); card.className = 'query-card'; const title = document.createElement('h3'); title.textContent = record.numeroOperacion || record.id; const details = document.createElement('p'); const moduleDetail = record.moduloActivo === 'Gastos' ? record.datosModulo?.concepto : record.moduloActivo === 'Viáticos' ? `${record.datosModulo?.origen || ''} → ${record.datosModulo?.destino || ''}` : record.nombreActivo; details.textContent = `${record.moduloActivo || 'Actividad'} · ${moduleDetail || 'Sin descripción'} · ${record.estadoOperacion || 'Borrador'} · ${record.usuarioResponsable || 'Sin usuario'}`; const actions = document.createElement('div'); actions.className = 'inline-actions'; const open = document.createElement('button'); open.type = 'button'; open.textContent = 'Abrir expediente'; open.addEventListener('click', () => window.dispatchEvent(new CustomEvent('mrfc:open-record', { detail: { id: record.id } }))); actions.append(open); if (Number.isFinite(record.ubicacion?.latitud) && Number.isFinite(record.ubicacion?.longitud)) { const map = document.createElement('a'); map.href = `https://www.google.com/maps?q=${record.ubicacion.latitud},${record.ubicacion.longitud}`; map.target = '_blank'; map.rel = 'noopener noreferrer'; map.textContent = 'Mapa'; actions.append(map); } card.append(title, details, actions); container.append(card); });
 }

@@ -161,6 +161,9 @@ export const storageAdapter = {
 
   importBackup(payload, { replace = false } = {}) {
     const parsed = typeof payload === 'string' ? JSON.parse(payload) : payload;
+    if (!Array.isArray(parsed) && parsed?.app && parsed.app !== 'MRFC') {
+      throw new Error('El respaldo pertenece a otra aplicación.');
+    }
     const records = Array.isArray(parsed) ? parsed : parsed?.records;
     if (!Array.isArray(records)) {
       throw new Error('El respaldo MRFC no contiene una colección de registros válida.');
