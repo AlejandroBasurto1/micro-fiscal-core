@@ -1,0 +1,57 @@
+{
+  "app": "MRFC",
+  "schemaVersion": 2,
+  "exportedAt": "2026-09-05T18:00:00.000Z",
+  "records": [
+    {
+      "id": "fixture-expense-1",
+      "schemaVersion": 2,
+      "moduloActivo": "Gastos",
+      "tipoRegistro": "gasto",
+      "actividad": "Gastos",
+      "operacion": "Registro de gasto",
+      "fechaISO": "2026-09-05T12:00:00.000Z",
+      "fechaLegible": "2026-09-05",
+      "hora": "12:00:00",
+      "resultadoCalculadora": 580,
+      "subtotal": 500,
+      "iva": 80,
+      "isr": 0,
+      "gananciaReal": 0,
+      "numeroOperacion": "MRFC-RESPALDO-GASTO",
+      "nombreActivo": "Factura restaurada",
+      "usuarioResponsable": "Responsable respaldo",
+      "estadoOperacion": "En revisión",
+      "ubicacion": { "latitud": 29.0729, "longitud": -110.9559, "direccion": "Hermosillo, Sonora" },
+      "fotografias": [
+        { "slot": 1, "storageKey": "fixture-expense-photo-1", "detected": "FACTURA RESTAURADA" }
+      ],
+      "observaciones": "Expediente restaurado desde fixture",
+      "historialCambios": [],
+      "datosModulo": {
+        "fecha": "2026-09-05",
+        "categoria": "Servicios",
+        "concepto": "Gasto restaurado",
+        "proveedor": "Proveedor respaldo",
+        "importe": 500,
+        "iva": 80,
+        "total": 580,
+        "metodoPago": "Transferencia",
+        "cuentaBanco": "Cuenta de prueba",
+        "tipoComprobante": "Factura",
+        "responsable": "Responsable respaldo",
+        "operacionRelacionada": "OP-RESPALDO",
+        "clienteRelacionado": "Cliente respaldo"
+      }
+    }
+  ],
+  "media": [
+    {
+      "slot": 1,
+      "storageKey": "fixture-expense-photo-1",
+      "detected": "FACTURA RESTAURADA",
+      "mediaType": "image/png",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9WlYfWQAAAAASUVORK5CYII="
+    }
+  ]
+}

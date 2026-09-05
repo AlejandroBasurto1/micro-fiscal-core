@@ -54,6 +54,13 @@ test('rechaza respaldos inválidos sin modificar los datos actuales', () => {
   assert.equal(localStorage.getItem('mrfc-records'), before);
 });
 
+test('rechaza respaldos de otra aplicación sin modificar MRFC', () => {
+  storageAdapter.create({ id: 'safe-record', cliente: 'Conservar' });
+  const before = localStorage.getItem('mrfc-records');
+  assert.throws(() => storageAdapter.importBackup({ app: 'OTRA', records: [] }), /otra aplicación/);
+  assert.equal(localStorage.getItem('mrfc-records'), before);
+});
+
 test('respalda JSON corrupto antes de recuperar una colección vacía', () => {
   localStorage.setItem('mrfc-records', '{json-corrupto');
 

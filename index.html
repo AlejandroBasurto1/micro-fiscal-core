@@ -63,6 +63,58 @@
       <label><span class="sr-only">CLABE o cuenta</span><input type="text" id="clabeCuenta" placeholder="🔢 CLABE / Cuenta" inputmode="numeric" maxlength="20"></label>
       <label data-field="entrega"><span class="sr-only">Tipo de entrega</span><select id="tipoEntrega"><option value="">🚚 Tipo entrega</option><option>Corta rentable</option><option>Media</option><option>Larga</option><option>Alto esfuerzo</option></select></label>
     </div>
+  </div>
+  <div id="operationalModuleForms" class="dynamic-hidden">
+    <section class="module-form dynamic-hidden" id="expenseForm" data-operational-module="Gastos" aria-labelledby="expenseTitle">
+      <div class="dossier-head"><div><p class="dossier-kicker">CONTROL DE EGRESOS</p><h3 id="expenseTitle" data-lang-es="Registro de gasto" data-lang-en="Expense record">Registro de gasto</h3></div><strong id="expenseTotal" class="module-total">$0.00</strong></div>
+      <div class="module-form-grid">
+        <label><span data-lang-es="Fecha" data-lang-en="Date">Fecha</span><input id="expenseDate" type="date" required></label>
+        <label><span data-lang-es="Categoría" data-lang-en="Category">Categoría</span><select id="expenseCategory" required><option value="">Selecciona</option><option>Combustible</option><option>Alimentos</option><option>Hospedaje</option><option>Casetas</option><option>Estacionamiento</option><option>Transporte</option><option>Mantenimiento</option><option>Servicios</option><option>Insumos</option><option>Otros</option></select></label>
+        <label class="wide"><span data-lang-es="Concepto" data-lang-en="Description">Concepto</span><input id="expenseConcept" type="text" maxlength="180" required></label>
+        <label><span data-lang-es="Proveedor" data-lang-en="Vendor">Proveedor</span><input id="expenseVendor" type="text" maxlength="160"></label>
+        <label><span data-lang-es="Importe sin IVA" data-lang-en="Amount before VAT">Importe sin IVA</span><input id="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" required></label>
+        <label><span data-lang-es="IVA registrado" data-lang-en="Recorded VAT">IVA registrado</span><input id="expenseVat" type="number" min="0" step="0.01" inputmode="decimal"></label>
+        <label><span data-lang-es="Método de pago" data-lang-en="Payment method">Método de pago</span><select id="expensePayment"><option value="">Selecciona</option><option>Efectivo</option><option>Tarjeta</option><option>Transferencia</option><option>Pago en línea</option><option>Otro</option></select></label>
+        <label><span data-lang-es="Cuenta / banco" data-lang-en="Account / bank">Cuenta / banco</span><input id="expenseAccount" type="text" maxlength="120"></label>
+        <label><span data-lang-es="Comprobante" data-lang-en="Receipt type">Comprobante</span><select id="expenseDocumentType"><option value="">Selecciona</option><option>Factura</option><option>Ticket</option><option>Nota</option><option>Sin comprobante</option></select></label>
+        <label><span data-lang-es="Operación relacionada" data-lang-en="Related operation">Operación relacionada</span><input id="expenseRelatedOperation" type="text" maxlength="100"></label>
+        <label><span data-lang-es="Cliente relacionado" data-lang-en="Related client">Cliente relacionado</span><input id="expenseRelatedClient" type="text" maxlength="160"></label>
+      </div>
+      <p class="module-help" data-lang-es="Usa Fotografía 1 para factura, ticket o nota y Analizar para OCR. El texto detectado es editable." data-lang-en="Use Photo 1 for an invoice, ticket or note and Analyze for OCR. Detected text remains editable.">Usa Fotografía 1 para factura, ticket o nota y Analizar para OCR. El texto detectado es editable.</p>
+    </section>
+
+    <section class="module-form dynamic-hidden" id="travelForm" data-operational-module="Viáticos" aria-labelledby="travelTitle">
+      <div class="dossier-head"><div><p class="dossier-kicker">COMPROBACIÓN DE VIAJE</p><h3 id="travelTitle" data-lang-es="Expediente de viáticos" data-lang-en="Travel expense file">Expediente de viáticos</h3></div><div class="module-totals"><strong id="travelActual">$0.00</strong><small id="travelBalance">Saldo $0.00</small></div></div>
+      <div class="module-form-grid">
+        <label class="wide"><span data-lang-es="Motivo" data-lang-en="Purpose">Motivo</span><input id="travelPurpose" type="text" maxlength="200" required></label>
+        <label><span data-lang-es="Origen" data-lang-en="Origin">Origen</span><input id="travelOrigin" type="text" maxlength="160" required></label>
+        <label><span data-lang-es="Destino" data-lang-en="Destination">Destino</span><input id="travelDestination" type="text" maxlength="160" required></label>
+        <label><span data-lang-es="Fecha inicial" data-lang-en="Start date">Fecha inicial</span><input id="travelStartDate" type="date" required></label>
+        <label><span data-lang-es="Fecha final" data-lang-en="End date">Fecha final</span><input id="travelEndDate" type="date" required></label>
+        <label><span data-lang-es="Vehículo" data-lang-en="Vehicle">Vehículo</span><input id="travelVehicle" type="text" maxlength="120"></label>
+        <label><span data-lang-es="Kilometraje inicial" data-lang-en="Starting mileage">Kilometraje inicial</span><input id="travelStartMileage" type="number" min="0" step="0.1"></label>
+        <label><span data-lang-es="Kilometraje final" data-lang-en="Ending mileage">Kilometraje final</span><input id="travelEndMileage" type="number" min="0" step="0.1"></label>
+        <label><span data-lang-es="Gasolina" data-lang-en="Fuel">Gasolina</span><input id="travelFuel" type="number" min="0" step="0.01"></label>
+        <label><span data-lang-es="Casetas" data-lang-en="Tolls">Casetas</span><input id="travelTolls" type="number" min="0" step="0.01"></label>
+        <label><span data-lang-es="Estacionamiento" data-lang-en="Parking">Estacionamiento</span><input id="travelParking" type="number" min="0" step="0.01"></label>
+        <label><span data-lang-es="Alimentos" data-lang-en="Meals">Alimentos</span><input id="travelFood" type="number" min="0" step="0.01"></label>
+        <label><span data-lang-es="Hospedaje" data-lang-en="Lodging">Hospedaje</span><input id="travelLodging" type="number" min="0" step="0.01"></label>
+        <label><span data-lang-es="Transporte" data-lang-en="Transport">Transporte</span><input id="travelTransport" type="number" min="0" step="0.01"></label>
+        <label><span data-lang-es="Otros gastos" data-lang-en="Other expenses">Otros gastos</span><input id="travelOther" type="number" min="0" step="0.01"></label>
+        <label><span data-lang-es="Anticipos" data-lang-en="Advances">Anticipos</span><input id="travelAdvance" type="number" min="0" step="0.01"></label>
+        <label><span data-lang-es="Método de pago" data-lang-en="Payment method">Método de pago</span><select id="travelPayment"><option value="">Selecciona</option><option>Efectivo</option><option>Tarjeta</option><option>Transferencia</option><option>Mixto</option><option>Otro</option></select></label>
+        <label><span data-lang-es="Operación relacionada" data-lang-en="Related operation">Operación relacionada</span><input id="travelRelatedOperation" type="text" maxlength="100"></label>
+      </div>
+      <div class="travel-summary"><span id="travelDistance">0 km</span><span id="travelExpenseBreakdown">Gasto real $0.00</span><span id="travelPendingBalance">Saldo por comprobar $0.00</span></div>
+      <p class="module-help" data-lang-es="El responsable se captura en el expediente. Adjunta hasta tres evidencias; la primera admite OCR." data-lang-en="Capture the responsible person in the file. Attach up to three pieces of evidence; the first supports OCR.">El responsable se captura en el expediente. Adjunta hasta tres evidencias; la primera admite OCR.</p>
+    </section>
+
+    <section class="module-records" id="moduleRecordTools" aria-labelledby="moduleRecordsTitle">
+      <div class="dossier-head"><h3 id="moduleRecordsTitle" data-lang-es="Registros del módulo" data-lang-en="Module records">Registros del módulo</h3><button id="moduleExportBtn" type="button">Exportar módulo CSV</button></div>
+      <div class="module-filter-grid"><input id="moduleRecordSearch" type="search" placeholder="Buscar por concepto, proveedor, responsable, origen o destino"><input id="moduleRecordDate" type="date"><select id="moduleRecordCategory"><option value="">Todas las categorías</option></select></div>
+      <div id="moduleRecordResults" class="query-results"></div>
+    </section>
+  </div>
     <section class="dossier" id="operationDossier" aria-labelledby="dossierTitle">
       <div class="dossier-head"><div><p class="dossier-kicker">EXPEDIENTE DIGITAL</p><h3 id="dossierTitle">Expediente por operación</h3></div><span id="dossierState" class="status-badge">Borrador</span></div>
       <div class="dossier-grid">
@@ -88,7 +140,6 @@
       <label class="observations">Observaciones<textarea id="operationNotes" rows="4" maxlength="2000"></textarea></label>
       <div class="change-history"><h3>Historial de cambios</h3><ol id="changeHistoryList"><li>Expediente nuevo.</li></ol></div>
     </section>
-  </div>
   <div id="modulePlaceholder" class="quick-status dynamic-hidden"></div>
   <div class="quick-status" id="estructuraBase">🧠 Plantilla MRFC activa.<br>Los campos cambian según actividad y operación seleccionada.</div>
   <div class="quick-status" id="quickStatus" role="status" aria-live="polite">📊 Estado operativo listo.<br>Sin registros analizados.</div>
