@@ -4,6 +4,7 @@ const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
 const value = id => document.getElementById(id)?.value?.trim?.() || '';
 const photoState = new Map();
+const pendingPhotoDeletes = new Set();
 let storage;
 let notify = () => {};
 let currentOperation = '';
@@ -11,6 +12,7 @@ let currentQrPayload = '';
 let tesseractPromise = null;
 
 const QR_FIELD_NAMES = new Set(['operationNumber', 'assetId', 'serialNumber', 'location', 'url', 'custom']);
+const BARCODE_FORMATS = new Set(['CODE128', 'CODE39', 'EAN13']);
 
 function markDirty() {
   window.dispatchEvent(new CustomEvent('mrfc:dirty'));
@@ -80,7 +82,19 @@ function requestLocation() {
   }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 120000 });
 }
 
-function photoKey(slot) { return `${currentOperation || value('operationNumber')}-photo-${slot}`; }
+function uniquePhotoKey(slot) {
+  const operation = currentOperation || value('operationNumber') || 'MRFC';
+  const nonce = globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  return `${operation}-photo-${slot}-${nonce}`;
+}
+
+export function resolvePhotoStorageKey(metadata, operation, slot) {
+  return metadata?.storageKey || metadata?.key || `${operation}-photo-${slot}`;
+}
+
+export function serializePhotoMetadata(items) {
+  return [...items].map(({ key, ...metadata }) => ({ ...metadata, storageKey: key }));
+}
 
 function setPhotoPreview(card, blob) {
   const image = card.querySelector('img');
@@ -106,9 +120,11 @@ async function handlePhoto(card, file) {
   const slot = card.dataset.photoSlot;
   try {
     const blob = await optimizeImage(file);
-    const key = photoKey(slot);
+    const previous = photoState.get(Number(slot));
+    const key = uniquePhotoKey(slot);
     const metadata = { key, slot: Number(slot), type: card.querySelector('h4').textContent, date: new Date().toISOString(), user: value('responsibleUser') || 'Usuario local', latitude: value('operationLatitude'), longitude: value('operationLongitude'), detected: card.querySelector('[data-detected]').value };
     await mediaStore.put({ ...metadata, blob });
+    if (previous?.key && previous.key !== key) pendingPhotoDeletes.add(previous.key);
     photoState.set(Number(slot), metadata);
     setPhotoPreview(card, blob); card.classList.add('has-image'); renderPhotoMeta(card, metadata); markDirty(); notify(`Fotografía ${slot} guardada y optimizada.`, 'green');
   } catch (error) { card.querySelector('input[type=file]').value = ''; notify(error?.message || 'No fue posible procesar la fotografía.', 'red'); }
@@ -121,12 +137,9 @@ function renderPhotoMeta(card, metadata) {
 async function removePhoto(card) {
   const slot = Number(card.dataset.photoSlot);
   if (!photoState.has(slot) || !confirm(`¿Eliminar la fotografía ${slot}?`)) return;
-  try {
-    await mediaStore.delete(photoState.get(slot).key);
-    photoState.delete(slot); clearPhotoCard(card); markDirty(); notify(`Fotografía ${slot} eliminada.`, 'yellow');
-  } catch {
-    notify(`No fue posible eliminar la fotografía ${slot}.`, 'red');
-  }
+  pendingPhotoDeletes.add(photoState.get(slot).key);
+  photoState.delete(slot); clearPhotoCard(card); markDirty();
+  notify(`Fotografía ${slot} marcada para eliminar. Guarda el expediente para confirmar.`, 'yellow');
 }
 
 function expandPhoto(card) {
@@ -179,18 +192,26 @@ function qrPayload() {
   return buildQrPayload(collectOperationData(), selected, value('qrCustom'), `${location.origin}${location.pathname}`);
 }
 
+function renderQrVisual(payload) {
+  const output = $('#qrOutput');
+  output.replaceChildren();
+  if (!payload) { delete output.dataset.payload; return true; }
+  output.dataset.payload = payload;
+  if (!window.QRCode) return false;
+  new window.QRCode(output, { text: payload, width: 180, height: 180, correctLevel: window.QRCode.CorrectLevel.M });
+  return true;
+}
+
 function generateQr() {
-  const output = $('#qrOutput'); output.replaceChildren();
   if (!window.QRCode) { notify('El generador QR no está disponible.', 'red'); return; }
   try {
     currentQrPayload = qrPayload();
-    output.dataset.payload = currentQrPayload;
-    new window.QRCode(output, { text: currentQrPayload, width: 180, height: 180, correctLevel: window.QRCode.CorrectLevel.M });
+    renderQrVisual(currentQrPayload);
     markDirty();
     notify('Código QR generado.', 'green');
   } catch (error) {
     currentQrPayload = '';
-    delete output.dataset.payload;
+    renderQrVisual('');
     notify(error?.message || 'No fue posible generar el QR.', 'red');
   }
 }
@@ -228,6 +249,27 @@ export function validateBarcodeValue(format, rawValue) {
   throw new Error('Formato de código de barras no compatible.');
 }
 
+export function inferBarcodeFormat(rawValue, persistedFormat = '') {
+  const persisted = String(persistedFormat || '').toUpperCase();
+  if (BARCODE_FORMATS.has(persisted)) return persisted;
+  const code = String(rawValue || '').trim();
+  if (/^\d{13}$/.test(code)) {
+    try { validateBarcodeValue('EAN13', code); return 'EAN13'; }
+    catch { /* Un valor numérico heredado todavía puede representarse como CODE128. */ }
+  }
+  return 'CODE128';
+}
+
+function renderBarcodeVisual(rawValue, format) {
+  const output = $('#barcodeOutput');
+  output.replaceChildren();
+  if (!rawValue) return true;
+  if (!window.JsBarcode) return false;
+  const code = validateBarcodeValue(format, rawValue);
+  window.JsBarcode(output, code, { format, lineColor: '#07111f', background: '#fff', width: 2, height: 70, displayValue: true });
+  return true;
+}
+
 function generateBarcode() {
   const candidate = value('barcodeValue') || currentOperation.replace(/[^A-Z0-9]/gi, '').slice(-18);
   let code;
@@ -236,7 +278,7 @@ function generateBarcode() {
   const duplicate = storage.list().some(record => record.codigoBarras === code && record.numeroOperacion !== currentOperation);
   if (duplicate) { notify('El código ya pertenece a otra operación.', 'red'); return; }
   if (!window.JsBarcode) { notify('El generador de código no está disponible.', 'red'); return; }
-  try { window.JsBarcode('#barcodeOutput', code, { format: value('barcodeFormat'), lineColor: '#07111f', background: '#fff', width: 2, height: 70, displayValue: true }); $('#barcodeValue').value = code; markDirty(); notify('Código de barras generado y validado.', 'green'); } catch { notify('El valor no es válido para el formato seleccionado.', 'red'); }
+  try { renderBarcodeVisual(code, value('barcodeFormat')); $('#barcodeValue').value = code; markDirty(); notify('Código de barras generado y validado.', 'green'); } catch { notify('El valor no es válido para el formato seleccionado.', 'red'); }
 }
 
 async function scanCode(type) {
@@ -276,30 +318,57 @@ function printElement(element, title) {
   popup.document.close(); popup.focus(); popup.print();
 }
 
+function restoreQrControls(payload) {
+  let parsed = null;
+  try { parsed = payload ? JSON.parse(payload) : null; }
+  catch { /* Un payload externo se conserva, aunque no tenga campos MRFC editables. */ }
+  const keys = { operationNumber: 'operacion', assetId: 'activo', serialNumber: 'serie', location: 'ubicacion', url: 'url', custom: 'personalizado' };
+  if (parsed && typeof parsed === 'object') {
+    $$('.code-panel:first-child input[type=checkbox]').forEach(input => { input.checked = Object.hasOwn(parsed, keys[input.value]); });
+  }
+  $('#qrCustom').value = typeof parsed?.personalizado === 'string' ? parsed.personalizado : '';
+}
+
+function restoreCodeVisuals(qrPayloadValue, barcodeValue, barcodeFormat) {
+  let qrReady = !qrPayloadValue;
+  let barcodeReady = !barcodeValue;
+  let attempts = 0;
+  const operationAtLoad = currentOperation;
+  const attempt = () => {
+    if (currentOperation !== operationAtLoad || currentQrPayload !== qrPayloadValue || value('barcodeValue') !== barcodeValue) return;
+    try { if (!qrReady) qrReady = renderQrVisual(qrPayloadValue); }
+    catch { qrReady = true; notify('No fue posible restaurar visualmente el QR guardado.', 'yellow'); }
+    try { if (!barcodeReady) barcodeReady = renderBarcodeVisual(barcodeValue, barcodeFormat); }
+    catch { barcodeReady = true; notify('No fue posible restaurar visualmente el código de barras guardado.', 'yellow'); }
+    attempts += 1;
+    if ((!qrReady || !barcodeReady) && attempts < 20) setTimeout(attempt, 100);
+    else if (!qrReady || !barcodeReady) notify('Los datos de los códigos se cargaron, pero la librería visual no está disponible.', 'yellow');
+  };
+  attempt();
+}
+
 export function collectOperationData() {
   const lat = coordinate('operationLatitude'); const lng = coordinate('operationLongitude');
-  return { numeroOperacion: value('operationNumber'), nombreActivo: value('assetName'), identificadorActivo: value('assetId'), numeroSerie: value('serialNumber'), usuarioResponsable: value('responsibleUser'), estadoOperacion: value('operationStatus'), ubicacion: { latitud: lat !== null && lat >= -90 && lat <= 90 ? lat : null, longitud: lng !== null && lng >= -180 && lng <= 180 ? lng : null, direccion: value('operationAddress') }, codigoBarras: value('barcodeValue'), qrPayload: currentQrPayload, fotografias: [...photoState.values()].map(({ key, ...metadata }) => metadata), observaciones: value('operationNotes'), historialCambios: [] };
+  return { numeroOperacion: value('operationNumber'), nombreActivo: value('assetName'), identificadorActivo: value('assetId'), numeroSerie: value('serialNumber'), usuarioResponsable: value('responsibleUser'), estadoOperacion: value('operationStatus'), ubicacion: { latitud: lat !== null && lat >= -90 && lat <= 90 ? lat : null, longitud: lng !== null && lng >= -180 && lng <= 180 ? lng : null, direccion: value('operationAddress') }, codigoBarras: value('barcodeValue'), formatoCodigoBarras: value('barcodeFormat'), qrPayload: currentQrPayload, fotografias: serializePhotoMetadata(photoState.values()), observaciones: value('operationNotes'), historialCambios: [] };
 }
 
 export async function loadOperationData(record) {
   currentOperation = record.numeroOperacion || operationNumber();
-  const map = { operationNumber: currentOperation, assetName: record.nombreActivo, assetId: record.identificadorActivo, serialNumber: record.numeroSerie, responsibleUser: record.usuarioResponsable, operationStatus: record.estadoOperacion || 'Borrador', operationLatitude: record.ubicacion?.latitud, operationLongitude: record.ubicacion?.longitud, operationAddress: record.ubicacion?.direccion, barcodeValue: record.codigoBarras, operationNotes: record.observaciones };
+  const barcodeFormat = inferBarcodeFormat(record.codigoBarras, record.formatoCodigoBarras);
+  const map = { operationNumber: currentOperation, assetName: record.nombreActivo, assetId: record.identificadorActivo, serialNumber: record.numeroSerie, responsibleUser: record.usuarioResponsable, operationStatus: record.estadoOperacion || 'Borrador', operationLatitude: record.ubicacion?.latitud, operationLongitude: record.ubicacion?.longitud, operationAddress: record.ubicacion?.direccion, barcodeValue: record.codigoBarras, barcodeFormat, operationNotes: record.observaciones };
   Object.entries(map).forEach(([id, data]) => { const element = document.getElementById(id); if (element) element.value = data ?? ''; });
   $('#dossierState').textContent = value('operationStatus'); updateMap(); renderChanges(record.historialCambios || []);
   photoState.clear();
+  pendingPhotoDeletes.clear();
   $$('.photo-card').forEach(clearPhotoCard);
   currentQrPayload = typeof record.qrPayload === 'string' ? record.qrPayload : '';
-  $('#qrOutput').replaceChildren();
-  if (currentQrPayload) $('#qrOutput').dataset.payload = currentQrPayload;
-  else delete $('#qrOutput').dataset.payload;
-  try {
-    const parsedQr = currentQrPayload ? JSON.parse(currentQrPayload) : null;
-    $('#qrCustom').value = typeof parsedQr?.personalizado === 'string' ? parsedQr.personalizado : '';
-  } catch { $('#qrCustom').value = ''; }
+  renderQrVisual('');
+  $('#barcodeOutput').replaceChildren();
+  restoreQrControls(currentQrPayload);
   for (const metadata of (Array.isArray(record.fotografias) ? record.fotografias : []).slice(0, 3)) {
     const slot = Number(metadata.slot);
     if (![1, 2, 3].includes(slot)) continue;
-    const key = `${currentOperation}-photo-${slot}`;
+    const key = resolvePhotoStorageKey(metadata, currentOperation, slot);
     const card = $(`[data-photo-slot="${slot}"]`);
     photoState.set(slot, { ...metadata, key });
     card.querySelector('[data-detected]').value = metadata.detected || '';
@@ -313,20 +382,34 @@ export async function loadOperationData(record) {
       notify(`No se pudo recuperar la fotografía ${slot}; el expediente sigue disponible.`, 'yellow');
     }
   }
+  restoreCodeVisuals(currentQrPayload, value('barcodeValue'), barcodeFormat);
 }
 
 export function resetOperationData() {
   currentOperation = operationNumber();
   ['assetName','assetId','serialNumber','responsibleUser','operationLatitude','operationLongitude','operationAddress','barcodeValue','operationNotes','qrCustom'].forEach(id => { document.getElementById(id).value = ''; });
   currentQrPayload = '';
-  $('#operationNumber').value = currentOperation; $('#operationStatus').value = 'Borrador'; $('#dossierState').textContent = 'Borrador'; $('#qrOutput').replaceChildren(); delete $('#qrOutput').dataset.payload; $('#barcodeOutput').replaceChildren(); $('#operationMap').removeAttribute('src'); $('#openMapsBtn').href = '#'; $('#openMapsBtn').setAttribute('aria-disabled', 'true'); photoState.clear();
+  $('#operationNumber').value = currentOperation; $('#operationStatus').value = 'Borrador'; $('#dossierState').textContent = 'Borrador'; $('#qrOutput').replaceChildren(); delete $('#qrOutput').dataset.payload; $('#barcodeOutput').replaceChildren(); $('#operationMap').removeAttribute('src'); $('#openMapsBtn').href = '#'; $('#openMapsBtn').setAttribute('aria-disabled', 'true'); photoState.clear(); pendingPhotoDeletes.clear();
   $$('.photo-card').forEach(clearPhotoCard); renderChanges([]);
+}
+
+export async function commitOperationMedia(record) {
+  const activeKeys = new Set([...photoState.values()].map(item => item.key));
+  const keys = [...pendingPhotoDeletes].filter(key => !activeKeys.has(key));
+  const results = await Promise.allSettled(keys.map(key => mediaStore.delete(key)));
+  results.forEach((result, index) => { if (result.status === 'fulfilled') pendingPhotoDeletes.delete(keys[index]); });
+  currentOperation = record?.numeroOperacion || currentOperation;
+  const failed = results.filter(result => result.status === 'rejected').length;
+  if (failed) notify('El expediente se guardó, pero quedó evidencia anterior pendiente de limpieza.', 'yellow');
+  return { deleted: results.length - failed, failed };
 }
 
 export async function deleteOperationMedia(record) {
   const operation = record?.numeroOperacion;
   if (!operation) return;
-  await Promise.allSettled([1, 2, 3].map(slot => mediaStore.delete(`${operation}-photo-${slot}`)));
+  const storedKeys = (Array.isArray(record.fotografias) ? record.fotografias : []).map(metadata => metadata?.storageKey).filter(Boolean);
+  const legacyKeys = [1, 2, 3].map(slot => `${operation}-photo-${slot}`);
+  await Promise.allSettled([...new Set([...storedKeys, ...legacyKeys])].map(key => mediaStore.delete(key)));
 }
 
 function renderChanges(changes) { const list = $('#changeHistoryList'); list.replaceChildren(); (changes.length ? changes : [{ date: new Date().toISOString(), action: 'Expediente nuevo.' }]).forEach(change => { const item = document.createElement('li'); item.textContent = `${new Date(change.date).toLocaleString('es-MX')} — ${change.action}`; list.append(item); }); }

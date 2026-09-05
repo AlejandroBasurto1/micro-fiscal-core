@@ -1,7 +1,7 @@
 import { storageAdapter } from './storage.js';
 import { activityOperations, dynamicRules, fiscalConfig } from './config.js';
 import { bindCalculator } from './calculator.js';
-import { initOperations, collectOperationData, loadOperationData, resetOperationData, deleteOperationMedia } from './operations.js';
+import { initOperations, collectOperationData, loadOperationData, resetOperationData, commitOperationMedia, deleteOperationMedia } from './operations.js';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -135,6 +135,7 @@ async function saveRecord() {
     }
 
     if(!saved) throw new Error('El adaptador no devolvió el registro guardado.');
+    await commitOperationMedia(saved);
     state.currentEditingId=saved.id;
     $('#mainSection').classList.add('editing');
     state.dirty=false;
