@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.1 — 2026-09-04
+
+- Guardado y edición idempotentes para evitar expedientes duplicados.
+- Migración de claves anteriores y recuperación segura de JSON local corrupto.
+- Respaldo/restauración JSON con combinación por ID y CSV UTF-8 endurecido.
+- GPS, mapa, QR persistente y validación explícita de CODE128, CODE39 y EAN13.
+- Fotografías optimizadas con límite controlado, OCR recuperable y limpieza de URLs temporales.
+- Búsqueda actualizada tras CRUD, preferencias persistentes y pruebas automatizadas.
+
 ## 2.0.0 — 2026-07-21
 
 - Logotipos oficiales oscuro/claro con firma AB Studio.

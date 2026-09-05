@@ -1,6 +1,8 @@
 const STORAGE_KEY = 'mrfc-records';
 const CORRUPT_BACKUP_KEY = 'mrfc-records-corrupt-backup';
 const SCHEMA_VERSION = 2;
+const LEGACY_STORAGE_KEYS = ['mrfcRecords', 'mrfc-registros', 'registrosMRFC'];
+let lastStorageError = null;
 
 function migrateRecords(records) {
   return records
@@ -14,12 +16,22 @@ function migrateRecords(records) {
     }));
 }
 
+function safeReadRaw(key) {
+  try {
+    return localStorage.getItem(key);
+  } catch (error) {
+    lastStorageError = error;
+    return null;
+  }
+}
+
 function safeWriteRaw(key, value) {
   try {
     localStorage.setItem(key, value);
+    lastStorageError = null;
     return true;
   } catch (error) {
-    console.error(`MRFC: no fue posible escribir ${key}.`, error);
+    lastStorageError = error;
     return false;
   }
 }
@@ -39,14 +51,29 @@ function writeStore(store) {
 }
 
 function readStore() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return { schemaVersion: SCHEMA_VERSION, records: [] };
+  let raw = safeReadRaw(STORAGE_KEY);
+  if (!raw) {
+    for (const legacyKey of LEGACY_STORAGE_KEYS) {
+      const legacyRaw = safeReadRaw(legacyKey);
+      if (!legacyRaw) continue;
+      try {
+        const legacy = JSON.parse(legacyRaw);
+        const records = Array.isArray(legacy) ? legacy : legacy?.records;
+        if (!Array.isArray(records)) continue;
+        const migrated = writeStore({ records });
+        return migrated;
+      } catch {
+        // Se conserva la clave anterior intacta y se intenta la siguiente.
+      }
+    }
+    return { schemaVersion: SCHEMA_VERSION, records: [] };
+  }
 
   try {
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed)) {
       const migrated = { schemaVersion: SCHEMA_VERSION, records: migrateRecords(parsed) };
-      writeStore(migrated);
+      try { writeStore(migrated); } catch { /* Los datos migrados siguen disponibles en memoria. */ }
       return migrated;
     }
     if (parsed && Array.isArray(parsed.records)) {
@@ -54,19 +81,21 @@ function readStore() {
         return { schemaVersion: SCHEMA_VERSION, records: migrateRecords(parsed.records) };
       }
       const migrated = { schemaVersion: SCHEMA_VERSION, records: migrateRecords(parsed.records) };
-      writeStore(migrated);
+      try { writeStore(migrated); } catch { /* Los datos migrados siguen disponibles en memoria. */ }
       return migrated;
     }
+    throw new Error('Estructura de almacenamiento MRFC inválida.');
   } catch (error) {
-    console.warn('MRFC: almacenamiento local corrupto; se conservará una copia de recuperación.', error);
-    safeWriteRaw(CORRUPT_BACKUP_KEY, raw);
+    lastStorageError = error;
+    const recovered = safeWriteRaw(CORRUPT_BACKUP_KEY, raw);
+    if (recovered) safeWriteRaw(STORAGE_KEY, JSON.stringify({ schemaVersion: SCHEMA_VERSION, records: [] }));
   }
 
   return { schemaVersion: SCHEMA_VERSION, records: [] };
 }
 
 function createId() {
-  return crypto.randomUUID?.() || `mrfc-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  return globalThis.crypto?.randomUUID?.() || `mrfc-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
 function clone(value) {
@@ -132,20 +161,19 @@ export const storageAdapter = {
 
   importBackup(payload, { replace = false } = {}) {
     const parsed = typeof payload === 'string' ? JSON.parse(payload) : payload;
-    if (!parsed || !Array.isArray(parsed.records)) {
+    const records = Array.isArray(parsed) ? parsed : parsed?.records;
+    if (!Array.isArray(records)) {
       throw new Error('El respaldo MRFC no contiene una colección de registros válida.');
     }
 
-    const incoming = migrateRecords(parsed.records);
+    const incoming = migrateRecords(records);
     const store = readStore();
     const current = replace ? [] : store.records.slice();
     const byId = new Map(current.map(record => [record.id, record]));
 
     incoming.forEach(record => {
       const safeRecord = { ...record, id: record.id || createId() };
-      if (byId.has(safeRecord.id)) {
-        safeRecord.id = createId();
-      }
+      // Un respaldo del mismo expediente actualiza ese expediente; no crea duplicados.
       byId.set(safeRecord.id, safeRecord);
     });
 
@@ -156,12 +184,13 @@ export const storageAdapter = {
 
   getDiagnostics() {
     const store = readStore();
-    const raw = localStorage.getItem(STORAGE_KEY) || '';
+    const raw = safeReadRaw(STORAGE_KEY) || '';
     return {
       schemaVersion: store.schemaVersion,
       records: store.records.length,
-      bytesApprox: new Blob([raw]).size,
-      hasCorruptBackup: Boolean(localStorage.getItem(CORRUPT_BACKUP_KEY))
+      bytesApprox: new TextEncoder().encode(raw).byteLength,
+      hasCorruptBackup: Boolean(safeReadRaw(CORRUPT_BACKUP_KEY)),
+      storageAvailable: !lastStorageError
     };
   }
 };

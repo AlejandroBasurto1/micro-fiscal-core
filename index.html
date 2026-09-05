@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="MRFC Micro Real Fiscal Core: panel operativo local para registros y control administrativo.">
   <title>MRFC</title>
-  <script>if(localStorage.getItem('mrfc-theme')==='light')document.documentElement.classList.add('theme-light');</script>
+  <script>try{if(localStorage.getItem('mrfc-theme')==='light')document.documentElement.classList.add('theme-light')}catch{}</script>
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 <header class="topbar">
-  <div class="logo-box brand-lockup"><picture><source media="(prefers-color-scheme:light)" srcset="assets/assetsmrfc-logo-light.png"><img id="mrfcLogo" src="assets/assetsmrfc-logo-dark.png" width="1536" height="1024" alt="MRFC Micro Fiscal Core — AB Studio"></picture></div>
+  <div class="logo-box brand-lockup"><img id="mrfcLogo" src="assets/assetsmrfc-logo-dark.png" width="1536" height="1024" alt="MRFC Micro Fiscal Core — AB Studio"></div>
   <div class="top-actions">
     <div class="datetime-box" aria-live="off"><time id="horaActual" class="hud-clock">00:00</time><time id="fechaActual" class="hud-date">--</time></div>
     <button class="mini-btn" id="homeBtn" type="button" aria-label="Inicio">🏠</button>
@@ -74,7 +74,7 @@
         <label>Estado<select id="operationStatus"><option>Borrador</option><option>En proceso</option><option>En revisión</option><option>Completado</option><option>Cancelado</option></select></label>
       </div>
       <div class="location-panel">
-        <div class="dossier-head"><h3>📍 Ubicación y mapa</h3><div class="inline-actions"><button id="getLocationBtn" type="button">Obtener ubicación</button><a id="openMapsBtn" href="#" target="_blank" rel="noopener noreferrer">Abrir en Google Maps</a></div></div>
+        <div class="dossier-head"><h3>📍 Ubicación y mapa</h3><div class="inline-actions"><button id="getLocationBtn" type="button">Obtener ubicación</button><a id="openMapsBtn" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true">Abrir en Google Maps</a></div></div>
         <div class="location-grid"><label>Latitud<input id="operationLatitude" type="number" step="any" placeholder="19.4326"></label><label>Longitud<input id="operationLongitude" type="number" step="any" placeholder="-99.1332"></label><label class="wide">Dirección aproximada<input id="operationAddress" type="text" maxlength="260" placeholder="Captura manual o dirección obtenida"></label></div>
         <iframe id="operationMap" class="operation-map" title="Mapa de la operación" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
@@ -113,8 +113,8 @@
 
 <input id="ocrFile" type="file" accept="image/*" hidden>
 <input id="codeScannerFile" type="file" accept="image/*" capture="environment" hidden>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" referrerpolicy="no-referrer" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" referrerpolicy="no-referrer" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js" referrerpolicy="no-referrer" defer></script>
 <script type="module" src="js/app.js"></script>
 </body></html>

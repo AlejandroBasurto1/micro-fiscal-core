@@ -1,63 +1,61 @@
-# Reporte de entrega MRFC V2
+# Reporte de entrega MRFC V2.0.1
 
-## Arquitectura encontrada
+## Alcance
 
-- Frontend: HTML, CSS y JavaScript ES Modules.
-- Backend: no existe.
-- Base de datos: `localStorage`.
-- Rutas: una ruta estática compatible con Vercel.
+- Rama base: `fix/mrfc-functional-core` en `900c213e7b0e6927d90235dce8661755d97129ad`.
+- Rama de entrega: `fix/mrfc-production-ready`.
+- Frontend estático: HTML, CSS y JavaScript ES Modules.
+- Persistencia local: `localStorage` para expedientes e IndexedDB para fotografías optimizadas.
+- No se modificaron `main`, ICSSA, branding ni fórmulas oficiales de ISR.
 
-## Archivos
+## Correcciones funcionales
 
-Modificados: `index.html`, `css/main.css`, `js/app.js`, `js/storage.js`, `README.md`, `CHANGELOG.md`.
+- Crear, cargar, editar y eliminar expedientes sin duplicarlos al volver a guardar.
+- Recuperar fallos de escritura sin limpiar el formulario ni sobrescribir el último contenido persistido.
+- Migrar colecciones V1/V2 y claves locales anteriores; respaldar el contenido local corrupto antes de reiniciar la colección activa.
+- Exportar CSV con BOM UTF-8, saltos normalizados y protección frente a fórmulas de hoja de cálculo.
+- Exportar y restaurar respaldos JSON; los IDs existentes se actualizan en lugar de duplicarse.
+- Unificar ambos botones GPS, validar coordenadas vacías/rangos y actualizar mapa y enlace de Google Maps.
+- Mantener exactamente tres espacios fotográficos, liberar URLs temporales, optimizar imágenes y rechazar de forma controlada archivos mayores de 25 MB.
+- Mantener OCR recuperable y el texto detectado editable/persistente aunque Tesseract no esté disponible.
+- Persistir el contenido QR real y validar los campos seleccionados.
+- Validar CODE128, CODE39 y EAN13, incluido el dígito verificador de EAN13.
+- Refrescar búsquedas después de CRUD/restauración y cubrir operación, activo, serie, usuario, estado, fecha y ubicación.
+- Persistir tema e idioma sin hacer fallar el arranque cuando el almacenamiento de preferencias no está disponible.
+- Sustituir la impresión mediante HTML dinámico por clonación segura del nodo generado.
 
-Creados: `js/operations.js`, `js/media.js`, `.env.example`, `DELIVERY-REPORT.md`.
+## Pruebas automatizadas
 
-## Funciones creadas
+Ejecutar con Node.js 20 o posterior:
 
-- Expediente y número único de operación.
-- GPS opcional, mapa y captura manual.
-- Tres fotografías con original, optimizada y metadatos.
-- OCR bajo demanda y corrección manual.
-- QR configurable y códigos de barras validados.
-- Escaneo con `BarcodeDetector` cuando está disponible.
-- Consulta avanzada e historial de cambios.
-- Migración automática V1→V2.
+```bash
+npm test
+npm run check
+```
 
-## Persistencia y migraciones
+La suite cubre CRUD, edición sin duplicados, migración, fallo de cuota, respaldo/restauración, JSON corrupto, calculadora, QR, CODE128, CODE39, EAN13, estructura estática, tres fotografías, patrones DOM inseguros y headers de Vercel.
 
-- `localStorage`: `mrfc-records`, esquema 2.
-- IndexedDB: `mrfc-media/photos`, versión 1.
-- Los registros anteriores se conservan con valores seguros.
-- No hay migración SQL porque no existe backend.
+## Pruebas de navegador realizadas
 
-## Variables de entorno
+- Arranque y carga HTTP de `index.html`, CSS y seis módulos con respuesta 200 y consola limpia.
+- Captura, guardado, recarga, apertura, edición y búsquedas del expediente.
+- Calculadora básica, IVA, QR, CODE128 y EAN13 válido/inválido.
+- Coordenadas manuales, mapa, enlace Google Maps y permiso GPS denegado.
+- Carga, reemplazo, ampliación, Escape, persistencia de foto y OCR editable.
+- Rechazo controlado de una imagen de más de 25 MB sin bloquear la interfaz.
+- Respaldo/restauración válida y rechazo de JSON corrupto sin perder los registros existentes.
+- CSV, QR, código de barras y respaldo activaron sus flujos de descarga sin errores de consola.
+- Tema e idioma persistieron tras recargar.
+- Viewports 1440×900, 768×1024 y 390×844 sin desbordamiento horizontal; cámara/formularios permanecieron accesibles.
 
-Ninguna obligatoria. Futuras: `MRFC_MAP_PROVIDER_KEY`, `MRFC_OCR_API_URL`, `MRFC_API_BASE_URL`, solo del lado servidor.
+## Vercel
 
-## Cómo probar
+`vercel.json` conserva `X-Content-Type-Options`, `Referrer-Policy` y `Permissions-Policy` para cámara y geolocalización. La interfaz MRFC no requiere compilación: usar framework **Other**, sin comando de build y con `.` como directorio de salida.
 
-1. Ejecuta `python -m http.server 8080`.
-2. Selecciona actividad y operación; completa activo y usuario.
-3. Registra ubicación por GPS o manualmente.
-4. Agrega tres fotografías y analiza la primera.
-5. Genera QR y código de barras.
-6. Guarda, busca, abre y edita el expediente.
-7. Recarga para comprobar persistencia.
+## Limitaciones conocidas
 
-## Pruebas ejecutadas
-
-- Sintaxis de seis módulos JavaScript.
-- Carga en Edge sin errores de aplicación.
-- Expediente esquema 2 y búsqueda por serie.
-- Coordenadas y dirección persistidas.
-- Original y optimizada en IndexedDB.
-- Responsive 390 px sin desbordamiento.
-
-## Limitaciones reales
-
-- Autenticación y permisos reales requieren backend.
-- Sincronización multiusuario requiere API/base de datos.
-- OCR, QR y códigos dependen del navegador o CDN.
-- `BarcodeDetector` no existe en todos los navegadores.
-- La dirección aproximada debe validarse.
+- La persistencia es local al navegador; autenticación, permisos y sincronización multiusuario requieren backend.
+- OCR y generación de códigos cargan librerías desde CDN; ante fallo se muestra un mensaje y la captura manual sigue disponible.
+- El escaneo depende de `BarcodeDetector`; navegadores sin soporte conservan la captura manual.
+- El respaldo JSON incluye metadatos de fotografías, no los binarios guardados en IndexedDB.
+- ISR permanece en cero y sin cálculo oficial hasta contar con configuración fiscal validada.
