@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "node --check js/app.js && node --check js/calculator.js && node --check js/config.js && node --check js/export.js && node --check js/media.js && node --check js/operational-modules.js && node --check js/operations.js && node --check js/storage.js",
+    "check": "node --check js/app.js && node --check js/calculator.js && node --check js/config.js && node --check js/export.js && node --check js/media.js && node --check js/operational-modules.js && node --check js/operations.js && node --check js/storage.js && node --check js/viaticos-ui.js",
     "test": "node --test"
   },
   "engines": {
