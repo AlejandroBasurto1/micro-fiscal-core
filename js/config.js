@@ -1,3 +1,5 @@
+import { installViaticosFundsUI } from './viaticos-ui.js';
+
 export const fiscalConfig = Object.freeze({ ivaRate: 0.16, isrRate: null });
 
 export const activityOperations = Object.freeze({
@@ -17,3 +19,8 @@ export const dynamicRules = Object.freeze({
 });
 
 export const modules = ['Actividad', 'Bancos', 'Gastos', 'Viáticos', 'Proveedor', 'Cliente', 'Rutas', 'Mantenimiento', 'OCR', 'QR', 'Código', 'GPS'];
+
+if (globalThis.document) {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installViaticosFundsUI, { once: true });
+  else installViaticosFundsUI();
+}
