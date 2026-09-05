@@ -37,8 +37,17 @@ test('Vercel conserva headers de seguridad y permisos de cámara/GPS', () => {
   const config = JSON.parse(readFileSync(resolve(root, 'vercel.json'), 'utf8'));
   const headers = Object.fromEntries(config.headers[0].headers.map(item => [item.key, item.value]));
   assert.equal(headers['X-Content-Type-Options'], 'nosniff');
+  assert.equal(headers['X-Frame-Options'], 'DENY');
+  assert.match(headers['Strict-Transport-Security'], /max-age=63072000/);
+  assert.equal(headers['Cross-Origin-Opener-Policy'], 'same-origin');
   assert.equal(headers['Referrer-Policy'], 'strict-origin-when-cross-origin');
   assert.equal(headers['Permissions-Policy'], 'camera=(self), geolocation=(self), microphone=()');
   assert.equal(config.outputDirectory, '.');
   assert.equal(config.cleanUrls, true);
+});
+
+test('OCR usa una versión CDN fijada', () => {
+  const operations = readFileSync(resolve(root, 'js/operations.js'), 'utf8');
+  assert.match(operations, /tesseract\.js@5\.1\.1/);
+  assert.doesNotMatch(operations, /tesseract\.js@5\//);
 });

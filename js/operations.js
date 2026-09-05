@@ -130,8 +130,16 @@ async function handlePhoto(card, file) {
   } catch (error) { card.querySelector('input[type=file]').value = ''; notify(error?.message || 'No fue posible procesar la fotografía.', 'red'); }
 }
 
+export function formatPhotoMetadata(metadata = {}) {
+  const parsedDate = new Date(metadata.date);
+  const date = Number.isNaN(parsedDate.getTime()) ? 'fecha no disponible' : parsedDate.toLocaleString('es-MX');
+  const user = String(metadata.user ?? '').trim() || 'usuario no disponible';
+  const coordinate = value => value === 0 || String(value ?? '').trim() ? String(value) : 'sin GPS';
+  return `${date} · ${user} · ${coordinate(metadata.latitude)}, ${coordinate(metadata.longitude)}`;
+}
+
 function renderPhotoMeta(card, metadata) {
-  card.querySelector('.photo-meta').textContent = `${new Date(metadata.date).toLocaleString('es-MX')} · ${metadata.user} · ${metadata.latitude || 'sin GPS'}, ${metadata.longitude || 'sin GPS'}`;
+  card.querySelector('.photo-meta').textContent = formatPhotoMetadata(metadata);
 }
 
 async function removePhoto(card) {
@@ -155,7 +163,7 @@ async function loadTesseract() {
   if (!tesseractPromise) {
     tesseractPromise = new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+      script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
       script.onload = () => window.Tesseract ? resolve(window.Tesseract) : reject(new Error('Tesseract no se inicializó.'));
       script.onerror = () => reject(new Error('No se pudo cargar Tesseract.'));
       document.head.append(script);
