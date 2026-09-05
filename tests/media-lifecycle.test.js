@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { inferBarcodeFormat, resolvePhotoStorageKey, serializePhotoMetadata } from '../js/operations.js';
+import { formatPhotoMetadata, inferBarcodeFormat, resolvePhotoStorageKey, serializePhotoMetadata, stagePhotoRemoval, stagePhotoReplacement } from '../js/operations.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -26,6 +26,23 @@ test('difiere el borrado físico hasta después de guardar el expediente', () =>
   assert.ok(app.indexOf('storageAdapter.update') < app.indexOf('await commitOperationMedia(saved)'));
 });
 
+test('reemplazar y borrar se pueden cancelar sin perder las tres evidencias confirmadas', () => {
+  const confirmed = new Map([1, 2, 3].map(slot => [slot, { slot, key: `operacion-anterior-photo-${slot}` }]));
+  const draft = new Map(confirmed);
+  const pendingDeletes = new Set();
+
+  stagePhotoReplacement(draft, pendingDeletes, 1, { slot: 1, key: 'foto-reemplazo-temporal' });
+  stagePhotoRemoval(draft, pendingDeletes, 2);
+
+  assert.deepEqual([...draft.keys()], [1, 3]);
+  assert.deepEqual([...pendingDeletes], ['operacion-anterior-photo-1', 'operacion-anterior-photo-2']);
+  assert.deepEqual([...confirmed.values()].map(item => item.key), [
+    'operacion-anterior-photo-1',
+    'operacion-anterior-photo-2',
+    'operacion-anterior-photo-3'
+  ]);
+});
+
 test('restaura formatos persistidos e identifica EAN13 heredado válido', () => {
   assert.equal(inferBarcodeFormat('ABC-123', 'CODE39'), 'CODE39');
   assert.equal(inferBarcodeFormat('7501031311309'), 'EAN13');
@@ -39,4 +56,13 @@ test('la carga de expediente vuelve a renderizar QR y código de barras', () => 
   assert.match(loadBlock, /restoreCodeVisuals\(currentQrPayload, value\('barcodeValue'\), barcodeFormat\)/);
   assert.match(operations, /renderQrVisual\(qrPayloadValue\)/);
   assert.match(operations, /renderBarcodeVisual\(barcodeValue, barcodeFormat\)/);
+});
+
+test('metadatos fotográficos incompletos nunca muestran Invalid Date ni undefined', () => {
+  const fallback = formatPhotoMetadata({});
+  const equator = formatPhotoMetadata({ date: '2026-09-04T00:00:00.000Z', user: 'QA', latitude: 0, longitude: 0 });
+
+  assert.doesNotMatch(fallback, /Invalid Date|undefined/);
+  assert.match(fallback, /fecha no disponible · usuario no disponible/);
+  assert.match(equator, /QA · 0, 0/);
 });
