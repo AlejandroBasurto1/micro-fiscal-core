@@ -23,6 +23,19 @@ Rama operativa: `fix/mrfc-functional-core`
 7. En **Git > Production Branch**, seleccionar `fix/mrfc-functional-core` si se desea publicar MRFC sin mover `main`.
 8. Desplegar y esperar estado **Ready**.
 
+## Estado observado en la validación
+
+El 2026-09-04, Vercel completó correctamente el preview del commit de validación, pero **Deployment Protection** redirigió a inicio de sesión. El alias público `skyblue-fiscal-core.vercel.app` respondió `DEPLOYMENT_NOT_FOUND`, por lo que todavía falta promover un deployment y asignar/confirmar el dominio de producción.
+
+Para la salida real:
+
+1. Iniciar sesión en Vercel con acceso al proyecto `skyblue-fiscal-core`.
+2. Abrir el deployment marcado **Ready** desde el PR de validación.
+3. Probarlo autenticado antes de promoverlo.
+4. Configurar `fix/mrfc-functional-core` como Production Branch.
+5. Usar **Promote to Production** y confirmar que el alias/dominio público apunta al deployment promovido.
+6. Mantener protegidos los previews; habilitar acceso público sólo en el dominio de producción previsto.
+
 `vercel.json` fija `cleanUrls`, el directorio de salida y los headers de seguridad. `.vercelignore` excluye PHP, SQL, configuración, pruebas y documentación para que el artefacto sea exclusivamente estático.
 
 ## Verificación posterior

@@ -55,6 +55,8 @@ git diff --check HEAD^ HEAD
 
 Resultado local final: **33 pruebas aprobadas, 0 fallos**, sintaxis válida en ocho archivos JavaScript y todos los recursos principales con HTTP 200.
 
+GitHub Actions run `33935857264` terminó en `success` para pruebas, sintaxis y whitespace. Vercel terminó el preview en estado `Ready`; la inspección HTTP anónima quedó bloqueada por Deployment Protection. El dominio público estable aún requiere promoción/asignación por el propietario del proyecto.
+
 ## Documentación
 
 - `README.md`: visión general y ejecución.
