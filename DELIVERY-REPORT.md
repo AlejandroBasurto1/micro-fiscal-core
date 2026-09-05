@@ -62,6 +62,8 @@ La suite cubre CRUD de Actividad/Gastos/Viáticos, edición sin duplicados, cál
 
 `vercel.json` conserva `X-Content-Type-Options`, `Referrer-Policy` y `Permissions-Policy` para cámara y geolocalización, y declara `.` como salida. La interfaz MRFC no requiere compilación: usar framework **Other**, sin comando de build y con `.` como directorio de salida. Desplegar esta rama sólo como preview hasta la revisión de Sky.
 
+Vercel marcó el preview de la rama como **Ready**. La URL HTTPS redirige a login porque Deployment Protection sigue activa; Sky debe autenticarse o habilitar acceso temporal para la prueba física de cámara/GPS. No se cambiaron permisos ni se promovió el deployment.
+
 ## Limitaciones conocidas
 
 - La persistencia es local al navegador; autenticación, permisos y sincronización multiusuario requieren backend.

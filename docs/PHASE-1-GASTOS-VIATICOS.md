@@ -52,4 +52,8 @@ Abrir `http://127.0.0.1:8080` en una pestaña limpia.
 - Rama preview: `feature/mrfc-operational-modules`.
 - No promover ni fusionar antes de la revisión de Sky.
 
-Después del estado **Ready**, abrir el preview HTTPS en móvil real. Autorizar cámara/GPS sólo para el dominio del preview, repetir los dos recorridos y revisar la consola. Si Deployment Protection exige acceso, el revisor debe iniciar sesión en Vercel o habilitar el acceso del preview de forma temporal.
+Preview creado por Vercel: `https://skyblue-fiscal-core-git-feature-m-78900d-alejandro-b-s-projects.vercel.app`.
+
+El deployment quedó **Ready**, pero el acceso anónimo redirige al login de Vercel por **Deployment Protection**. Sky debe iniciar sesión con acceso al proyecto o habilitar temporalmente el acceso del preview; no es necesario cambiar el código ni promoverlo a producción.
+
+Una vez autenticado, abrir el preview HTTPS en móvil real. Autorizar cámara/GPS sólo para ese dominio, repetir los dos recorridos, abrir DevTools y confirmar que la consola permanece limpia. No hacer merge desde Vercel ni GitHub durante esta revisión.
